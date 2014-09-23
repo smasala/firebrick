@@ -66,7 +66,7 @@
 			var me = this;
 			return function(){
 					if(options.autoRender !== false){
-						me.createView(me.app.name + ".view.Index", {data:options.initialData});
+						me.createView(me.app.name + ".view.Index", {target:"body", data:options.initialData});
 					}
 					if($.isFunction(options.go)){
 						options.go();
