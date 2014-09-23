@@ -3,7 +3,7 @@
 	"description": "A JavaScript MVC Framework powered with jQuery and Rivets JS",
 	"licence": "MIT",
 	"homepage": "http://firebrickjs.com",
-	"main": "firebrick.js",
+	"main": "firebrick.min.js",
 	"authors": [
 		"Steven Masala"
 	],
