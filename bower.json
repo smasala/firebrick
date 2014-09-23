@@ -13,7 +13,7 @@
 		"framework",
 		"javascript"
 	],
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"dependencies": {
 		"jquery": "~2.0.0",
 		"rivets": "~0.6.10"
