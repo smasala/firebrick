@@ -4,6 +4,7 @@
 	"licence": "MIT",
 	"homepage": "http://firebrickjs.com",
 	"main": "firebrick.min.js",
+	"ignore": "",
 	"authors": [
 		"Steven Masala"
 	],
