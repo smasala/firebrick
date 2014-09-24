@@ -45,7 +45,7 @@
 				me.app = options.app,
 				whenReady = me.utils.whenReady(options);
 			
-			me.utils.initSplash(options.splash || me.view.loadingTpl);
+			me.utils.initSplash(options.splash || me.templates.loadingTpl);
 				
 			//if files need to be required first, then require them and fire the application
 			if(options.require && options.require.length > 0){
@@ -258,6 +258,14 @@
 		
 		},
 		
+		templates:{
+			/**
+			 * General loading tpl
+			 * @private
+			 */
+			loadingTpl: "<div class='fb-view-loader'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>",
+		},
+		
 		view: {
 			
 			/**
@@ -270,12 +278,6 @@
 			* Extensions of the view files
 			*/
 			viewExtension: "html",
-			
-			/**
-			 * General loading tpl
-			 * @private
-			 */
-			loadingTpl: "<div class='fb-view-loader'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>",
 			
 			/**
 			* get view class by name
@@ -1379,7 +1381,7 @@
 		/**
 		 * loading template - loaded into target is showLoading == true
 		 */
-		loadingTpl: Firebrick.view.loadingTpl,
+		loadingTpl: Firebrick.templates.loadingTpl,
 		/**
 		 * whether to show that the view is loading
 		 */
