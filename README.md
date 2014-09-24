@@ -2,6 +2,11 @@
 
 JavaScript MVC Framework built with jQuery and Rivets templating
 
+## Install with Bower
+```
+bower install firebrick
+```
+
 ##Usage
 
 * Load jQuery and Rivets and Firebrick in the correct order
@@ -21,7 +26,7 @@ JavaScript MVC Framework built with jQuery and Rivets templating
 			//Do you thing
 		}
 	});
-``` 
+```
 
 ## See it in Action
 
