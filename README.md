@@ -1,6 +1,6 @@
 #Firebrick JS
 
-JavaScript MVC Framework built with jQuery and Rivets templates
+JavaScript MVC Framework built with jQuery, Bootstrap and Rivets templates
 
 ## Install with Bower
 ```

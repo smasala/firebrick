@@ -27,6 +27,7 @@
 		},
 		
 		/** ready function to kick start the application
+		* @fires main-viewRendered || view object
 		* @param options :: object = {
 					go:function(), //called on document ready
 					app:{
@@ -34,17 +35,26 @@
 						path: string //path of the app
 					},
 					autoRender: boolean //whether to call first view automatically  "{app.name}.view.Index",
-					initialData: object //initialData to be passed to the autoRender view
+					initialData: object //initialData to be passed to the autoRender view,
+					splash: string //html or string to be rendered before the document is loaded - removed on document.ready
+					require:string or array of string //these file(s) are required
 				}
 		*/
 		ready: function(options){
 			var me = this;
 				me.app = options.app,
-				whenReady = me.whenReady(options);
+				whenReady = me.utils.whenReady(options);
+			
+			me.utils.initSplash(options.splash || me.view.loadingTpl);
 				
 			//if files need to be required first, then require them and fire the application
 			if(options.require && options.require.length > 0){
 			
+				if(!$.isArray(options.require)){
+					//convert to array if no already
+					options.require = [options.require];
+				}
+				
 				$.each(options.require, function(index, className){
 					me.create(className);
 				});
@@ -54,24 +64,6 @@
 				//no files were required - lets go!
 				$(document).ready(whenReady);
 			}
-		},
-		
-		/**
-		* Do not call - this function is returned to ready() and is fired when the document has completed loading
-		* @private
-		* @param options :: object :: config object passed to Firebrick.ready({})
-		* @returns function
-		*/
-		whenReady: function(options){
-			var me = this;
-			return function(){
-					if(options.autoRender !== false){
-						me.createView(me.app.name + ".view.Index", {target:"body", data:options.initialData});
-					}
-					if($.isFunction(options.go)){
-						options.go();
-					}
-				};
 		},
 		
 		/** SHORTCUTS **/
@@ -280,6 +272,12 @@
 			viewExtension: "html",
 			
 			/**
+			 * General loading tpl
+			 * @private
+			 */
+			loadingTpl: "<div class='fb-view-loader'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>",
+			
+			/**
 			* get view class by name
 			* @param name :: string
 			* @return class
@@ -295,7 +293,7 @@
 			* @returns Firebrick.view.Base || object
 			**/
 			createView: function(name, config){
-				//get, define and call the construtor of the view
+				//get, define and call the constructor of the view
 				var me = this, 
 					view = me.defineView(name, config).init();
 				return view;
@@ -315,11 +313,21 @@
 					//set basic configurations for view class
 					config = me.basicViewConfigurations(config);
 					
+					//save the view in the registry
+					var view = Firebrick.classes.buildClass(name, config);
+					me.viewRegistry[name] = view;
+					
+					if(view.showLoading === true){
+						var t = me.getTarget(view.target);
+						if(t){
+							t.html(view.loadingTpl);
+						}
+					}
+					
 					//get the view
 					Firebrick.utils.require(name, function(tpl){
+						//save the template
 						config.tpl = tpl;
-						//save the view in the registry
-						me.viewRegistry[name] = Firebrick.classes.buildClass(name, config);
 					}, false, "html", me.viewExtension);
 				}
 				
@@ -363,7 +371,7 @@
 				if(refresh === true || !me.body){
 					me.body = $("body");
 				}
-				return this.body;
+				return me.body;
 			},
 			
 			/**
@@ -391,6 +399,39 @@
 		
 		utils: {
 		
+			/**
+			 * html is appended to the html tag before the document is ready 
+			 * @usage splash paramter with Firebrick.ready({splash:html});
+			 * @private
+			 * @param html :: string
+			 */
+			initSplash: function(html){
+				$("html").append("<div class='fb-splash'>" + html + "</div>");
+				$(document).ready(function(){
+					$("div.fb-splash").remove();
+				});
+			},
+			
+			/**
+			* Do not call - this function is returned to ready() and is fired when the document has completed loading
+			* @private
+			* @fires main-viewRendered || view object
+			* @param options :: object :: config object passed to Firebrick.ready({})
+			* @returns function
+			*/
+			whenReady: function(options){
+				var me = this;
+				return function(){
+						if(options.autoRender !== false){
+							var view = Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", data:options.initialData});
+							Firebrick.fireEvent("main-viewRendered", view);
+						}
+						if($.isFunction(options.go)){
+							options.go();
+						}
+					};
+			},
+			
 			/**
 			* extend class 1 with properties of class 2
 			* @param config :: object :: object to extend
@@ -1335,6 +1376,14 @@
 		*/
 		rivets: null,
 		rivets_config: {},
+		/**
+		 * loading template - loaded into target is showLoading == true
+		 */
+		loadingTpl: Firebrick.view.loadingTpl,
+		/**
+		 * whether to show that the view is loading
+		 */
+		showLoading: false,
 		
 		/**
 		* State the view is current in. "Initial", "Rendered"

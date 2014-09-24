@@ -1,0 +1,7 @@
+v0.1.0
+----------------------------
+* added splash screen option before initial view is rendered
+* fixed that Firebrick.ready({require:...}) can also be a string
+* added event "main-viewRendered" when Index.html from Firebrick.ready is auto rendered
+* add the ability to show a loader whilst the view is loading
+* bootstrap dependency added
