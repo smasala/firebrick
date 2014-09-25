@@ -1,6 +1,6 @@
 #Firebrick JS
 
-JavaScript MVC Framework built with jQuery, Bootstrap and Rivets templates
+JavaScript MVC Framework built with jQuery, Bootstrap and Knockout JS
 
 ## Install with Bower
 ```
@@ -35,8 +35,3 @@ bower install firebrick
 		}
 	});
 ```
-
-## See it in Action
-
-[Firebrick Todomvc](https://github.com/smasala/firebrick-todomvc)
-
