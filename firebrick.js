@@ -14,8 +14,7 @@
 	
 	var Firebrick = {
 		
-		version_type: "alpha",
-		version: "1.0.0",
+		version: "0.1.0",
 		
 		/**
 		* used to store configurations set Firebrick.ready()
