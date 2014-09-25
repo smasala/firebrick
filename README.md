@@ -9,7 +9,7 @@ bower install firebrick
 
 ##Usage
 
-* Load jQuer, Bootstrap and Knockout and Firebrick in the correct order followed by
+* Load jQuery, Bootstrap, Knockout JS and Firebrick in the correct order followed by
 ```
 	<script src="bower_components/jquery/jquery.min.js" type="text/javascript"></script>
 	<script src="bower_components/knockoutjs/dist/knockout.js" type="text/javascript"></script>
