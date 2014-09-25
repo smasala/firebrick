@@ -1,4 +1,4 @@
-v0.1.0
+v0.2.0
 ----------------------------
 * added splash screen option before initial view is rendered
 * fixed that Firebrick.ready({require:...}) can also be a string
