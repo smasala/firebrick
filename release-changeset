@@ -5,3 +5,9 @@ v0.1.0
 * added event "main-viewRendered" when Index.html from Firebrick.ready is auto rendered
 * add the ability to show a loader whilst the view is loading
 * bootstrap dependency added
+* path builder bug fix
+* bug fix create store with no extra config options
+* rename view bind parameter from data to store (data is deprecated)
+* fix registering this.app.on events where the controller was passed into the event construction
+* fix so that events are truly registered even when there page has not finished loading
+* changed from rivets to knockout js

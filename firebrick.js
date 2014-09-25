@@ -1,7 +1,7 @@
 /**
-* Firebrick JS - JavaScript MVC Framework powered by jQuery and Rivets
+* Firebrick JS - JavaScript MVC Framework powered by jQuery, Bootstrap and Knockout JS
 * Author: Steven Masala
-* dependencies: jquery, rivets.js
+* dependencies: jquery, bootstrap, knockout js
 * contact: me@smasala.com
 */ 
 
@@ -386,10 +386,10 @@
 			},
 			
 			/**
-			* Render HTML or Rivets Template to the given target
+			* Render HTML or Template to the given target
 			* @private
 			* @param target :: jquery object ::
-			* @param html :: string :: rivets template or html
+			* @param html :: string :: template or html
 			* @return target as jquery object
 			*/
 			renderTo:function(target, html){
@@ -571,6 +571,12 @@
 					homePath = Firebrick.app.path,
 					appName = Firebrick.app.name,
 					ext = ext || "js";
+				
+				//check whether user has added the trailing / to the path
+				if(homePath.charAt(homePath.length-1) == "/"){
+					//remove the last "/" from path as it is added later on by name.replace
+					homePath = homePath.substr(0, homePath.length-1);
+				}
 				
 				name = name.trim();
 				
@@ -797,9 +803,11 @@
 			on_internal: function(object){
 				var me = this, scope = object.scope;
 				$.each(object, function(selector, value){
-					$.each(value, function(eventName, callback){
-						me.register_on_event(eventName, selector, callback, scope);
-					});
+					if(selector != "scope"){
+						$.each(value, function(eventName, callback){
+							me.register_on_event(eventName, selector, callback, scope);
+						});
+					}
 				});
 			},
 			
@@ -808,7 +816,7 @@
 			* @private
 			*/
 			register_on_event: function(eventName, selector, callback, scope){
-				$(document.body).on(eventName, selector, function(){
+				$(document).on(eventName, selector, function(){
 					//add scope as last argument, just in case the scope of the function is changed
 					var args = [].splice.call(arguments, 0);
 					args.push(this);
@@ -834,7 +842,7 @@
 				if($.type(name) == "string"){
 					//return the created class
 					var clazz = Firebrick.get(name);
-					clazz = Firebrick.utils.overwrite(clazz, config);
+					clazz = Firebrick.utils.overwrite(clazz, config || {});
 					clazz.init();
 					return clazz;
 				}else{
@@ -878,7 +886,7 @@
 				* Used by Firebrick.store.Base.load();
 				* @private
 				* @param store = Firebrick.store.Base object
-				* @param options :: object :: {callback:function(jsonObject, status, response), scope: object}
+				* @param options :: object :: {async:boolean (optional - default false), callback:function(jsonObject, status, response), scope: object}
 				* @return store
 				**/
 				loadStore: function(store, options){
@@ -894,6 +902,7 @@
 					
 					$.ajax({
 						datatype: store.datatype,
+						async:$.type(options.async) == "boolean" ? options.async : false,
 						url: store.url,
 						success:function(jsonObject, status, response){
 							store.setData(jsonObject);
@@ -1097,6 +1106,7 @@
 					
 					if(data[store.root]){
 						data[store.root] = me.convertToRecords(store, data[store.root]);
+						store.data = data;
 					}else{
 						console.info("store root was not found in the specified data:", store.root, store);
 					}
@@ -1351,9 +1361,9 @@
 		*/
 		tpl: "",
 		/**
-		* data to bind to the view
-		*/
-		data: "",
+		 * bind a store or plain data to the view
+		 */
+		store:null,
 		/**
 		* parsed html using the tpl and data
 		*/
@@ -1372,11 +1382,6 @@
 		* string || object :: name of the controller || controller class itself
 		*/
 		controller: null,
-		/**
-		* Rivets object that is returned when the template and data is bound
-		*/
-		rivets: null,
-		rivets_config: {},
 		/**
 		 * loading template - loaded into target is showLoading == true
 		 */
@@ -1408,7 +1413,7 @@
 		* Returns the store linked to the view
 		*/
 		getStore: function(){
-			return this.data;
+			return this.store;
 		},
 		
 		/**
@@ -1420,23 +1425,14 @@
 		},
 		
 		/**
-		* Construct the view with the Rivets template and data binding
-		* @param html_template :: string (optional) :: rivets html
-		* @param data :: object (optional) :: data to bind to the rivets template
+		* Construct the view with template and data binding
+		* @param html_template :: string (optional) :: html
+		* @param data :: object (optional) :: data to bind to the template
 		* @returns self
 		*/
 		initView: function(html_template, data){
 			var me = this;
 			me.html = html_template;
-			
-			//set rivet default configs
-			me.rivets_config = me.rivets_config || $.isEmptyObject(me.rivets_config) ? {
-				store: me.getStore()
-			} : me.rivets_config;
-
-			if(me.controller && !me.rivets_config.hasOwnProperty("controller")){
-				me.rivets_config.controller = Firebrick.get(me.controller);
-			}
 			
 			if(me.autoRender){
 				me.render();
@@ -1475,7 +1471,12 @@
 				Firebrick.view.renderTo(target, me.html);
 			
 				if(me.state == "initial"){
-					me.rivets = rivets.bind(target, me.rivets_config);
+					var d = me.getData();
+					if($.isArray(d)){
+						d ={items: d};
+					}
+					me.koData = ko.mapping.fromJS(d);
+					ko.applyBindings(me.koData, target[0]);
 					me.state = "rendered";
 				}
 				
@@ -1494,9 +1495,9 @@
 		*/
 		initStore:function(){
 			var me = this;
-			me.data = me.data || {};
-			if(!me.data.isStore){
-				me.data = Firebrick.createStore({data:me.data});
+			me.store = me.store || {};
+			if(!me.store.isStore){
+				me.store = Firebrick.createStore({data:me.store});
 			}
 			return me;
 		},
@@ -1562,7 +1563,7 @@
 		*/
 		init: function(){
 			var me = this;
-			if(!me.dataInitialised){
+			if(!me.dataInitialised && me.data){
 				me.setData(me.data);
 			}
 			return this.callParent();
@@ -1901,25 +1902,6 @@
 		
 		
 	});
-	
-	/**
-	* Rivets Extensions
-	*/
-	if(window.rivets){
-		rivets.formatters.size = function(value){
-			return value.length;
-		}
-		
-		//Overwrite prototype function to access the model when calling a controller from the view
-		//v0.6.10
-		rivets._.Binding.prototype.set = function(value) {
-			var _ref1;
-			value = value instanceof Function && !this.binder["function"] ? this.formattedValue(value.call(this.model, this)) : this.formattedValue(value);
-			return (_ref1 = this.binder.routine) != null ? _ref1.call(this, this.el, value) : void 0;
-		};
-		
-	}
-	/*** EO Rivets Extensions **/
 	
 	window.Firebrick = Firebrick;
 	

@@ -18,6 +18,7 @@
 	"dependencies": {
 		"jquery": "~2.0.0",
 		"bootstrap": "~3.2.0",
-		"rivets": "~0.6.10"
+		"knockoutjs": "~3.2.0",
+		"knockout-mapping": "~2.4.1"
 	}
 }
