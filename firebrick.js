@@ -14,7 +14,7 @@
 	
 	var Firebrick = {
 		
-		version: "0.2.0",
+		version: "0.3.0",
 		
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -164,7 +164,9 @@
 					clazz = me.get(name, config);
 					
 				//initalise the class
-				clazz.init();
+				if(clazz.init){
+					clazz.init();
+				}
 				
 				//return it
 				return clazz;
@@ -190,7 +192,7 @@
 					//require the class first
 					Firebrick.utils.require(name, function(){
 						//check and load any sub dependencies
-						if(me.classRegistry[name].hasDependencies()){
+						if(me.classRegistry[name].hasDependencies && me.classRegistry[name].hasDependencies()){
 							var subDeps = me.classRegistry[name].require;
 							if(!$.isArray(subDeps)){
 								subDeps = [subDeps];
@@ -236,15 +238,15 @@
 			buildClass: function(name, config){
 				var me = this, config = config || {};
 				//is the class extending from something?
-				if(config.extends){
+				if(config.extend){
 					//does the parent exist?
-					var parent = me.classRegistry[config.extends];
+					var parent = me.classRegistry[config.extend];
 					if(parent){
 						//iterate over the parents configuration
 						config = Firebrick.utils.extend(config, parent);
 						config._super = parent;						
 					}else{
-						console.warn("unable to find parent class to inherit from:", config.extends);
+						console.warn("unable to find parent class to inherit from:", config.extend);
 					}
 					
 				}
@@ -345,8 +347,8 @@
 			basicViewConfigurations: function(config){
 				var me = this;
 				config = config || {};
-				if(!config.extends){
-					config.extends = "Firebrick.view.Base";
+				if(!config.extend){
+					config.extend = "Firebrick.view.Base";
 					if(!config.init){
 						config.init = function(){
 							return this.callParent();
@@ -427,6 +429,7 @@
 							var view = Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", data:options.initialData});
 							Firebrick.fireEvent("main-viewRendered", view);
 						}
+						
 						if($.isFunction(options.go)){
 							options.go();
 						}
@@ -828,6 +831,15 @@
 		
 		data: {
 			
+			viewModel: new function(){
+				//store basic view model data
+				this.data = ko.observable();
+				
+				this.getData = function(){
+					console.info("get in here", arguments)
+				}
+			},
+			
 			/**
 			* Used by createStore or createRecord to create basic object to be reused
 			* @private
@@ -853,8 +865,8 @@
 					config = name || {};
 					
 					//if no extend is defined (which is standard case) - give it one - ie. the store base class
-					if(!config.extends){
-						config.extends = "Firebrick." + type + ".Base";
+					if(!config.extend){
+						config.extend = "Firebrick." + type + ".Base";
 					}
 					
 					//return a new object based on the Base class
@@ -1353,8 +1365,7 @@
 	});
 	
 	Firebrick.define("Firebrick.view.Base", {
-		extends:"Firebrick.class.Base",
-		
+		extend:"Firebrick.class.Base",
 		/**
 		* set when the view is loaded by the ajax request
 		* @private
@@ -1389,7 +1400,7 @@
 		/**
 		 * whether to show that the view is loading
 		 */
-		showLoading: false,
+		showLoading: true,
 		
 		/**
 		* State the view is current in. "Initial", "Rendered"
@@ -1458,28 +1469,33 @@
 		
 		/**
 		* Render view to specified target
+		* @fires viewRendered
 		* @param target :: string || jQuery Object (optional) :: defaults to this.target
 		* @returns self
 		*/
 		renderTo: function(target){
 			var me = this,
-				ovt = target,
+				ovt = me.target,
 				target = me.getTarget(target);
 			
-			if(target){
-				
-				Firebrick.view.renderTo(target, me.html);
+			//first clear the node from any bindings
+			ko.cleanNode(target[0]);
 			
+			if(target){
+				Firebrick.view.renderTo(target, me.html);
 				if(me.state == "initial"){
 					var d = me.getData();
 					if($.isArray(d)){
-						d ={items: d};
+						d={items: d};
 					}
 					me.koData = ko.mapping.fromJS(d);
 					ko.applyBindings(me.koData, target[0]);
 					me.state = "rendered";
+				}else if("rendered"){
+					ko.applyBindings(me.koData, target[0]);
 				}
 				
+				me.fireEvent("viewRendered", me);
 			}else{
 				console.warn("unable to render, no target found for", ovt || me.target, this);
 			}
@@ -1525,7 +1541,7 @@
 	});
 	
 	Firebrick.define("Firebrick.controller.Base", {
-		extends:"Firebrick.class.Base",
+		extend:"Firebrick.class.Base",
 		/**
 		*String or Array of Strings of classes/stores etc. that are needed
 		*/
@@ -1557,7 +1573,7 @@
 	});
 	
 	Firebrick.define("Firebrick.store.Base", {
-		extends:"Firebrick.class.Base",
+		extend:"Firebrick.class.Base",
 		/**
 		* Called on creation
 		*/
@@ -1769,7 +1785,7 @@
 	});
 	
 	Firebrick.define("Firebrick.record.Base", {
-		extends:"Firebrick.class.Base",
+		extend:"Firebrick.class.Base",
 		
 		/**
 		* unique id given on creation

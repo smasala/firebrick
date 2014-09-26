@@ -1,3 +1,11 @@
+v0.3.0
+----------------------------
+* showLoading parameter default value to true
+* replace javascript reserved word extends to extend
+* fix bug where all define() object required function hasDependencies()
+* fire event viewRendered when view is rendered :)
+* clear view so that you can dynamically change the content of an item with a new template and data
+
 v0.2.0
 ----------------------------
 * added splash screen option before initial view is rendered
