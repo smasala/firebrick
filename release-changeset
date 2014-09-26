@@ -1,3 +1,7 @@
+v0.3.1
+----------------------------
+* fix so that files can only be required once
+
 v0.3.0
 ----------------------------
 * showLoading parameter default value to true

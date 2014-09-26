@@ -14,7 +14,7 @@
 	
 	var Firebrick = {
 		
-		version: "0.3.0",
+		version: "0.3.1",
 		
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -403,6 +403,11 @@
 		utils: {
 		
 			/**
+			 * keep track of all require requests
+			 */
+			requiredFiles:{},
+			
+			/**
 			 * html is appended to the html tag before the document is ready 
 			 * @usage splash paramter with Firebrick.ready({splash:html});
 			 * @private
@@ -530,6 +535,12 @@
 					names = [names];
 				}
 				
+				//filter out requires that have already been called before
+				var unFilterednames = names;
+				names = unFilterednames.filter(function(value){
+					return !me.requiredFiles[value];
+				});
+				
 				//mark how files are to be fetched
 				var ajaxCounter = names.length,
 					//prepare callback function
@@ -545,6 +556,7 @@
 				//iterate of each file and get them
 				for(var i = 0, l = names.length; i<l; i++){
 					//convert the name into the correct path
+					me.requiredFiles[names] = true;
 					path = me.getPathFromName(names[i], ext);
 					$.ajax({
 						async:$.type(async) == "boolean" ? async : true,
