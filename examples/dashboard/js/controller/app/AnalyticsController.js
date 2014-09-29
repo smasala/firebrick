@@ -122,7 +122,7 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 			        plot.setData(series);
 			        plot.draw();
 			        console.info("running", id);
-			    }, 2000);
+			    }, 40);
 			    
 			});
 		},
