@@ -2,13 +2,10 @@
 	<div class="col-md-8 contentbox">
 		<form role="form" class="form-horizontal">
 		
-			<fieldset>
+			<fieldset data-bind="with: users()[activePage()]">
 			
 				<legend class="page-header"><h3>Users</h3></legend>
 			
-			<div data-bind="template: { name: 'user-tpl', data: users()[activePage()] }"></div>
-			
-			<script type="text/html" id="user-tpl">
 				<div class="form-group">
 					<label class="col-md-3" for="user_id">Id</label>
 					<div class="col-md-7">
@@ -53,7 +50,6 @@
                        </select>
 				  	</div>
 				</div>
-			</script>
 
 			</fieldset>
 			

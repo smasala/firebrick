@@ -36,6 +36,15 @@
             "house_number": "4a",
             "postcode": "59845",
             "country": "IT"
+        },
+        {
+            "id": 1001,
+            "name": "Fred",
+            "surname": "Elliot",
+            "street": "Manchester Road",
+            "house_number": "7",
+            "postcode": "ME23 ABC",
+            "country": "UK"
         }
     ]
 }

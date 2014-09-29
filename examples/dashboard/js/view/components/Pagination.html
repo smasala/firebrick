@@ -1,7 +1,7 @@
 <ul class="pagination">
-	<li><a id="pagePrev" href="#">&laquo;</a></li>
+	<li><a id="pagePrev">&laquo;</a></li>
 		<!-- ko foreach: pages -->
-			<li data-bind="css: {active: $parent.activePage() == $index()}, attr:{value: $index}"><a class="paginationItem" data-bind="text: num" href="#"></a></li>
+			<li data-bind="css: {active: $parent.activePage() == $index()}, attr:{value: $index}"><a class="paginationItem" data-bind="text: num"></a></li>
 		<!-- /ko -->
-	<li><a id="pageNext" href="#">&raquo;</a></li>
+	<li><a id="pageNext">&raquo;</a></li>
 </ul>
