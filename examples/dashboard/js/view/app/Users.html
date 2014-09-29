@@ -1,0 +1,74 @@
+<div class="row">
+	<div class="col-md-8 contentbox">
+		<form role="form" class="form-horizontal">
+		
+			<fieldset>
+			
+				<legend class="page-header"><h3>Users</h3></legend>
+			
+			<div data-bind="template: { name: 'user-tpl', data: users()[activePage()] }"></div>
+			
+			<script type="text/html" id="user-tpl">
+				<div class="form-group">
+					<label class="col-md-3" for="user_id">Id</label>
+					<div class="col-md-7">
+						<input id="user_id" type="text" class="form-control" placeholder="#"  data-bind="value: id">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3" for="user_name">Name</label>
+					<div class="col-md-7">
+						<input id="user_name" type="text" class="form-control" placeholder="" data-bind="value: name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3" for="user_surname">Surname</label>
+					<div class="col-md-7">
+						<input id="user_surname" type="text" class="form-control" placeholder="" data-bind="value: surname">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3" for="user_street">Street</label>
+					<div class="col-md-7">
+						<input id="user_street" type="text" class="form-control" placeholder="" data-bind="value: street">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3" for="user_housenumber">House Number</label>
+					<div class="col-md-7">
+						<input id="user_housenumber" type="text" class="form-control" placeholder="" data-bind="value: house_number">
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3" for="user_postcode">Postcode</label>
+					<div class="col-md-7">
+						<input id="user_postcode" type="text" class="form-control" placeholder="" data-bind="value: postcode">
+					</div>
+				</div>
+				<div class="form-group">
+			  		<label class="col-md-3" for="user_country">Country</label>
+				  	<div class="col-md-7">
+				  		<select id="selectbasic" name="user_country" class="form-control" 
+				  			data-bind="options: $parent.countries, value:country">
+                       </select>
+				  	</div>
+				</div>
+			</script>
+
+			</fieldset>
+			
+			<div id="user_pagination" class="text-center">
+				<!-- pagination tpl -->
+				<pagination params="type: 'user_pagination'"></pagination>
+			</div>
+			
+  		</form>
+	</div>
+	<div class="col-md-4 infobox">
+		<p>Some interesting information goes in here</p>
+		<div class="alert alert-success" role="alert">Well done! You successfully read this important alert message.</div>
+		<div class="alert alert-info" role="alert">Heads up! This alert needs your attention, but it's not super important.</div>
+		<div class="alert alert-warning" role="alert">Warning! Better check yourself, you're not looking too good.</div>
+		<div class="alert alert-danger" role="alert">Oh snap! Change a few things up and try submitting again.</div>
+	</div>
+</div>

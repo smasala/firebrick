@@ -1,0 +1,41 @@
+{
+    "success": true,
+    "users": [
+        {
+            "id": 1000,
+            "name": "Johnny",
+            "surname": "English",
+            "street": "London Lane",
+            "house_number": "13",
+            "postcode": "SE25 6NT",
+            "country": "UK"
+        },
+        {
+            "id": 1001,
+            "name": "Fred",
+            "surname": "Elliot",
+            "street": "Manchester Road",
+            "house_number": "7",
+            "postcode": "ME23 ABC",
+            "country": "UK"
+        },
+        {
+            "id": 1002,
+            "name": "Hans",
+            "surname": "Peter",
+            "street": "Goseriede",
+            "house_number": "1",
+            "postcode": "30159",
+            "country": "DE"
+        },
+        {
+            "id": 1003,
+            "name": "Roberto",
+            "surname": "Pasta",
+            "street": "Via Pizzeria",
+            "house_number": "4a",
+            "postcode": "59845",
+            "country": "IT"
+        }
+    ]
+}
