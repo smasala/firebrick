@@ -27,8 +27,8 @@ bower install firebrick
 	
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css" />
-	<link rel="stylesheet" href="bower_components/bootstrap/docs/examples/dashboard/dashboard.css" />
+		<!-- Optional Bootrstrap Theme --> 
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css" />
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
 	
 	<!-- Firebrick JS -->
