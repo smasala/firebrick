@@ -7,7 +7,7 @@ JavaScript MVC Framework built with:
     * Require JS
 
 ### Development
-Please not that this framework is still under development and that some large API changes can be made with any release
+Please note that this framework is still under development and that some large API changes can be made with any release
 
 ## Install with Bower
 ```
