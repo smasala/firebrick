@@ -7,7 +7,7 @@ bower install firebrick
 ```
 
 ##See it Live
-Checkout the [http://demo.firebrickjs.com](Dashboard) demo
+Checkout the [Dashboard ](http://demo.firebrickjs.com) demo
 
 ## Learn more
 
