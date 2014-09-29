@@ -14,6 +14,10 @@ Please not that this framework is still under development and that some large AP
 bower install firebrick
 ```
 
+##Demo
+
+Checkout the [http://demo.firebrickjs.com](Dashboard) demo
+
 ##Usage
 
 * Load files in the correct order
