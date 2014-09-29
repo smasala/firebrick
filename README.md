@@ -1,6 +1,7 @@
 #Firebrick JS v0.4.0
 
 JavaScript MVC Framework built with:
+
     * jQuery
     * Bootstrap
     * Knockout JS
