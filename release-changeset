@@ -5,6 +5,7 @@ v0.4.0
 * implement requirejs
 * autoLoad store parameter - defaults to false
 * records removed completely and from stores - data made observable into the store when created
+* added dashboard example
 
 
 v0.3.1
