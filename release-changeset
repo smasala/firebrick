@@ -1,3 +1,12 @@
+v0.4.0
+----------------------------
+* fix cleanNode error with invalid target
+* improve how files are required and loaded
+* implement requirejs
+* autoLoad store parameter - defaults to false
+* records removed completely and from stores - data made observable into the store when created
+
+
 v0.3.1
 ----------------------------
 * fix so that files can only be required once

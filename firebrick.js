@@ -14,7 +14,7 @@
 	
 	var Firebrick = {
 		
-		version: "0.3.1",
+		version: "0.4.0",
 		
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -37,15 +37,25 @@
 					initialData: object //initialData to be passed to the autoRender view,
 					splash: string //html or string to be rendered before the document is loaded - removed on document.ready
 					require:string or array of string //these file(s) are required
+					cache: boolean default true - whether require should cache files or not
 				}
 		*/
 		ready: function(options){
 			var me = this;
-				me.app = options.app,
-				whenReady = me.utils.whenReady(options);
+				me.app = options.app;
 			
 			me.utils.initSplash(options.splash || me.templates.loadingTpl);
-				
+
+			if(options.cache === false){
+				require.config({
+				    urlArgs: "fireb=" + (new Date()).getTime()
+				});
+			}
+			
+			if(options.autoRender !== false){
+				var view = Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", data:options.initialData});
+			}
+			
 			//if files need to be required first, then require them and fire the application
 			if(options.require && options.require.length > 0){
 			
@@ -53,15 +63,15 @@
 					//convert to array if no already
 					options.require = [options.require];
 				}
-				
-				$.each(options.require, function(index, className){
-					me.create(className);
-				});
+
+				require(options.require, function(){
+					$("div.fb-splash").remove();
+					options.go.apply(options.go, arguments);
+				})
 			
-				$(document).ready(whenReady);
 			}else{
-				//no files were required - lets go!
-				$(document).ready(whenReady);
+				$("div.fb-splash").remove();
+				options.go();
 			}
 		},
 		
@@ -161,10 +171,10 @@
 			*/
 			create: function(name, config){
 				var me = this,
-					clazz = me.get(name, config);
+					clazz = me.define(name, config);
 					
 				//initalise the class
-				if(clazz.init){
+				if(clazz && clazz.init){
 					clazz.init();
 				}
 				
@@ -180,7 +190,7 @@
 			* @returns object
 			*/
 			createClass:function(name, config){
-				var me = this;
+				var me = this, clazz = me.classRegistry[name];
 			
 				if($.isPlainObject(name)){
 					//object has been passed, just return it
@@ -188,30 +198,18 @@
 				}
 				
 				//does it already exist?
-				if(!me.classRegistry[name]){
-					//require the class first
-					Firebrick.utils.require(name, function(){
-						//check and load any sub dependencies
-						if(me.classRegistry[name].hasDependencies && me.classRegistry[name].hasDependencies()){
-							var subDeps = me.classRegistry[name].require;
-							if(!$.isArray(subDeps)){
-								subDeps = [subDeps];
-							}
-							$.each(subDeps, function(index, className){
-								me.create(className);
-							});
-						}
-						
-						if(config){
-							//if config is passed, extend the class
-							me.classRegistry[name] = Firebrick.utils.extend(me.classRegistry[name], config);
-						}
-						
-						
-					}, false);
+				if(!clazz){
+					//check again
+					clazz = me.classRegistry[name];
 				}
 				
-				return me.classRegistry[name];
+				if(clazz && config){
+					//if config is passed, extend the class
+					clazz = Firebrick.utils.extend(clazz, config);
+					me.classRegistry[name] = clazz;
+				}
+				
+				return clazz;
 			},
 			
 			/**
@@ -415,30 +413,6 @@
 			 */
 			initSplash: function(html){
 				$("html").append("<div class='fb-splash'>" + html + "</div>");
-				$(document).ready(function(){
-					$("div.fb-splash").remove();
-				});
-			},
-			
-			/**
-			* Do not call - this function is returned to ready() and is fired when the document has completed loading
-			* @private
-			* @fires main-viewRendered || view object
-			* @param options :: object :: config object passed to Firebrick.ready({})
-			* @returns function
-			*/
-			whenReady: function(options){
-				var me = this;
-				return function(){
-						if(options.autoRender !== false){
-							var view = Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", data:options.initialData});
-							Firebrick.fireEvent("main-viewRendered", view);
-						}
-						
-						if($.isFunction(options.go)){
-							options.go();
-						}
-					};
 			},
 			
 			/**
@@ -524,6 +498,7 @@
 			* @param async :: boolean :: defaults true
 			* @param data_type :: string :: jQuery ajax datatype. defauts to 'script'
 			* @param ext :: string :: file extension. defaults to 'js'
+			* @returns the files that were eventually loaded
 			*/
 			require: function(names, callback, async, data_type, ext){
 				var me = this, 
@@ -552,16 +527,16 @@
 							}
 						}
 					};
-				
+
 				//iterate of each file and get them
 				for(var i = 0, l = names.length; i<l; i++){
 					//convert the name into the correct path
-					me.requiredFiles[names] = true;
+					me.requiredFiles[names[i]] = true;
 					path = me.getPathFromName(names[i], ext);
 					$.ajax({
 						async:$.type(async) == "boolean" ? async : true,
 						dataType:data_type,
-						url:path,
+						url:path + "?fb" + (new Date()).getTime(),
 						success:function(){
 							newCallback.apply(this, arguments);
 						},
@@ -572,6 +547,8 @@
 						}
 					});
 				}
+				
+				return names;
 			},
 			
 			/**
@@ -732,8 +709,7 @@
 					//get the argument from this function call
 					var args = [].splice.call(arguments, 1),
 						ev = me.createEventData(eventName);	//create an event object to pass to the function argument
-					//place event object as the first argument
-					args.unshift(ev);
+
 					for(var i = 0, l = reg.length; i<l; i++){
 						var f = reg[i];
 						//copy the function config created by addListener into the event argument and the function itself
@@ -843,50 +819,6 @@
 		
 		data: {
 			
-			viewModel: new function(){
-				//store basic view model data
-				this.data = ko.observable();
-				
-				this.getData = function(){
-					console.info("get in here", arguments)
-				}
-			},
-			
-			/**
-			* Used by createStore or createRecord to create basic object to be reused
-			* @private
-			* @param type :: string :: whether record or store
-			* @param name :: string (optional) || object :: if string, then Firebrick.create(name, config) is called
-			* @param config :: object (optional) :: data to config the class with - called in conjuction when name is set
-			*/
-			createDataObject: function(type, name, config){
-				var me = this; 
-					
-				//name is a string - hence the user is looking to create an actual defined store
-				if($.type(name) == "string"){
-					//return the created class
-					var clazz = Firebrick.get(name);
-					clazz = Firebrick.utils.overwrite(clazz, config || {});
-					clazz.init();
-					return clazz;
-				}else{
-					
-					type = type.toLowerCase();
-					
-					//only 1 parameter in this case, name is then config.
-					config = name || {};
-					
-					//if no extend is defined (which is standard case) - give it one - ie. the store base class
-					if(!config.extend){
-						config.extend = "Firebrick." + type + ".Base";
-					}
-					
-					//return a new object based on the Base class
-					return Firebrick.classes.buildClass("Firebrick." + type + ".Base", config);
-				}
-				
-			},
-			
 			//store functions
 			store: {
 				
@@ -902,8 +834,28 @@
 				* @returns Firebrick.store.Base
 				*/
 				createStore:function(name, config){
-					//return a new object based on the Base class
-					return Firebrick.data.createDataObject("Store", name, config);
+					var me = this; 
+					
+					//name is a string - hence the user is looking to create an actual defined store
+					if($.type(name) == "string"){
+						//return the created class
+						var clazz = Firebrick.get(name);
+						clazz = Firebrick.utils.overwrite(clazz, config || {});
+						clazz.init();
+						return clazz;
+					}else{
+						
+						//only 1 parameter in this case, name is then config.
+						config = name || {};
+						
+						//if no extend is defined (which is standard case) - give it one - ie. the store base class
+						if(!config.extend){
+							config.extend = "Firebrick.store.Base";
+						}
+						
+						//return a new object based on the Base class
+						return Firebrick.classes.buildClass("Firebrick.store.Base", config).init();
+					}
 				},
 				
 				/**
@@ -945,232 +897,6 @@
 				},
 				
 				/**
-				* @private
-				* @fires recordInserted :: record || data
-				* @fires storeUpdated :: record || data
-				* @returns store
-				*/
-				insert: function(store, pos, data){
-					var me = this;
-					if(pos == -1){
-						//add to the end
-						store.data[store.root].push(data);
-					}else{
-						//add at specific index
-						store.data[store.root].splice(pos, 0, data);
-					}
-					if(data && data.isRecord){
-						data.store = store;
-						me.registerStoreRecordListeners(store, data);
-					}
-					store.fireEvent("recordInserted", store, data);
-					store.fireEvent("storeUpdated", store, data);
-					return store;
-				},
-				
-				/**
-				* Register listeners onto the record that bubble up to the store
-				* @private
-				* @param store :: store class
-				* @param record :: record class
-				* @returns store
-				*/
-				registerStoreRecordListeners: function(store, record){
-					record.bubbleEvents = {};
-					
-					var f = function(){
-						store.fireEvent("storeUpdated", store, record);
-					};
-					
-					record.bubbleEvents["recordChanged"] = (f);
-					record.on("recordChanged", f);
-					
-					return store;
-				},
-				
-				/**
-				* Remove all listeners registered by registerStoreRecordListeners
-				* @private
-				* @param store :: store class
-				* @param record :: record class
-				* @returns store
-				*/
-				removeRecordListeners: function(store, record){
-					var me = this;
-					$.each(record.bubbleEvents, function(name, func){
-						record.off(name, func);
-					});
-					return store;
-				},
-				
-				/**
-				* @private
-				*/
-				add: function(store, data){
-					var me = this;
-					return me.insert(store, -1, data);
-				},
-				
-				/**
-				* do a deep search and look if key && value or key is present and remove it
-				* @private
-				* @usage findAndRemove(["a","b","c"], "b"); :: simple array search, removes value "b" from array
-				* @usage findAndRemove([records...], "name", "bob") :: deep search (records in records). removes the first record where "name" == "bob".
-				* @param store :: Firebrick.base.Store
-				* @param data :: simple array or array of records
-				* @param key :: string :: either the name of an object key or the value in simple array
-				* @param value :: any (optional) :: only used if searching in records
-				* @returns store;
-				*/
-				remove: function(store, key, value, all){
-					var me = this;
-					store.changedRecords = [];
-					var r = me.findRecordAndExecute(store, "remove", key, value, all);
-					if(store.changedRecords.length > 0){
-						store.fireEvent("recordRemoved", store, store.changedRecords);
-						store.fireEvent("storeUpdated", store, store.changedRecords);
-						$.each(store.changedRecords, function(i, record){
-							me.removeRecordListeners(store, record);
-						});
-						store.changedRecords = [];
-					}
-					return store;
-				},
-				
-				/**
-				*	same as findAndRemove, just removes all matches
-				* @see findAndRemove
-				* @private
-				*/
-				removeAll: function(store, key, value){
-					return this.remove(store, key, value, true);
-				},
-				
-				/**
-				* deep search, find record within records
-				* @private
-				* @usage findRecord([records...], "name", "bob"); find the record where "name" == "bob"
-				* @usage findRecord(["a", "b", "c"], "b")
-				* @param store :: Firebrick.base.Store
-				* @param data :: array[records]
-				* @param key :: string
-				* @param value :: any
-				* @returns record[]
-				*/
-				findRecord: function(store, key, value){
-					return this.findRecordAndExecute(store, "find", key, value);
-				},
-				
-				/**
-				*	same as findRecord, just finds all records
-				* @see findRecord
-				* @private
-				*/
-				findAllRecords: function(store, key, value){
-					return this.findRecordAndExecute(store, "find", key, value, true);
-				},
-				
-				/**
-				* find record and execute an action on it. internal use only
-				* @private
-				* @param action :: string :: find, remove
-				* @returns array of results
-				*/
-				findRecordAndExecute: function(store, action, key, value, all){
-					all = all === true ? all : false;
-					var result = [], data = store.getRoot();
-					
-					var f = function(v){
-						//is the iterated item a Record?
-						if($.isPlainObject(v) && v.isRecord){
-							//check if this is the item we were looking for
-							if((key == "recordId" && v.recordId == value) || (v.data.hasOwnProperty(key) && v.data[key] == value)){
-								if(action == "remove"){
-									//found, remove and stop iteration
-									store.changedRecords.push(v);
-									//don't return this element so that it is removed during filtering
-								}else if(action == "find"){
-									//return the found item
-									return v;
-								}
-							}else{
-								if(action == "remove"){
-									//not a match so we can return this element
-									return v; 
-								}
-							}
-						}
-					};
-					
-					
-					result = data.filter(f);
-					
-					if(action == "remove"){
-						//set the store again with the filter records
-						store.data[store.root] = result;
-					}
-						
-					//return the new array with removed items or found matching results
-					return result;
-				},
-				
-				/**
-				* Called from within a store - converts json object into a data object with records
-				* @private
-				* @param store :: Firebrick.store.Base object
-				* @param data :: json object
-				* @returns store
-				*/
-				setDataForStore: function(store, data){
-					var me = this;
-					
-					if($.isArray(data)){
-						data = { root: data };
-					}
-					
-					if(data[store.root]){
-						data[store.root] = me.convertToRecords(store, data[store.root]);
-						store.data = data;
-					}else{
-						console.info("store root was not found in the specified data:", store.root, store);
-					}
-					
-					return store;
-				},
-				
-				
-				
-				/**
-				* Convert a simple json array into an array with Firebrick.record.Base objects (recursive function)
-				* @private
-				* @param array :: array :: json array
-				* @returns array :: new array with records
-				*/
-				convertToRecords: function(store, array){
-					var me = this, 
-						record;
-					//array = [{},{},{}] || [1,2,3,4]
-					$.each(array, function(index, value){
-						//each item in the array
-						if($.isPlainObject(value)){
-							//item is also an object
-							$.each(value, function(k,v){
-								//iterate over all object properties
-								if($.isArray(v)){
-									//found an array, convert those to record recursively as well
-									value[k] = me.convertToRecords(store, v);
-								}
-							});
-						}
-						//create a new record from the data
-						//manipulate the original array by changing its value to the new record
-						array[index] = Firebrick.createRecord().setData(value);
-					});
-					
-					return array;
-				},
-				
-				/**
 				* Submit the given store with its data to the specified url
 				* @private
 				* @param store :: Firebricks.store.Base class
@@ -1188,7 +914,7 @@
 						data = store.toJson();
 						$.ajax({
 							url: store.url.submit,
-							data: {data: data},
+							data: {data: store.toJson()},
 							type: store.protocol,
 							beforeSend: function(){
 								return store.fireEvent("beforeSubmit", store, data);
@@ -1210,58 +936,6 @@
 					return store;
 				},
 				
-			},
-			
-			/**
-			* convert records back to a plain object recursively
-			* @private
-			* @param data :: store data
-			*/
-			convertToPlainObject: function(data){
-				var me = this,
-					convertedData;
-				
-				if($.isArray(data)){
-					convertedData = [];
-					$.each(data, function(index, value){
-						convertedData.push(me.convertToPlainObject(value));
-					});
-				}else if($.isPlainObject(data)){
-					if(data.isRecord){
-						//record class - extract the info we need
-						data = data.data;
-					}
-					convertedData = {};
-					$.each(data, function(key, value){
-						convertedData[key] = me.convertToPlainObject(value); 
-					});
-				}else{
-					//nothing to convert
-					convertedData = data;
-				}
-				
-				return convertedData;
-			},
-			
-			record: {
-			
-				/**
-				* creates a new Firebrick.record.Base store to be used OR if a name and config are supplied, then Firebrick.create() is called
-				* @usage createRecord({
-							key:"name",
-							value:"bob"
-						}); :: creates a new class Firebrick.record.Base to be used
-				* @usage createRecord() :: returns a Record class to be used
-				* @usage createRecord("MyApp.record.MyRecord", {}); :: Firebrick.create() is called
-				* @param name || config :: string (optional) || object :: if string, then Firebrick.create(name, config) is called
-				* @param config :: object (optional) :: data to config the class with - called in conjuction when name is set
-				* @returns Firebrick.record.Base
-				*/
-				createRecord:function(name, config){
-					//return a new object based on the Base class
-					return Firebrick.data.createDataObject("Record", name, config).init();
-				}
-			
 			}
 			
 		},
@@ -1302,6 +976,12 @@
 			//inits of all inits :)
 			return this;
 		},
+		
+		/**
+		 * whether or not the dependecies required by parameter require have already been loaded
+		 * @private
+		 */
+		dependenciesLoaded: false,
 	
 		localEventId:0,
 		localEventRegistry: {},
@@ -1311,15 +991,6 @@
 		*/
 		bubbleEvents: {},
 	
-		/**
-		* Check whether this class has any sub dependencies declared by "require"
-		* @returns boolean
-		*/
-		hasDependencies:function(){
-			var me = this;
-			return (me.require && ( $.type(me.require) == "string" || ( $.isArray(me.require) && me.require.length > 0 ) ) );
-		},
-		
 		/**
 		* register a listener to this object, when the object fires a specific event
 		* @param eventName :: string
@@ -1490,23 +1161,12 @@
 				ovt = me.target,
 				target = me.getTarget(target);
 			
-			//first clear the node from any bindings
-			ko.cleanNode(target[0]);
-			
 			if(target){
+				ko.cleanNode(target[0]);
 				Firebrick.view.renderTo(target, me.html);
-				if(me.state == "initial"){
-					var d = me.getData();
-					if($.isArray(d)){
-						d={items: d};
-					}
-					me.koData = ko.mapping.fromJS(d);
-					ko.applyBindings(me.koData, target[0]);
-					me.state = "rendered";
-				}else if("rendered"){
-					ko.applyBindings(me.koData, target[0]);
-				}
-				
+				me.state = "rendered";
+				me.store.data = ko.mapping.fromJS(me.getData());
+				ko.applyBindings(me.store.data, target[0]);
 				me.fireEvent("viewRendered", me);
 			}else{
 				console.warn("unable to render, no target found for", ovt || me.target, this);
@@ -1554,10 +1214,6 @@
 	
 	Firebrick.define("Firebrick.controller.Base", {
 		extend:"Firebrick.class.Base",
-		/**
-		*String or Array of Strings of classes/stores etc. that are needed
-		*/
-		require:[],
 		
 		/**
 		* Called on creation
@@ -1591,6 +1247,9 @@
 		*/
 		init: function(){
 			var me = this;
+			if(!me.dataInitialised && me.autoLoad){
+				me.load();
+			}
 			if(!me.dataInitialised && me.data){
 				me.setData(me.data);
 			}
@@ -1646,6 +1305,12 @@
 		dataInitialised: false,
 		
 		/**
+		 * load store on creation
+		 * default false
+		 */
+		autoLoad:false,
+		
+		/**
 		* Load the store
 		* @usage load({
 					callback:function(){},
@@ -1656,27 +1321,6 @@
 		*/
 		load: function(options){
 			return Firebrick.data.store.loadStore(this, options);
-		},
-		
-		/**
-		* Remove from Store by key where value = {value}
-		* @usage remove("name", "bob");
-		* @param key :: string :: search data for entry with key
-		* @param value :: any :: if value matches that of the data with the {key} name then remove
-		* @return self
-		*/
-		remove: function(key, value){
-			var me = this;
-			return Firebrick.data.store.remove(me, key, value);
-		},
-		
-		/**
-		* same as remove() just removes all instances found
-		* @see remove
-		*/
-		removeAll: function(key, value){
-			var me = this;
-			return Firebrick.data.store.removeAll(me, key, value);
 		},
 		
 		/**
@@ -1694,80 +1338,12 @@
 		*/
 		setData: function(data){
 			var me = this;
-			Firebrick.data.store.setDataForStore(me, data);
+			if($.isArray(data)){
+				data={items: data};
+			}
+			me.data = data
 			me.dataInitialised = true;
 			return me;
-		},
-		
-		/**
-		* insert into store at specific position
-		* @param pos :: int :: position at which you wish to add the data item
-		* @param data :: any
-		* @returns self
-		*/
-		insert:function(pos, data){
-			var me = this;
-			return Firebrick.data.store.insert(me, pos, data);
-		},
-		
-		/**
-		* adds to the end of the data items
-		* @param data :: any
-		* @returns self
-		*/
-		add: function(data){
-			var me = this;
-			return Firebrick.data.store.add(me, data);
-		},
-		
-		/**
-		* Finds first record matching key and value
-		* @usage findRecord("text", "bob");
-		* @param key :: string
-		* @param value :: any
-		* @returns record
-		*/
-		findRecord: function(key, value){
-			var me = this;
-			return Firebrick.data.store.findRecord(me, key, value);
-		},
-		
-		/**
-		* Finds all records matching key and value
-		* @usage findRecord("text", "bob");
-		* @param key :: string
-		* @param value :: any
-		* @returns record[]
-		*/
-		findAllRecords: function(key, value){
-			var me = this;
-			return Firebrick.data.store.findAllRecords(me, key, value);
-		},
-		
-		/**
-		* returns all root records or data - calls getRoot();
-		* @returns any
-		*/
-		findAll: function(){
-			return this.getRoot();
-		},
-		
-		/**
-		* @returns root data
-		*/
-		getRoot: function(){
-			return this.data[this.root];
-		},
-		
-		/**
-		* @returns integer :: the length of getRoot(); as long as getRoot is an array, otherwise returns 0
-		*/
-		size: function(){
-			var me = this;
-			if($.isArray(me.getRoot())){
-				return me.getRoot().length;
-			}
-			return 0;
 		},
 		
 		/**
@@ -1783,145 +1359,11 @@
 		* @returns object
 		*/
 		toPlainObject: function(){
-			return Firebrick.data.convertToPlainObject(this.data);
+			return $.isFunction(me.data) ? ko.toJS(me.data) : me.data;
 		},
 		
 		/**
 		* Convert store data to json string
-		* @returns json string
-		*/
-		toJson: function(){
-			return JSON.stringify(this.toPlainObject());
-		}
-		
-	});
-	
-	Firebrick.define("Firebrick.record.Base", {
-		extend:"Firebrick.class.Base",
-		
-		/**
-		* unique id given on creation
-		* @private
-		*/
-		recordId: null,
-		/**
-		* data to pass to the record
-		*/
-		data: null,
-		/**
-		* property to determine whether this class is a record
-		*/
-		isRecord: true,
-		
-		init:function(){
-			var me = this;
-			me.data = me.data || {};
-			me.recordId = Firebrick.utils.uniqId();	//give this record an id
-			return this.callParent();
-		},
-		
-		/**
-		* Returns the id specified in the data object - this is separate to that of the Record.id
-		* @returns data.id || null;
-		*/
-		getDataId: function(){
-			var me = this;
-			if(me.data && me.data.id){
-				return me.data.id;
-			}
-			return;
-		},
-		
-		/**
-		* Get the id of the record Record.recordId
-		* @returns this.recordId
-		*/
-		getId: function(){
-			return this.recordId;
-		},
-		
-		/**
-		* Add data to the current record data
-		* @param data :: any :: adds the data to the current data values - overwrites when passed data is an object and the key is already present in this record
-		* @returns self
-		*/
-		addData: function(data){
-			var me = this;
-			if($.isArray(me.data)){
-				//if the current record data is an array we add the new data to the end
-				me.data.push(data);
-			}else if($.isPlainObject(me.data)){
-				//if the current record data is an object, then we copy all the properties of the argument into the current data
-				//note that the argument data must also be an object
-				$.each(data, function(k,v){
-					me.data[k] = v;
-				});
-			}else{
-				//me.data is a primitive type so just overwrite it.
-				me.data = data;
-			}
-			return me;
-		},
-		
-		/**
-		* Set the data property with new values
-		* @param data :: any
-		* @returns self
-		*/
-		setData: function(data){
-			var me = this;
-			me.data = data;
-			return me;
-		},
-		
-		/**
-		* get data from the data object by key
-		* @param key :: string (optional) :: returns all data when no key is specified
-		* @returns any
-		**/
-		getData: function(key){
-			var me = this;
-			if(key){
-				return me.formatter(me.data[key]);
-			}
-			return me.data;
-		},
-		
-		/**
-		* Set a value in the record 
-		* @fires "recordChanged" :: record, key, value
-		* @param key :: string :: key to which you wish to set the value too
-		* @param value :: any :: value you wish to set
-		* @returns self
-		*/
-		setValue:function(key, value){
-			var me = this;
-			if(me.data){
-				if(me.data[key] !== value){
-					me.data[key] = value;
-					me.fireEvent("recordChanged", me, key, value);
-				}
-			}
-			return me;
-		},
-		
-		/**
-		* Todo: allow user to define this
-		*/
-		formatter: function(value){
-			return value;
-		},
-		
-		/**
-		*	returns the store data to JSON object
-		* @returns object
-		*/
-		toPlainObject: function(){
-			return Firebrick.data.convertToPlainObject(this.data);
-		},
-		
-		/**
-		* convert record to json string
 		* @returns json string
 		*/
 		toJson: function(){
