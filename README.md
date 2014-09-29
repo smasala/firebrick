@@ -1,4 +1,4 @@
-#Firebrick JS v0.4.0
+#Firebrick JS v0.4.4
 
 JavaScript MVC Framework built with:
     * jQuery
@@ -16,7 +16,7 @@ bower install firebrick
 
 ##Demo
 
-Checkout the [http://demo.firebrickjs.com](Dashboard) demo
+Checkout the [http://demo.firebrickjs.com](Dashboard)
 
 ##Usage
 

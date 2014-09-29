@@ -14,7 +14,7 @@
 	
 	var Firebrick = {
 		
-		version: "0.4.0",
+		version: "0.4.4",
 		
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -402,8 +402,15 @@
 		
 			/**
 			 * keep track of all require requests
+			 * @private
 			 */
 			requiredFiles:{},
+			
+			/**
+			 * keep track of all the interval functions running
+			 * @private
+			 */
+			intervalRegistry:{},
 			
 			/**
 			 * html is appended to the html tag before the document is ready 
@@ -465,12 +472,76 @@
 			* @usage delay(function(){}, 1000, scope);
 			* @param callback :: function
 			* @param timeout :: integer :: miliseconds
+			* @param args :: any :: pass to delay function
 			* @param scope :: object (optional) :: scope of the callback function. Defaults to: window
 			*/
-			delay: function(callback, timeout, scope, data){
-				setTimeout(function(){
-					callback.apply(scope || this);
-				}, timeout);
+			delay: function(callback, timeout, args, scope){
+				setTimeout(function(args1){
+					callback.apply(scope || this, args1);
+				}, timeout, args);
+			},
+			
+			/**
+			 * clear the interval running by id
+			 */
+			clearInterval:function(id){
+				var me = this,
+					func = me.intervalRegistry[id];
+				if(func){
+					window.clearInterval(func.intId);
+					delete this.intervalRegistry[id];
+				}
+			},
+			
+			/**
+			 * set an interval and prevent any duplicates
+			 * @param id :: string (optional)
+			 * @param callback :: function
+			 * @param timeout :: int :: miliseconds
+			 * @param scope :: object :: scope to apply to the callback
+			 */
+			setInterval: function(){
+				var me = this,
+					fArg = arguments[0];
+					id = $.isFunction(fArg) ? fArgs.id : fArg;
+				
+				if(!me.isIntervalRunning(id)){
+					if($.isFunction(fArg)){
+						newId = me.int_applyInterval(null, arguments[0], arguments[1], arguments[2]);
+					}else{
+						newId = me.int_applyInterval.apply(this, arguments);
+					}
+				}
+				
+				return newId;
+			},
+			
+			/**
+			 * @private use setInterval()
+			 * @param id :: string (optional)
+			 * @return id :: string
+			 */
+			int_applyInterval: function(id, callback, interval, scope){
+				var me = this;
+				
+				var f = function(){
+					callback.apply(scope || this, arguments);
+				}
+				//start the interval
+				f.intId = window.setInterval(f, interval);
+				
+				//register the interval function
+				me.intervalRegistry[id] = f;
+				//return the id
+				return id;
+			},
+			
+			/**
+			 * Check whether interval already exists
+			 * @param id :: string
+			 */
+			isIntervalRunning: function(id){
+				return this.intervalRegistry[id];
 			},
 		
 			/**
@@ -941,13 +1012,50 @@
 		},
 		
 		router:{
+			
+			/**
+			 * set route definitions
+			 * @usage Firebrick.router.set({
+			 * 		"users/abc": function(){},
+			 * 		"contact": function(){}
+			 * })
+			 * @usage: Firebrick.router.set(function(){}) //call function regardless of route
+			 * @params config :: object
+			 * @param callback :: function (optional)
+			 */
+			set: function(config, callback){
+				var me = this,
+					route = function(){};
+				
+				if($.isFunction(config)){
+					//one argument given, simple callback regardless of hash change
+					route = config;
+				}else{
+					if($.isPlainObject(config)){
+						route = function(){
+							$.each(config, function(hash, cb){
+								if(Firebrick.router.is("#" + hash)){
+									cb.apply(this, arguments);
+									return false;
+								};
+							});
+						};
+					}
+				}
+					
+					
+				return me.onHashChange(route);
+			},
 		
 			/**
 			* Call a function when the hash changes on the site
-			* @param callback :: function :: function to call on hashchange
+			* @usage Firebrick.router
+			* @private || use Firebrick.route.set()
+			* @param config
+			* @param callback
 			*/
 			onHashChange: function(callback){
-				$(window).on("hashchange", function(){
+				return $(window).on("hashchange", function(){
 					callback.apply(this, arguments);
 				});
 			},
@@ -983,6 +1091,7 @@
 		 */
 		dependenciesLoaded: false,
 	
+		localClassEventId:null,
 		localEventId:0,
 		localEventRegistry: {},
 		/**
@@ -998,13 +1107,19 @@
 		* @returns self
 		*/
 		on: function(eventName, callback){
-			var me = this;
-			if(!me.localEventRegistry[eventName]){
-				me.localEventRegistry[eventName] = [];
+			var me = this,
+				classId = this.localClassEventId || Firebrick.utils.uniqId();	//generate an id if it doesnt have one already
+			
+			this.localClassEventId = classId;
+			
+			if(!me.localEventRegistry[classId]){
+				me.localEventRegistry[classId] = {};
+				me.localEventRegistry[classId][eventName] = [];
 			}
+			
 			callback.id = me.localEventId;
 			localEventId = me.localEventId++;
-			me.localEventRegistry[eventName].push(callback);
+			me.localEventRegistry[classId][eventName].push(callback);
 			return me;
 		},
 		
@@ -1015,11 +1130,12 @@
 		* @returns self
 		*/
 		off: function(eventName, callback){
-			var me = this;
-			if(me.localEventRegistry[eventName]){
-				$.each(me.localEventRegistry[eventName], function(i, func){
+			var me = this,
+				classId = me.localClassEventId;
+			if(me.localEventRegistry[classId] && me.localEventRegistry[classId][eventName]){
+				$.each(me.localEventRegistry[classId][eventName], function(i, func){
 					if(func.id == callback.id){
-						me.localEventRegistry[eventName].splice(i, 1);
+						me.localEventRegistry[classId][eventName].splice(i, 1);
 						return false;
 					}
 				});
@@ -1035,11 +1151,12 @@
 		*/
 		fireEvent: function(){
 			var me = this,
+				classId = me.localClassEventId,
+				events = me.localEventRegistry[classId],
 				args = arguments, 
-				eventName = [].splice.call(arguments, 0, 1);	//get first argument - i.e. the event name
-			
-			if(me.localEventRegistry[eventName]){
-				$.each(me.localEventRegistry[eventName], function(i, func){
+				eventName = arguments[0];	//get first argument - i.e. the event name
+			if(events && events[eventName]){
+				$.each(events[eventName], function(i, func){
 					func.apply(func, args);
 				});
 			}

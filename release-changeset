@@ -1,3 +1,9 @@
+v0.4.4
+----------------------------
+* improved hash routing
+* allow interval functions to be created and removed Firebrick.utils.setInterval() && Firebrick.utils.clearInterval() with custom ids
+* fix memory leak with event firing per class
+
 v0.4.0
 ----------------------------
 * fix cleanNode error with invalid target
