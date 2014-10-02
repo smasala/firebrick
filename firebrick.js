@@ -1461,6 +1461,7 @@
 		 * @usage subViews: Firebrick.defineView(...)
 		 * @usage subViews: [Firebrick.defineView(...), Firebrick.defineView(...)]
 		 */
+		subViews:null,
 
 		/**
 		* Called on creation
