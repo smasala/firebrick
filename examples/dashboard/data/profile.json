@@ -1,0 +1,8 @@
+{
+    "success": true,
+    "profile": {
+        "id": 1000,
+        "username": "Terminator",
+        "newsletter": true
+    }
+}

@@ -1,16 +1,32 @@
-define(function(){
+define([
+        "controller/view/NavController", 
+        "controller/app/MainController", 
+        "popover"], function(){
+	
 	return Firebrick.create("MyApp.controller.ViewController", {
 		extend:"Firebrick.controller.Base",
 		init:function(){
 			var me = this;
 			
-			Firebrick.addListener("updateBreadcrumb", function(event, page){
-				Firebrick.getView("MyApp.view.components.Breadcrumbs").store.getData().text(page);
-			});
+			this.app.on({
+				".langIcon":{
+					click:function(event, el){
+						Firebrick.languages.setLang(el.id);
+					} 
+				},
+				scope:this
+			})
 			
 			me.initView();
 			
+			me.initPopovers();
+			
 			me.callParent();
+		},
+		
+		initPopovers: function(){
+			//init any popovers
+			$("[data-toggle=popover]").popover({html:true});
 		},
 		
 		initView:function(){
@@ -19,16 +35,16 @@ define(function(){
 				store:{
 					links:[{
 							id: "app_Users",
-							text: "Users"
+							text: "nav_item_users"
 						},{
 							id: "app_Reports",
-							text: "Reports"
+							text: "nav_item_reports"
 						},{
 							id: "app_Analytics",
-							text: "Analytics"
+							text: "nav_item_analytics"
 						},{
 							id: "app_Exports",
-							text: "Exports"
+							text: "nav_item_exports"
 						}],
 						currentActive: "app_Users",
 						setActive: function(id){
@@ -50,7 +66,8 @@ define(function(){
 			});
 			
 			Firebrick.fireEvent("viewReady");
-		},
+		}
+		
 		
 	});
 });

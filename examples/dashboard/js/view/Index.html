@@ -2,22 +2,33 @@
 	<div class="container-fluid">
 		<div class="navbar-header">
       	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-	        <span class="sr-only">Toggle navigation</span>
+	        <span class="sr-only" data-bind="text: fb.text('toggle_nav')"></span>
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#">Firebrick Prototype</a>
+	      <a class="navbar-brand" href="/" data-bind="text: fb.text('title')"></a>
 	   </div>
    <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Settings</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="#">Help</a></li>
+        <li><a href="/" data-bind="text: fb.text('dashboard')"></a></li>
+        <li><a id="settings" data-bind="text: fb.text('settings')"></a></li>
+        <li><a id="profile" href="#" data-bind="text: fb.text('profile')"></a></li>
+        <li><a href="#" tabindex="0" 
+        		data-toggle="popover" data-trigger="focus"
+        		data-container="body" data-placement="left" 
+        		data-bind="attr{ 'data-content' : helptext }, text: fb.text('help')">
+       		</a>
+     	</li>
+     	<!-- ko foreach: fb.languages.allLanguages() -->
+     	<li>
+			<a data-bind="attr:{id:$data}" class="langIcon"><img data-bind="attr{src:'/images/lang/' + $data + '.png'}" /></a>
+		</li>
+		<!-- /ko -->
+		
       </ul>
       <form class="navbar-form navbar-right">
-        <input type="text" class="form-control" placeholder="Search...">
+        <input type="text" class="form-control" data-bind="attr{'placeholder': fb.text('ph_search')}">
       </form>
     </div>
   </div>
@@ -31,6 +42,7 @@
     	<div id="main-content">
 			<!-- loaded dynamically -->
 		</div>
+		<popup></popup>
     </div>
   </div>
 </div>

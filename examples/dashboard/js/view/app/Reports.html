@@ -1,14 +1,13 @@
-<h3>Reports</h3>
+<h3 data-bind="text: fb.text('rp_title')">Reports</h3>
 
-<p>
-	Something about reports comes here <span data-bind="text: name"></span>
+<p data-bind="text: fb.text('rp_info')"">
 </p>
 
 <div class="row">
 	<div class="col-lg-12">
 		<div class="panel panel-default panel-success">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">Data</h3>
+		    <h3 class="panel-title" data-bind="text: fb.text('rp_title')"></h3>
 		  </div>
 		  <div class="panel-body">
 		    <div id="sincos" style="width:100%;height:400px"></div>
@@ -21,49 +20,49 @@
 	<div class="col-lg-4">
 		<div class="panel panel-default panel-success">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">Panel 1</h3>
+		    <h3 class="panel-title" data-bind="text: fb.text('rp_box_1_title')"></h3>
 		  </div>
 		  <div class="panel-body">
-		  		<div class="alert alert-success" role="alert">Well done! You successfully read this important alert message.</div>
-				<div class="alert alert-info" role="alert">Heads up! This alert needs your attention, but it's not super important.</div>
-				<div class="alert alert-warning" role="alert">Warning! Better check yourself, you're not looking too good.</div>
-				<div class="alert alert-danger" role="alert">Oh snap! Change a few things up and try submitting again.</div>
+		  		<div class="alert alert-success" role="alert" data-bind="text: fb.text('alert_a')"></div>
+				<div class="alert alert-info" role="alert" data-bind="text: fb.text('alert_b')">Heads up! This alert needs your attention, but it's not super important.</div>
+				<div class="alert alert-warning" role="alert" data-bind="text: fb.text('alert_c')">Warning! Better check yourself, you're not looking too good.</div>
+				<div class="alert alert-danger" role="alert" data-bind="text: fb.text('alert_d')">Oh snap! Change a few things up and try submitting again.</div>
 		  </div>
 		</div>
 	</div>
 	<div class="col-lg-4">
 		<div class="panel panel-default panel-info">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">Panel 2</h3>
+		    <h3 class="panel-title" data-bind="text: fb.text('rb_box_2_title')"></h3>
 		  </div>
 		  <div class="panel-body">
-				<p class="text-muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
-				<p class="text-primary">Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-				<p class="text-success">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-				<p class="text-info">Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-				<p class="text-warning">Etiam porta sem malesuada magna mollis euismod.</p>
-				<p class="text-danger">Donec ullamcorper nulla non metus auctor fringilla.</p>
+				<p class="text-muted" data-bind="text: fb.text('silly1')"></p>
+				<p class="text-primary" data-bind="text: fb.text('silly2')"></p>
+				<p class="text-success" data-bind="text: fb.text('silly1')"></p>
+				<p class="text-info" data-bind="text: fb.text('silly2')"></p>
+				<p class="text-warning" data-bind="text: fb.text('silly1')"></p>
+				<p class="text-danger" data-bind="text: fb.text('silly2')"></p>
 		  </div>
 		</div>
 	</div>
 	<div class="col-lg-4">
 		<div class="panel panel-default panel-danger">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">Panel 3</h3>
+		    <h3 class="panel-title" data-bind="text: fb.text('rb_box_3_title')"></h3>
 		  </div>
 		  <div class="panel-body">
 			<ul class="list-group">
 		      <li class="list-group-item">
 		        <span class="badge">14</span>
-		        Cras justo odio
+		        <span data-bind="text: fb.text('silly1')"></span>
 		      </li>
 		      <li class="list-group-item">
 		        <span class="badge">2</span>
-		        Dapibus ac facilisis in
+		        <span data-bind="text: fb.text('silly2')"></span>
 		      </li>
 		      <li class="list-group-item">
 		        <span class="badge">1</span>
-		        Morbi leo risus
+		       <span data-bind="text: fb.text('silly1')"></span>
 		      </li>
 		    </ul>
 		  </div>

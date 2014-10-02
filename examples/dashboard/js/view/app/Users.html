@@ -4,7 +4,7 @@
 		
 			<fieldset data-bind="with: users()[activePage()]">
 			
-				<legend class="page-header"><h3>Users</h3></legend>
+				<legend class="page-header"><h3 data-bind="text: fb.text('users_title')"></h3></legend>
 			
 				<div class="form-group">
 					<label class="col-md-3" for="user_id">Id</label>
@@ -13,37 +13,37 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3" for="user_name">Name</label>
+					<label class="col-md-3" for="user_name" data-bind="text: fb.text('users_name')"></label>
 					<div class="col-md-7">
 						<input id="user_name" type="text" class="form-control" placeholder="" data-bind="value: name">
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3" for="user_surname">Surname</label>
+					<label class="col-md-3" for="user_surname" data-bind="text: fb.text('users_surname')"></label>
 					<div class="col-md-7">
 						<input id="user_surname" type="text" class="form-control" placeholder="" data-bind="value: surname">
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3" for="user_street">Street</label>
+					<label class="col-md-3" for="user_street" data-bind="text: fb.text('users_street')"></label>
 					<div class="col-md-7">
 						<input id="user_street" type="text" class="form-control" placeholder="" data-bind="value: street">
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3" for="user_housenumber">House Number</label>
+					<label class="col-md-3" for="user_housenumber" data-bind="text: fb.text('users_hn')"></label>
 					<div class="col-md-7">
 						<input id="user_housenumber" type="text" class="form-control" placeholder="" data-bind="value: house_number">
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3" for="user_postcode">Postcode</label>
+					<label class="col-md-3" for="user_postcode" data-bind="text: fb.text('users_pc')"></label>
 					<div class="col-md-7">
 						<input id="user_postcode" type="text" class="form-control" placeholder="" data-bind="value: postcode">
 					</div>
 				</div>
 				<div class="form-group">
-			  		<label class="col-md-3" for="user_country">Country</label>
+			  		<label class="col-md-3" for="user_country" data-bind="text: fb.text('users_country')"></label>
 				  	<div class="col-md-7">
 				  		<select id="selectbasic" name="user_country" class="form-control" 
 				  			data-bind="options: $parent.countries, value:country">
@@ -55,16 +55,16 @@
 			
 			<div id="user_pagination" class="text-center">
 				<!-- pagination tpl -->
-				<pagination params="type: 'user_pagination'"></pagination>
+				<pagination></pagination>
 			</div>
 			
   		</form>
 	</div>
 	<div class="col-md-4 infobox">
-		<p>Some interesting information goes in here</p>
-		<div class="alert alert-success" role="alert">Well done! You successfully read this important alert message.</div>
-		<div class="alert alert-info" role="alert">Heads up! This alert needs your attention, but it's not super important.</div>
-		<div class="alert alert-warning" role="alert">Warning! Better check yourself, you're not looking too good.</div>
-		<div class="alert alert-danger" role="alert">Oh snap! Change a few things up and try submitting again.</div>
+		<p data-bind="text: fb.text('alert_title')"></p>
+		<div class="alert alert-success" role="alert" data-bind="text: fb.text('alert_a')"></div>
+		<div class="alert alert-info" role="alert" data-bind="text: fb.text('alert_b')"></div>
+		<div class="alert alert-warning" role="alert" data-bind="text: fb.text('alert_c')"></div>
+		<div class="alert alert-danger" role="alert" data-bind="text: fb.text('alert_d')"></div>
 	</div>
 </div>

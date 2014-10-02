@@ -19,10 +19,9 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 		initView:function(){
 			var me = this;
 			Firebrick.createView("MyApp.view.app.Reports", {
-				store:{name: "steven"},
 				target:"#main-content",
 				init:function(){
-					this.on("viewRendered", function(){
+					this.on("rendered", function(){
 						me.startGraph();
 					});
 					this.callParent();

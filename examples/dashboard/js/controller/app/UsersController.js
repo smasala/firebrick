@@ -32,7 +32,7 @@ define(["store/UserStore"], function(store){
 		},
 		
 		getUsers: function(){
-			return Firebrick.get("MyApp.store.UserStore").data.users;
+			return Firebrick.get("MyApp.store.UserStore").data.users();
 		},
 		
 		getCountries: function(){
@@ -44,7 +44,7 @@ define(["store/UserStore"], function(store){
 		initPageData: function(){
 			var me = this,
 				pages = [];
-			
+
 			$.each(me.getUsers(), function(i, obj){
 				pages.push({
 					num:i+1, 

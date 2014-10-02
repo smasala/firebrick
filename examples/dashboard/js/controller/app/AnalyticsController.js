@@ -22,24 +22,26 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 			Firebrick.createView("MyApp.view.app.Analytics", {
 				store:{name: "steven"},
 				target:"#main-content",
-				init:function(){
-					this.on("viewRendered", function(){
-						me.startGraph();
-					});
-					this.callParent();
+				listeners:{
+					"rendered": me.startGraph,
+					"destroyed": me.stopTimers,
+					scope:me
 				}
 			});
 		},
 		currentIds:[],
-		startGraph:function(){
-			var containers = $(".flot-moving-line-chart");
+		stopTimers:function(){
 			var me = this;
-			
 			$.each(me.currentIds, function(i,v){
-				console.info("delete", i, v);
 				Firebrick.utils.clearInterval(v);
 		    });
 		    me.currentIds = [];
+		},
+		startGraph:function(){
+			var me = this, 
+				containers = $(".flot-moving-line-chart");
+			
+			me.stopTimers();
 			
 			$.each(containers, function(){
 				var container = $(this);
@@ -116,13 +118,13 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 			    });
 			    
 			    var id = "analyticsInterval" + Firebrick.utils.uniqId();
+			    me.currentIds.push(id);
 			    // Update the random dataset at 25FPS for a smoothly-animating chart
 		    	Firebrick.utils.setInterval(id, function updateRandom() {
 			        series[0].data = getRandomData();
 			        plot.setData(series);
 			        plot.draw();
-			        console.info("running", id);
-			    }, 40);
+			    }, 80);
 			    
 			});
 		},
