@@ -420,7 +420,7 @@
 			 */
 			internal_loadSubView: function(subView){
 				if($.type(subView) == "string"){
-					subView = Firebrick.createView(subView);
+					subView = Firebrick.createView(subView, {autoRender:false});
 				}else if($.isPlainObject(subView)){
 					if(subView._classname && subView.state && subView.state == "initial"){
 						subView = Firebrick.createView(subView._classname);
