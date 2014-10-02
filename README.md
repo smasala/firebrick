@@ -1,10 +1,11 @@
 #Firebrick JS v0.5.0
 
 JavaScript MVC Framework built with:
-    * jQuery
-    * Bootstrap
-    * Knockout JS
-    * Require JS
+
+* jQuery
+* Bootstrap
+* Knockout JS
+* Require JS
 
 ### Development
 Please note that this framework is still under development and that some large API changes can be made with any release
