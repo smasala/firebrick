@@ -1,4 +1,4 @@
-#Firebrick JS v0.4.4
+#Firebrick JS v0.5.0
 
 JavaScript MVC Framework built with:
     * jQuery
@@ -20,7 +20,7 @@ Checkout the [Dashboard ](http://demo.firebrickjs.com) demo
 
 ##Usage
 
-* Load files in the correct order
+* Load files in the correct order (Note: you can also require these files with requirejs)
 ```
 	<!-- jQuery -->
 	<script src="bower_components/jquery/jquery.js" type="text/javascript"></script>

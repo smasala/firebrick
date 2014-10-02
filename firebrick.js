@@ -7,15 +7,15 @@
 
 (function(window, document, $){
 	
-	if(window.Firebrick){
-		console.error("unable to initialise FirebrickJS, Firebrick already defined");
+	if(window.Firebrick || window.fb){
+		console.error("unable to initialise FirebrickJS, window.Firebrick or window.fb are already defined");
 		return;
 	}
-	
+
 	var Firebrick = {
 		
-		version: "0.4.4",
-		
+		version: "0.5.0",
+
 		/**
 		* used to store configurations set Firebrick.ready()
 		* @private
@@ -34,10 +34,11 @@
 						path: string //path of the app
 					},
 					autoRender: boolean //whether to call first view automatically  "{app.name}.view.Index",
-					initialData: object //initialData to be passed to the autoRender view,
+					viewData: object //viewData to be passed to the autoRender view,
 					splash: string //html or string to be rendered before the document is loaded - removed on document.ready
 					require:string or array of string //these file(s) are required
-					cache: boolean default true - whether require should cache files or not
+					cache: boolean default true - whether require should cache files or not,
+					lang: language file name or store
 				}
 		*/
 		ready: function(options){
@@ -52,8 +53,12 @@
 				});
 			}
 			
+			if(options.lang){
+				Firebrick.languages.init(options.lang);
+			}
+			
 			if(options.autoRender !== false){
-				var view = Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", data:options.initialData});
+				var view = Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", store:options.viewData});
 			}
 			
 			//if files need to be required first, then require them and fire the application
@@ -65,12 +70,12 @@
 				}
 
 				require(options.require, function(){
-					$("div.fb-splash").remove();
+					$("div#fb-splash").remove();
 					options.go.apply(options.go, arguments);
-				})
+				});
 			
 			}else{
-				$("div.fb-splash").remove();
+				$("div#fb-splash").remove();
 				options.go();
 			}
 		},
@@ -82,6 +87,10 @@
 		
 		get: function(){
 			return this.shortcut(this.classes, "get", arguments);
+		},
+		
+		getById: function(){
+			return this.shortcut(this.classes, "getById", arguments);
 		},
 		
 		create: function(){
@@ -98,6 +107,14 @@
 		
 		getView: function(){
 			return this.shortcut(this.view, "getView", arguments);
+		},
+		
+		loadRaw: function(){
+			return this.shortcut(this.view, "loadRaw", arguments);
+		},
+		
+		getViewById: function(){
+			return this.shortcut(this.view, "getViewById", arguments);
 		},
 		
 		createView: function(){
@@ -140,8 +157,8 @@
 			return this.shortcut(this.data.store, "createStore", arguments);
 		},
 		
-		createRecord: function(){
-			return this.shortcut(this.data.record, "createRecord", arguments);
+		text: function(){
+			return this.shortcut(this.languages, "getByKey", arguments); 
 		},
 		/** END OF SHORTCUTS **/
 		
@@ -164,6 +181,25 @@
 			},
 			
 			/**
+			 * get a class by classId
+			 * @param string
+			 * @return object
+			 */
+			getById: function(id){
+				var me = this,
+					clazz;
+				$.each(me.classRegistry, function(k,v){
+					if(v.getClassId && v.getClassId() == id){
+						clazz = v;
+						//found class, stop iteration
+						return false;
+					}
+				});
+				
+				return clazz;
+			},
+			
+			/**
 			* get or returns a firebrick class by name and calls init()
 			* @param name :: string
 			* @param config :: object
@@ -174,7 +210,7 @@
 					clazz = me.define(name, config);
 					
 				//initalise the class
-				if(clazz && clazz.init){
+				if(clazz && clazz.init && !clazz._created){
 					clazz.init();
 				}
 				
@@ -288,6 +324,25 @@
 			},
 			
 			/**
+			 * get a class by classId
+			 * @param string
+			 * @return object
+			 */
+			getViewById: function(id){
+				var me = this,
+					clazz;
+				$.each(me.viewRegistry, function(k,v){
+					if(v.getClassId && v.getClassId() == id){
+						clazz = v;
+						//found class, stop iteration
+						return false;
+					}
+				});
+				
+				return clazz;
+			},
+			
+			/**
 			* Create and render a view
 			* @param name :: string :: MyApp.view.MyView
 			* @param config :: object (optional) :: object to config the View class with
@@ -296,7 +351,12 @@
 			createView: function(name, config){
 				//get, define and call the constructor of the view
 				var me = this, 
-					view = me.defineView(name, config).init();
+					view = me.defineView(name, config);
+				if(!view._created){
+					view.init();
+				}else if(view.autoRender){
+					view.render();
+				}
 				return view;
 			},
 			
@@ -318,22 +378,67 @@
 					var view = Firebrick.classes.buildClass(name, config);
 					me.viewRegistry[name] = view;
 					
-					if(view.showLoading === true){
-						var t = me.getTarget(view.target);
-						if(t){
-							t.html(view.loadingTpl);
-						}
-					}
+					view.startLoader();
 					
 					//get the view
 					Firebrick.utils.require(name, function(tpl){
 						//save the template
 						config.tpl = tpl;
 					}, false, "html", me.viewExtension);
+					
 				}
 				
 				//return the new view
 				return me.viewRegistry[name];
+			},
+			
+			/**
+			 * initialise subviews of a view
+			 * @private
+			 * @param view :: view object
+			 * @returns view
+			 */
+			initSubViews:function(view){
+				var me = this,
+					subViews = view.subViews;
+				if(subViews){
+					if($.isArray(subViews)){
+						$.each(subViews, function(i,v){
+							view.subViews[i] = me.internal_loadSubView(v);
+						});
+					}else{
+						view.subViews = me.internal_loadSubView(subViews);
+					}
+				}
+				
+				return view;
+			},
+			
+			/**
+			 * used by initSubViews
+			 * @private
+			 */
+			internal_loadSubView: function(subView){
+				if($.type(subView) == "string"){
+					subView = Firebrick.createView(subView);
+				}else if($.isPlainObject(subView)){
+					if(subView._classname && subView.state && subView.state == "initial"){
+						subView = Firebrick.createView(subView._classname);
+					}
+				}
+				return subView;
+			},
+			
+			/**
+			 * load html file raw
+			 */
+			loadRaw: function(name){
+				var me = this,
+					raw;
+				Firebrick.utils.require(name, function(r){
+					raw = r;
+				}, false, "html", "html");
+				return raw;
 			},
 			
 			/**
@@ -390,7 +495,7 @@
 			* @private
 			* @param target :: jquery object ::
 			* @param html :: string :: template or html
-			* @return target as jquery object
+			* @returns target as jquery object
 			*/
 			renderTo:function(target, html){
 				return target.html(html);
@@ -419,7 +524,7 @@
 			 * @param html :: string
 			 */
 			initSplash: function(html){
-				$("html").append("<div class='fb-splash'>" + html + "</div>");
+				$("html").append("<div id='fb-splash'>" + html + "</div>");
 			},
 			
 			/**
@@ -670,6 +775,83 @@
 
 				return u;
 			}
+			
+		},
+		
+		languages:{
+			
+			/**
+			 * @private
+			 * use get/setLang() to change the language
+			 */
+			lang: ko.observable("en"),
+			
+			/**
+			 * store of keys
+			 * @private
+			 */
+			keys:{},
+			
+			/**
+			 * initial the language keys
+			 * @private
+			 * @use Firebrick.ready({lang:...}) to set language
+			 * @param lang :: string or store object :: string = url to load
+			 */
+			init:function(lang){
+				var me = this;
+				if($.type(lang) == "string"){
+					me.keys = Firebrick.createStore({
+						url:lang,
+						autoLoad:true
+					}).getData();
+				}else if(lang.isStore){
+					me.keys = lang.getData();
+				}else{
+					console.error("unable to load languages", lang);
+				}
+			},
+			
+			/**
+			 * get text by its key
+			 * @param key :: string
+			 * @returns string
+			 */
+			getByKey: function(key){
+				var me = this;
+				key = key.toLowerCase();
+				return me.keys[me.lang()][key] || key;
+			},
+			
+			/**
+			 * set the app language
+			 * @param langKey :: string
+			 */
+			setLang: function(langKey){
+				this.lang(langKey)
+			},
+			
+			/**
+			 * get Lang as string
+			 * @returns string
+			 */
+			getLang: function(){
+				return this.lang();
+			},
+			
+			/**
+			 * available langages
+			 * @returns array of strings :: all possible languages
+			 */
+			allLanguages: function(){
+				var me = this,
+					langs = [];
+				$.each(ko.mapping.toJS(me.keys), function(lang, keys){
+					langs.push(lang);
+				});
+				return langs;
+			}
+			
 		},
 		
 		events: {
@@ -1082,7 +1264,13 @@
 
 		init:function(){
 			//inits of all inits :)
-			return this;
+			var me = this;
+			if(me.listeners){
+				me.on(me.listeners);
+			}
+			me.fireEvent(me.overrideReadyEvent || "ready");
+			me._created = true;
+			return me;
 		},
 		
 		/**
@@ -1091,35 +1279,89 @@
 		 */
 		dependenciesLoaded: false,
 	
-		localClassEventId:null,
-		localEventId:0,
-		localEventRegistry: {},
 		/**
-		* used to register a link of events
-		* e.g. if the records fires an event, so must its store etc.
-		*/
-		bubbleEvents: {},
+		 * wether a class has been created already
+		 */
+		_created:false,
+		
+		/**
+		 * @private use getClassId()
+		 */
+		_classId:null,
+		/**
+		 * event registry
+		 * @private
+		 */
+		localEventRegistry: {},
+
+		/**
+		 * get the id for the current class
+		 * @returns string
+		 */
+		getClassId: function(){
+			if(!this._classId){
+				//generate an id if it doesnt have one already
+				this._classId = "fb-" + Firebrick.utils.uniqId();
+			}
+			return this._classId;
+		},
+		
+		/**
+		 * shorthand for defining class listeners so you don't have to create the init function
+		 * @usage: listeners:{
+		 * 				"ready": function(){},
+		 * 				scope:this
+		 * 			}
+		 */
+		listeners:null,
 	
 		/**
 		* register a listener to this object, when the object fires a specific event
+		* @usage .on("someEvent", callback)
+		* @usage .on({
+		*     "someevent": callback,
+		*     "someotherevent": callback1
+		* })
 		* @param eventName :: string
 		* @param callback :: function
+		* @param scope :: object (optional)
 		* @returns self
 		*/
-		on: function(eventName, callback){
+		on: function(eventName, callback, scope){
 			var me = this,
-				classId = this.localClassEventId || Firebrick.utils.uniqId();	//generate an id if it doesnt have one already
-			
-			this.localClassEventId = classId;
+				classId = this.getClassId();	
 			
 			if(!me.localEventRegistry[classId]){
 				me.localEventRegistry[classId] = {};
-				me.localEventRegistry[classId][eventName] = [];
 			}
 			
-			callback.id = me.localEventId;
-			localEventId = me.localEventId++;
-			me.localEventRegistry[classId][eventName].push(callback);
+			var addEvent = function(eventName, func, sc){
+				//init the registry
+				if(!me.localEventRegistry[classId][eventName]){
+					me.localEventRegistry[classId][eventName] = [];
+				}
+				//give the function an id
+				func.id = Firebrick.utils.uniqId();
+				if(sc){
+					//add the scope if needed
+					func.scope = sc;
+				}
+				me.localEventRegistry[classId][eventName].push(func);
+			};
+			
+			if($.isPlainObject(eventName)){
+				//first argument is an object
+				var s = eventName.scope;
+				$.each(eventName, function(k,v){
+					if(k !== "scope"){
+						addEvent(k, v, s);
+					}
+				});
+			}else{
+				//just add the event
+				addEvent(eventName, callback, scope);
+			}
+			
 			return me;
 		},
 		
@@ -1131,7 +1373,7 @@
 		*/
 		off: function(eventName, callback){
 			var me = this,
-				classId = me.localClassEventId;
+				classId = me.getClassId();
 			if(me.localEventRegistry[classId] && me.localEventRegistry[classId][eventName]){
 				$.each(me.localEventRegistry[classId][eventName], function(i, func){
 					if(func.id == callback.id){
@@ -1151,13 +1393,13 @@
 		*/
 		fireEvent: function(){
 			var me = this,
-				classId = me.localClassEventId,
+				classId = me._classId,
 				events = me.localEventRegistry[classId],
 				args = arguments, 
 				eventName = arguments[0];	//get first argument - i.e. the event name
 			if(events && events[eventName]){
 				$.each(events[eventName], function(i, func){
-					func.apply(func, args);
+					func.apply(func.scope || func, args);
 				});
 			}
 			return me;
@@ -1198,25 +1440,46 @@
 		 */
 		loadingTpl: Firebrick.templates.loadingTpl,
 		/**
+		 * whether the loader is being shown or not
+		 * @private
+		 */
+		loading: false,
+		/**
 		 * whether to show that the view is loading
 		 */
 		showLoading: true,
-		
 		/**
 		* State the view is current in. "Initial", "Rendered"
 		* @private
 		*/
 		state:"initial",
+		/**
+		 * define subviews to load after creation of this view
+		 * string / array of strings / object / array of objects
+		 * @usage subViews: MyApp.view.MyView
+		 * @usage subViews: ["MyApp.view.MyView", "MyApp.view.MyView1"]
+		 * @usage subViews: Firebrick.defineView(...)
+		 * @usage subViews: [Firebrick.defineView(...), Firebrick.defineView(...)]
+		 */
 
 		/**
 		* Called on creation
 		*/
 		init: function(){
 			var me = this;
-			//check the data of the view is in the correct format
-			me.initStore();
-			//parse html with data
-			me.initView(me.tpl, me.getData());
+			me.overrideReadyEvent = "base";
+			
+			me.on(me.overrideReadyEvent, function(){
+				//check the data of the view is in the correct format
+				me.initStore();
+				//parse html with data
+				me.initView(me.tpl, me.getData());
+				
+				me.initSubViews();
+				
+				me.fireEvent("ready");
+			});
+			
 			return me.callParent();
 		},
 		
@@ -1253,6 +1516,13 @@
 		},
 		
 		/**
+		 * @private
+		 */
+		initSubViews: function(){
+			return Firebrick.view.initSubViews(this);
+		},
+		
+		/**
 		* @returns jquery object
 		*/
 		getTarget: function(){
@@ -1264,32 +1534,70 @@
 		* @returns self
 		*/
 		render:function(){
-			return this.renderTo();
-		},
-		
-		/**
-		* Render view to specified target
-		* @fires viewRendered
-		* @param target :: string || jQuery Object (optional) :: defaults to this.target
-		* @returns self
-		*/
-		renderTo: function(target){
 			var me = this,
 				ovt = me.target,
-				target = me.getTarget(target);
-			
+				target = me.getTarget();
+			 
 			if(target){
-				ko.cleanNode(target[0]);
-				Firebrick.view.renderTo(target, me.html);
-				me.state = "rendered";
-				me.store.data = ko.mapping.fromJS(me.getData());
-				ko.applyBindings(me.store.data, target[0]);
-				me.fireEvent("viewRendered", me);
+				
+				var el = target[0];
+				if(target.attr("fb-view-bind") && target.attr("fb-view-bind") != me.getClassId()){
+					ko.cleanNode(el);
+					target.removeAttr("fb-view-bind")
+				}
+				
+				if(!target.attr("fb-view-bind")){
+					Firebrick.view.renderTo(target, me.html);
+					me.stopLoader();
+					me.state = "rendered";
+					
+					var data = me.getData();
+					if(data && !$.isEmptyObject(data)){
+						target.attr("fb-view-bind", me.getClassId());
+						ko.applyBindings(me.store.getData(), el);
+						me.setDisposeCallback(el);	
+					}
+					
+					me.fireEvent("rendered", me);
+				}
+				
 			}else{
 				console.warn("unable to render, no target found for", ovt || me.target, this);
 			}
 			
 			return me;
+		},
+		
+		setDisposeCallback: function(el){
+			ko.utils.domNodeDisposal.addDisposeCallback(el, function(el){
+				var view = Firebrick.getViewById($(el).attr("fb-view-bind"));
+				view.fireEvent("destroyed", el);
+			});
+		},
+		
+		show: function(){
+			var me = this,
+				t = me.getTarget();
+			if(t){
+				t.show();
+			}
+		},
+		
+		hide: function(){
+			var me = this,
+				t = me.getTarget();
+			if(t){
+				t.hide();
+			}
+		},
+		
+		isVisible: function(){
+			var me = this,
+			t = me.getTarget();
+			if(t){
+				return t.is(":visible");
+			}
+			return false;
 		},
 		
 		/**
@@ -1308,23 +1616,33 @@
 		},
 		
 		/**
-		* Refresh the new with the template and data
+		* update the view with new dataa
 		* @param data :: object :: extra data you wish to pass to the view
 		* @returns self
 		*/
-		refresh:function(data){
-			var me = this,
-				store = me.getStore();
-			
-			if(data && store){
-				$.each(data, function(k, v){
-					store.data[k] = v;
-				});
-			}
-			
-			me.init();
-			me.render();
+		update:function(data){
+			var me = this;
+			me.getStore().setData(data);
 			return me;
+		},
+		
+		startLoader: function(){
+			var me = this,
+				t = me.getTarget();
+			if(!me.loading && t){
+				me.loading = true;
+				me.hide();
+				t.before("<div id='fb-loader-" + me.getClassId() + "'>" + me.loadingTpl + "</div>");
+			}
+		},
+		
+		stopLoader: function(){
+			var me = this;
+			if(me.loading){
+				$("#fb-loader-" + me.getClassId()).remove();
+				me.show();
+				me.loading = false;
+			}
 		}
 		
 	});
@@ -1354,7 +1672,8 @@
 			listeners:function(){
 				return Firebrick.events.addListener.apply(Firebrick.events, arguments);
 			}
-		}
+		},
+		
 	});
 	
 	Firebrick.define("Firebrick.store.Base", {
@@ -1364,11 +1683,14 @@
 		*/
 		init: function(){
 			var me = this;
-			if(!me.dataInitialised && me.autoLoad){
-				me.load();
-			}
-			if(!me.dataInitialised && me.data){
-				me.setData(me.data);
+			if(!me.dataInitialised){
+				if(me.autoLoad){
+					me.load();
+				}else{
+					if(me.data){
+						me.setData(me.data);
+					}	
+				}
 			}
 			return this.callParent();
 		},
@@ -1426,6 +1748,16 @@
 		 * default false
 		 */
 		autoLoad:false,
+		/**
+		 * data store - use setData()
+		 * @private
+		 */
+		data: null,
+		/**
+		 * initial raw data that was passed when setting the store with setData() function
+		 * @private
+		 */
+		_initialData:null,
 		
 		/**
 		* Load the store
@@ -1449,17 +1781,42 @@
 		},
 		
 		/**
+		 * provide the raw data
+		 * @param initial :: optional :: boolean :: set to true if you want the original data passed to setData() - if left out or false - it will parse the ko-ed data back to a JS object
+		 * @returns JS object
+		 */
+		getRawData: function(initial){
+			var me = this;
+			if(initial){
+				return me._initialData;
+			}
+			return ko.toJS(me.getData());
+		},
+		
+		/**
 		* Converts a json object into stores with records
 		* @param data :: json object
 		* @returns self
 		*/
 		setData: function(data){
 			var me = this;
-			if($.isArray(data)){
-				data={items: data};
+			
+			if(!me.dataInitialised){
+				if(!data.__ko_mapping__){
+					me._initialData = data;
+					data = ko.mapping.fromJS(data);
+				}
+				me.data = data;
+				me.dataInitialised = true;
+			}else{
+				if(!data.__ko_mapping__){
+					me._initialData = data;
+					ko.mapping.fromJS(data, me.data);
+				}else{
+					console.error("cannot update store data using a mapped object", data);
+				}
 			}
-			me.data = data
-			me.dataInitialised = true;
+			
 			return me;
 		},
 		
@@ -1491,5 +1848,6 @@
 	});
 	
 	window.Firebrick = Firebrick;
+	window.fb = window.Firebrick;
 	
 })(window, document, jQuery);

@@ -1,3 +1,17 @@
+v0.5.0
+----------------------------
+* allow an object of events to be passed to .on() - controller/view for example
+* fix passing data to index view
+* fix "destroy" event on views
+* fire event "ready" when all inits on a class(constructor, view, store) has been called
+* ability to update views with new data
+* changed initialData to viewData
+* ability to define subviews of a view
+* listeners object to classes so that you can add listeners when creating or defining an object without having to create the init function
+* memory leak fixes when calling create or createView on the same object multiple times
+* allow a language JSON to be called and change the language of the views using knockout
+* add window.fb for shortcut access, handy for fb.text() in templates
+
 v0.4.4
 ----------------------------
 * improved hash routing
