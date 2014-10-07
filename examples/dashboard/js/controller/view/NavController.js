@@ -24,7 +24,7 @@ define(["store/ProfileStore"], function(){
 				scope:this
 			});
 			
-			var popup = Firebrick.createView("MyApp.view.components.Popup", {
+			Firebrick.createView("MyApp.view.components.Popup", {
 				target: "popup",
 				store:{
 					header: ""
@@ -43,13 +43,14 @@ define(["store/ProfileStore"], function(){
 		},
 		
 		showProfilePanel: function(){
-			
-			Firebrick.getView("MyApp.view.components.Popup").getData().header("Profile");
+
+			Firebrick.createView("MyApp.view.components.Popup").getData().header(fb.text("profile")());
 			
 			Firebrick.createView("MyApp.view.general.Profile", {
 				target: "popup .modal-body",
 				store: Firebrick.createStore("MyApp.store.ProfileStore")
 			});
+			
 			
 			//bootstrap command
 			$('.modal').modal('show');
@@ -57,9 +58,10 @@ define(["store/ProfileStore"], function(){
 		},
 		
 		showSettingsPanel: function(){
+			Firebrick.utils.loadCSS("/bower_components/jquery-minicolors/jquery.minicolors.css");
 			require(["jquery-minicolors"], function(){
 				
-				Firebrick.getView("MyApp.view.components.Popup").getData().header("Settings");
+				Firebrick.createView("MyApp.view.components.Popup").getData().header(fb.text("settings")());
 				
 				Firebrick.createView("MyApp.view.general.Settings", {
 					target: "popup .modal-body"
