@@ -13,7 +13,7 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 		
 		start: function(){
 			this.initView();
-			Firebrick.fireEvent("updateBreadcrumb", "Reports");
+			Firebrick.fireEvent("updateBreadcrumb", "rp_title");
 		},
 		
 		initView:function(){

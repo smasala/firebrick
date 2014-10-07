@@ -14,7 +14,7 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 		
 		start: function(){
 			this.initView();
-			Firebrick.fireEvent("updateBreadcrumb", "Analytics");
+			Firebrick.fireEvent("updateBreadcrumb", "an_title");
 		},
 		a:0,
 		initView:function(){

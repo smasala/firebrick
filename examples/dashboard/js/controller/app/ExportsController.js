@@ -1,4 +1,4 @@
-define(function(){
+define(["store/ExportsStore"], function(){
 	return Firebrick.create("MyApp.controller.app.ExportsController", {
 		extend:"Firebrick.controller.Base",
 		init:function(){
@@ -13,13 +13,14 @@ define(function(){
 		
 		start: function(){
 			this.initView();
-			Firebrick.fireEvent("updateBreadcrumb", "Exports");
+			Firebrick.fireEvent("updateBreadcrumb", "exp_title");
 		},
 		
 		initView:function(){
 			var me = this;
 			Firebrick.createView("MyApp.view.app.Exports", {
-				target:"#main-content"
+				target:"#main-content",
+				store: Firebrick.createStore("MyApp.store.ExportsStore")
 			});
 		}
 		

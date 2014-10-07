@@ -118,7 +118,7 @@ define(["store/UserStore", "typeahead"], function(userStore){
 				store: me.initPageData()
 			});
 			
-			Firebrick.fireEvent("updateBreadcrumb", "Users");
+			Firebrick.fireEvent("updateBreadcrumb", "users_title");
 		},
 		
 		pageExist: function(num){

@@ -170,6 +170,7 @@
 		},
 		
 		text: function(){
+			console.info(arguments)
 			return this.shortcut(this.languages, "getByKey", arguments); 
 		},
 		/** END OF SHORTCUTS **/
@@ -243,12 +244,6 @@
 				if($.isPlainObject(name)){
 					//object has been passed, just return it
 					return name;
-				}
-				
-				//does it already exist?
-				if(!clazz){
-					//check again
-					clazz = me.classRegistry[name];
 				}
 				
 				if(clazz && config){
@@ -1798,10 +1793,6 @@
 		* @private
 		*/
 		isStore:true,
-		/**
-		* What is the root property in the stores data
-		*/
-		root: "root",
 		/**
 		* Whether the data in the store has been initialised, ie. convert to records etc.
 		* @private
