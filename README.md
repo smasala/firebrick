@@ -18,8 +18,6 @@ Checkout the [Dashboard ](http://demo.firebrickjs.com) demo
 
 ##Usage
 
-* Load files in the correct order (Note: you can also require these files with requirejs)
-
 ###Require JS
 
 ```
