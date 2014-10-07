@@ -1,4 +1,4 @@
-#Firebrick JS v0.5.0
+#Firebrick JS v0.6.1
 
 JavaScript MVC Framework built with:
 
@@ -6,9 +6,6 @@ JavaScript MVC Framework built with:
 * Bootstrap
 * Knockout JS
 * Require JS
-
-### Development
-Please note that this framework is still under development and that some large API changes can be made with any release
 
 ## Install with Bower
 ```
@@ -51,7 +48,7 @@ Checkout the [Dashboard ](http://demo.firebrickjs.com) demo
 			path:"/js"
 		},
 		go:function(){
-			//Do you thing
+			//Do your thing
 		}
 	});
 ```

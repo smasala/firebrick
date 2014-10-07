@@ -22,10 +22,14 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 			Firebrick.createView("MyApp.view.app.Analytics", {
 				store:{name: "steven"},
 				target:"#main-content",
-				listeners:{
-					"rendered": me.startGraph,
-					"destroyed": me.stopTimers,
-					scope:me
+				init:function(){
+					this.on("rendered", function(){
+						me.startGraph();
+					});
+					this.on("destroyed", function(){
+						me.stopTimers();
+					});
+					this.callParent();
 				}
 			});
 		},
@@ -36,8 +40,10 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 				Firebrick.utils.clearInterval(v);
 		    });
 		    me.currentIds = [];
+		    console.info("stop")
 		},
 		startGraph:function(){
+			console.info("start")
 			var me = this, 
 				containers = $(".flot-moving-line-chart");
 			

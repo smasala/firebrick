@@ -1,4 +1,4 @@
-define(["store/UserStore"], function(store){
+define(["store/UserStore", "typeahead"], function(userStore){
 	return Firebrick.create("MyApp.controller.app.UsersController", {
 		extend:"Firebrick.controller.Base",
 		init:function(){
@@ -14,20 +14,66 @@ define(["store/UserStore"], function(store){
 				".paginationItem":{
 					click:me.goToPage
 				},
+				"a.user-suggestion":{
+					click:me.showUser
+				},
 				scope:me
 			});
 
 			me.app.listeners({
 				"startview_app_Users": me.start,
-				"viewReady": me.start,
+				"viewReady": function(){
+					
+					var substringMatcher = function(strs) {
+						return function findMatches(q, cb) {
+							var matches, substrRegex;
+							 
+							// an array that will be populated with substring matches
+							matches = [];
+							 
+							// regex used to determine if a string contains the substring `q`
+							substrRegex = new RegExp(q, 'i');
+							 
+							// iterate through the pool of strings and for any string that
+							// contains the substring `q`, add it to the `matches` array
+							$.each(strs, function(i, user) {
+								if (substrRegex.test(user.name)) {
+									// the typeahead jQuery plugin expects suggestions to a
+									// JavaScript object, refer to typeahead docs for more info
+									matches.push({name: user.name, index:i});
+								}
+							});
+							 
+							cb(matches);
+						};
+					};
+
+					$("#user_search").typeahead({
+						 	hint: true,
+						 	highlight: true,
+						 	minLength: 1						
+						},{
+							source: substringMatcher(userStore.getRawData().users),
+							templates:{
+								suggestion:function(obj){
+									return "<p><a data-ta-index='" + obj.index + "' class='user-suggestion'> " + obj.name +"</a></p>"
+								}
+							}
+					});
+					me.start();
+				},
 				scope:me
 			});
 			
 			me.callParent();
 		},
 		
+		isOnShow:false,
+		startPage:0,
+		
 		start: function(){
 			var me = this;
+			me.isOnShow = true;
 			me.initView();
 		},
 		
@@ -38,8 +84,6 @@ define(["store/UserStore"], function(store){
 		getCountries: function(){
 			return ["UK", "DE", "IT"];
 		},
-		
-		startPage:0,
 		
 		initPageData: function(){
 			var me = this,
@@ -60,7 +104,13 @@ define(["store/UserStore"], function(store){
 
 			Firebrick.createView("MyApp.view.app.Users", {
 				store: {activePage:me.startPage, users: me.getUsers(), countries:me.getCountries()},
-				target:"#main-content"
+				target:"#main-content",
+				init:function(){
+					this.on("destroyed", function(){
+						me.isOnShow = false
+					});
+					this.callParent();
+				}
 			});
 			
 			Firebrick.createView("MyApp.view.components.Pagination", {
@@ -104,8 +154,15 @@ define(["store/UserStore"], function(store){
 		updateBindingsForPage:function(ap){
 			Firebrick.getView("MyApp.view.app.Users").getData().activePage(ap);
 			Firebrick.getView("MyApp.view.components.Pagination").getData().activePage(ap);
-		}
+		},
 		
+		showUser: function(event, el){
+			var me = this;
+			if(!me.isOnShow){
+				Firebrick.getView("MyApp.view.components.Nav").getData().setActive("app_Users");
+			}
+			me.updateBindingsForPage( $(el).attr("data-ta-index") );
+		}
 		
 	});
 });

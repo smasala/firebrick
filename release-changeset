@@ -1,3 +1,13 @@
+v0.6.1
+----------------------------
+* stores load by default asynchronously
+* fix typo bug with setInterval
+* interval big fixes
+* language keys are loaded asynchronously
+* added ko to fb argument
+* firebrick uses requirejs
+* fix event memory leak
+
 v0.5.0
 ----------------------------
 * allow an object of events to be passed to .on() - controller/view for example

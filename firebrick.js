@@ -5,8 +5,20 @@
 * contact: me@smasala.com
 */ 
 
-(function(window, document, $){
+(function(root, factory) {
 	
+  "use strict";
+
+  if (typeof define === "function" && define.amd) {
+    define(["jquery", "knockout", "knockout-mapping"], function($, ko, kom) {
+    	ko.mapping = kom;
+    	return factory($, ko);
+    });
+  } else {
+    factory(root.jQuery, root.ko);
+  }
+
+}(this, function($, ko) {
 	if(window.Firebrick || window.fb){
 		console.error("unable to initialise FirebrickJS, window.Firebrick or window.fb are already defined");
 		return;
@@ -14,7 +26,7 @@
 
 	var Firebrick = {
 		
-		version: "0.5.0",
+		version: "0.6.1",
 
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -70,12 +82,12 @@
 				}
 
 				require(options.require, function(){
-					$("div#fb-splash").remove();
+					me.utils.clearSplash();
 					options.go.apply(options.go, arguments);
 				});
 			
 			}else{
-				$("div#fb-splash").remove();
+				me.utils.clearSplash();
 				options.go();
 			}
 		},
@@ -280,15 +292,14 @@
 						config = Firebrick.utils.extend(config, parent);
 						config._super = parent;						
 					}else{
-						console.warn("unable to find parent class to inherit from:", config.extend);
+						console.warn("unable to build class or inherit from:", config.extend);
 					}
 					
 				}
 				
-				var clazz = config;
-				clazz._classname = name;
+				config._classname = name;
 				
-				return clazz;
+				return config;
 			}
 		
 		},
@@ -310,24 +321,18 @@
 			viewRegistry: {},
 			
 			/**
-			* Extensions of the view files
-			*/
-			viewExtension: "html",
-			
-			/**
 			* get view class by name
 			* @param name :: string
 			* @return class
 			*/
 			getView: function(name){
-				return this.defineView(name);
+				return this.viewRegistry[name];
 			},
-			
 			/**
-			 * get a class by classId
-			 * @param string
-			 * @return object
-			 */
+			* get a class by classId
+			* @param string
+			* @return object
+			*/
 			getViewById: function(id){
 				var me = this,
 					clazz;
@@ -338,7 +343,6 @@
 						return false;
 					}
 				});
-				
 				return clazz;
 			},
 			
@@ -350,18 +354,18 @@
 			**/
 			createView: function(name, config){
 				//get, define and call the constructor of the view
-				var me = this, 
+				var me = this,
 					view = me.defineView(name, config);
 				if(!view._created){
 					view.init();
 				}else if(view.autoRender){
 					view.render();
+					view.initSubViews();
 				}
 				return view;
 			},
-			
 			/**
-			* Note: different to Firebrick.define() for classes - 
+			* Note: different to Firebrick.define() for classes -
 			* Firebrick.defineView, defines and fetches if not already loaded the given view by name
 			* @param name :: string :: name of the view to me shown "MyApp.view.MyView"
 			* @param config :: object (optional) :: object to config the View class with
@@ -373,21 +377,10 @@
 				if(!me.viewRegistry[name]){
 					//set basic configurations for view class
 					config = me.basicViewConfigurations(config);
-					
 					//save the view in the registry
 					var view = Firebrick.classes.buildClass(name, config);
 					me.viewRegistry[name] = view;
-					
-					view.startLoader();
-					
-					//get the view
-					Firebrick.utils.require(name, function(tpl){
-						//save the template
-						config.tpl = tpl;
-					}, false, "html", me.viewExtension);
-					
 				}
-				
 				//return the new view
 				return me.viewRegistry[name];
 			},
@@ -422,7 +415,7 @@
 				if($.type(subView) == "string"){
 					subView = Firebrick.createView(subView, {autoRender:false});
 				}else if($.isPlainObject(subView)){
-					if(subView._classname && subView.state && subView.state == "initial"){
+					if(subView.isView){
 						subView = Firebrick.createView(subView._classname);
 					}
 				}
@@ -518,13 +511,29 @@
 			intervalRegistry:{},
 			
 			/**
+			 * @private
+			 * used by init&Clear Splash
+			 */
+			splashCleared: false, 
+			
+			/**
 			 * html is appended to the html tag before the document is ready 
 			 * @usage splash paramter with Firebrick.ready({splash:html});
 			 * @private
 			 * @param html :: string
 			 */
 			initSplash: function(html){
-				$("html").append("<div id='fb-splash'>" + html + "</div>");
+				var me = this;
+				Firebrick.delay(function(){
+					if(!me.splashCleared){
+						$("html").append("<div id='fb-splash'>" + html + "</div>");
+					}
+				}, 1);
+			},
+			
+			clearSplash: function(){
+				this.splashCleared = true;
+				$("#fb-splash").remove();
 			},
 			
 			/**
@@ -608,7 +617,7 @@
 			setInterval: function(){
 				var me = this,
 					fArg = arguments[0];
-					id = $.isFunction(fArg) ? fArgs.id : fArg;
+					id = $.isFunction(fArg) ? fArg.id : fArg;
 				
 				if(!me.isIntervalRunning(id)){
 					if($.isFunction(fArg)){
@@ -627,11 +636,14 @@
 			 * @return id :: string
 			 */
 			int_applyInterval: function(id, callback, interval, scope){
-				var me = this;
+				var me = this,
+					id = id || me.uniqId();
 				
 				var f = function(){
-					callback.apply(scope || this, arguments);
+					callback.id = id;
+					callback.apply(scope || callback, arguments);
 				}
+				
 				//start the interval
 				f.intId = window.setInterval(f, interval);
 				
@@ -774,6 +786,14 @@
 					u = ++d + m + (++me.globalC === 10000 ? (me.globalC = 1) : me.globalC);
 
 				return u;
+			},
+			
+			loadCSS: function(url) {
+			    var link = document.createElement("link");
+			    link.type = "text/css";
+			    link.rel = "stylesheet";
+			    link.href = url;
+			    document.getElementsByTagName("head")[0].appendChild(link);
 			}
 			
 		},
@@ -790,7 +810,7 @@
 			 * store of keys
 			 * @private
 			 */
-			keys:{},
+			keys:ko.observable({}),
 			
 			/**
 			 * initial the language keys
@@ -801,10 +821,14 @@
 			init:function(lang){
 				var me = this;
 				if($.type(lang) == "string"){
-					me.keys = Firebrick.createStore({
+					Firebrick.createStore({
 						url:lang,
-						autoLoad:true
-					}).getData();
+						autoLoad:false,
+					}).load({
+						callback:function(){
+							me.keys(this.getData());
+						}
+					});
 				}else if(lang.isStore){
 					me.keys = lang.getData();
 				}else{
@@ -819,8 +843,9 @@
 			 */
 			getByKey: function(key){
 				var me = this;
-				key = key.toLowerCase();
-				return me.keys[me.lang()][key] || key;
+					key = key.toLowerCase(),
+					a = me.keys()[me.lang()];
+				return a && a[key] ? a[key] : key;
 			},
 			
 			/**
@@ -1115,23 +1140,28 @@
 				* Used by Firebrick.store.Base.load();
 				* @private
 				* @param store = Firebrick.store.Base object
-				* @param options :: object :: {async:boolean (optional - default false), callback:function(jsonObject, status, response), scope: object}
+				* @param options :: object :: {async:boolean (optional - default true), callback:function(jsonObject, status, response), scope: object}
 				* @return store
 				**/
 				loadStore: function(store, options){
 					var me = this, 
 						options = options || {}
-						url = store.url;
+						url = store.url,
+						async = options.async;
 					
+					if($.type(async) != "boolean"){
+						async = store.async;
+					}
+						
 					if($.isPlainObject(url)){
 						url = url.get;
 					}					
 					
 					store.status = "preload";
-					
+
 					$.ajax({
 						datatype: store.datatype,
-						async:$.type(options.async) == "boolean" ? options.async : false,
+						async:$.type(async) == "boolean" ? async : true,
 						url: store.url,
 						success:function(jsonObject, status, response){
 							store.setData(jsonObject);
@@ -1273,12 +1303,14 @@
 			return me;
 		},
 		
-		/**
-		 * whether or not the dependecies required by parameter require have already been loaded
-		 * @private
-		 */
-		dependenciesLoaded: false,
-	
+		destroy:function(){
+			var me = this;
+			me.fireEvent("destroyed", me);
+			//remove all events
+			delete me.localEventRegistry[me.getClassId()];
+			me._created = false;
+		},
+		
 		/**
 		 * wether a class has been created already
 		 */
@@ -1393,7 +1425,7 @@
 		*/
 		fireEvent: function(){
 			var me = this,
-				classId = me._classId,
+				classId = me.getClassId(),
 				events = me.localEventRegistry[classId],
 				args = arguments, 
 				eventName = arguments[0];	//get first argument - i.e. the event name
@@ -1462,14 +1494,40 @@
 		 * @usage subViews: [Firebrick.defineView(...), Firebrick.defineView(...)]
 		 */
 		subViews:null,
+		/**
+		 * boolean whether class is view
+		 */
+		isView: true,
+		/**
+		* Extensions of the view files
+		*/
+		viewExtension: "html",
 
+		/**
+		 * @private
+		 */
+		_init:function(){
+			var me = this;
+			if(me.autoRender){
+				me.startLoader();
+			}
+			//get the view
+			Firebrick.utils.require(me._classname, function(tpl){
+				//save the template
+				me.tpl = tpl;
+			}, false, "html", me.viewExtension);
+			return this;
+		},
+		
 		/**
 		* Called on creation
 		*/
 		init: function(){
 			var me = this;
-			me.overrideReadyEvent = "base";
 			
+			me._init();
+			
+			me.overrideReadyEvent = "base";
 			me.on(me.overrideReadyEvent, function(){
 				//check the data of the view is in the correct format
 				me.initStore();
@@ -1542,9 +1600,9 @@
 			if(target){
 				
 				var el = target[0];
-				if(target.attr("fb-view-bind") && target.attr("fb-view-bind") != me.getClassId()){
+				if(target.attr("fb-view-bind")){
 					ko.cleanNode(el);
-					target.removeAttr("fb-view-bind")
+					target.removeAttr("fb-view-bind");
 				}
 				
 				if(!target.attr("fb-view-bind")){
@@ -1572,7 +1630,7 @@
 		setDisposeCallback: function(el){
 			ko.utils.domNodeDisposal.addDisposeCallback(el, function(el){
 				var view = Firebrick.getViewById($(el).attr("fb-view-bind"));
-				view.fireEvent("destroyed", el);
+				view.destroy();
 			});
 		},
 		
@@ -1632,8 +1690,14 @@
 				t = me.getTarget();
 			if(!me.loading && t){
 				me.loading = true;
-				me.hide();
-				t.before("<div id='fb-loader-" + me.getClassId() + "'>" + me.loadingTpl + "</div>");
+				Firebrick.delay(function(){
+					//if still loading...
+					if(me.loading){
+						me.hide();
+						t.before("<div id='fb-loader-" + me.getClassId() + "'>" + me.loadingTpl + "</div>");
+					}
+				}, 1);
+				
 			}
 		},
 		
@@ -1759,6 +1823,10 @@
 		 * @private
 		 */
 		_initialData:null,
+		/**
+		 * default value 
+		 */
+		async: true,
 		
 		/**
 		* Load the store
@@ -1848,7 +1916,7 @@
 		
 	});
 	
+	//global
 	window.Firebrick = Firebrick;
 	window.fb = window.Firebrick;
-	
-})(window, document, jQuery);
+}));

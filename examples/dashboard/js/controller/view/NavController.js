@@ -11,6 +11,9 @@ define(["store/ProfileStore"], function(){
 				"#profile": {
 					click: this.showProfilePanel
 				},
+				"#settings_colour_picker.colorPicker":{
+					change: this.bgColourPicked
+				},
 				scope:this
 			});
 			
@@ -21,38 +24,58 @@ define(["store/ProfileStore"], function(){
 				scope:this
 			});
 			
+			var popup = Firebrick.createView("MyApp.view.components.Popup", {
+				target: "popup",
+				store:{
+					header: ""
+				}
+			});
+			
 			me.initPopovers();
 			
 			this.callParent();
 		},
 		
 		initPopovers: function(){
-			//init any popovers
+			//init any popovers (bootstrap)
 			$("[data-toggle=popover]").popover({html:true});
+
 		},
 		
 		showProfilePanel: function(){
-			//get data from somewhere
 			
-			var popup = Firebrick.createView("MyApp.view.components.Popup", {
-				target: "popup",
-				store:{
-					header: fb.text("profile")
-				},
-				subViews: Firebrick.defineView("MyApp.view.general.Profile", {
-					target: "popup .modal-body",
-					store: Firebrick.createStore("MyApp.store.ProfileStore")
-				})
+			Firebrick.getView("MyApp.view.components.Popup").getData().header("Profile");
+			
+			Firebrick.createView("MyApp.view.general.Profile", {
+				target: "popup .modal-body",
+				store: Firebrick.createStore("MyApp.store.ProfileStore")
 			});
 			
-			
+			//bootstrap command
 			$('.modal').modal('show');
 			
 		},
 		
 		showSettingsPanel: function(){
-			//get data from somewhere
-			var data = {content: "Hello this is the popup data"};
+			require(["jquery-minicolors"], function(){
+				
+				Firebrick.getView("MyApp.view.components.Popup").getData().header("Settings");
+				
+				Firebrick.createView("MyApp.view.general.Settings", {
+					target: "popup .modal-body"
+				});
+				
+				//colour picker
+			    $('.colorPicker').minicolors({theme:null});
+			    
+			    //bootstrap command
+				$('.modal').modal('show');
+				
+			});
+		},
+		
+		bgColourPicked: function(event, el){
+			$("body").css("background-color", el.value); 
 		}
 		
 		
