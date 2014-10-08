@@ -22,14 +22,14 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 			Firebrick.createView("MyApp.view.app.Analytics", {
 				store:{name: "steven"},
 				target:"#main-content",
-				init:function(){
-					this.on("rendered", function(){
-						me.startGraph();
-					});
-					this.on("destroyed", function(){
+				listeners:{
+					"destroyed": function(){
 						me.stopTimers();
-					});
-					this.callParent();
+					},
+					"ready": function(){
+						me.startGraph();
+						Firebrick.fireEvent("showLoadDone");
+					}
 				}
 			});
 		},

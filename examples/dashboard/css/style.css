@@ -54,3 +54,81 @@ a{
 .tt-suggestion p {
     margin: 0;
 }
+
+
+/** Paper elements **/
+
+	
+    core-toolbar {
+      background-color: #CFA0E9;
+    }
+
+    core-toolbar.dark-theme {
+      background-color: #7D25AC;
+      color: #f1f1f1;
+      fill: #f1f1f1;
+    }
+
+paper-button {
+      margin: 20px;
+    }
+    
+      
+    paper-radio-group.blue paper-radio-button::shadow #ink[checked] {
+      color: #4285f4;
+    }
+    
+    paper-radio-group.blue paper-radio-button::shadow #onRadio {
+      background-color: #4285f4;
+    }
+    
+    paper-radio-button {
+      display: block;
+    }
+
+  core-header-panel {
+  float:left;
+    width: 360px;
+    height: 400px;
+    margin: 5px;
+  }
+  
+  core-header-panel[mode=cover]::shadow #mainContainer {
+    left: 70px;
+  }
+
+  .core-header {
+    height: 60px;
+    line-height: 60px;
+    font-size: 18px;
+    padding: 0 10px;
+    background-color: #4F7DC9;
+    color: #FFF;
+    transition: height 0.2s;
+  }
+  
+  .core-header.tall {
+    height: 180px;
+  }
+  
+  .core-header.medium-tall {
+    height: 120px;
+  }
+
+  .content {
+    height: 500px;
+    background: linear-gradient(rgb(214, 227, 231), lightblue);
+  }
+  
+paper-input.narrow {
+      width: 150px;
+    }
+  
+  paper-toast {
+  	left:500px;
+  }
+  
+paper-input .label{
+	color: #757575;
+	text-align: left;
+}

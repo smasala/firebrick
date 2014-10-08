@@ -14,7 +14,7 @@
 		"framework",
 		"javascript"
 	],
-	"version": "0.6.1",
+	"version": "0.7.7",
 	"dependencies": {
 		"jquery": "~2.0.0",
 		"bootstrap": "~3.2.0",

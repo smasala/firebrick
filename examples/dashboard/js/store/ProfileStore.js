@@ -3,6 +3,6 @@ define(function(){
 		extend:"Firebrick.store.Base",
 		url:"/data/profile.json",
 		root:"profile",
-		autoLoad:true
+		autoLoad:false
 	});
 });

@@ -5,7 +5,7 @@
 				<div class="form-group">
 						<label class="col-md-4 control-label" for="settings_colour_picker" data-bind="text: fb.text('bgcolour')"></label>
 						<div class="col-md-7 minicolors minicolors-theme-bootstrap">
-	    					<input id="settings_colour_picker" class="form-control colorPicker minicolors-input" type="text" data-bind="value: '#ffffff'" class="form-control" />
+	    					<input id="settings_colour_picker" class="form-control colorPicker minicolors-input" type="text" data-bind="value: $('body').css('background-color')" class="form-control" />
     					</div>
     					
 				</div>

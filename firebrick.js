@@ -26,7 +26,7 @@
 
 	var Firebrick = {
 		
-		version: "0.6.1",
+		version: "0.7.7",
 
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -50,7 +50,8 @@
 					splash: string //html or string to be rendered before the document is loaded - removed on document.ready
 					require:string or array of string //these file(s) are required
 					cache: boolean default true - whether require should cache files or not,
-					lang: language file name or store
+					lang: language file name or store,
+					dev: default false, true to print requirejs exceptions to console
 				}
 		*/
 		ready: function(options){
@@ -59,19 +60,7 @@
 			
 			me.utils.initSplash(options.splash || me.templates.loadingTpl);
 
-			if(options.cache === false){
-				require.config({
-				    urlArgs: "fireb=" + (new Date()).getTime()
-				});
-			}
-			
-			if(options.lang){
-				Firebrick.languages.init(options.lang);
-			}
-			
-			if(options.autoRender !== false){
-				var view = Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", store:options.viewData});
-			}
+			Firebrick.boot.prepApplication(options);
 			
 			//if files need to be required first, then require them and fire the application
 			if(options.require && options.require.length > 0){
@@ -118,27 +107,27 @@
 		},
 		
 		getView: function(){
-			return this.shortcut(this.view, "getView", arguments);
+			return this.shortcut(this.views, "getView", arguments);
 		},
 		
 		loadRaw: function(){
-			return this.shortcut(this.view, "loadRaw", arguments);
+			return this.shortcut(this.views, "loadRaw", arguments);
 		},
 		
 		getViewById: function(){
-			return this.shortcut(this.view, "getViewById", arguments);
+			return this.shortcut(this.views, "getViewById", arguments);
 		},
 		
 		createView: function(){
-			return this.shortcut(this.view, "createView", arguments);
+			return this.shortcut(this.views, "createView", arguments);
 		},
 		
 		defineView: function(){
-			return this.shortcut(this.view, "defineView", arguments);
+			return this.shortcut(this.views, "defineView", arguments);
 		},
 		
 		getBody: function(){
-			return this.shortcut(this.view, "getBody", arguments);
+			return this.shortcut(this.views, "getBody", arguments);
 		},
 		
 		delay: function(){
@@ -170,7 +159,6 @@
 		},
 		
 		text: function(){
-			console.info(arguments)
 			return this.shortcut(this.languages, "getByKey", arguments); 
 		},
 		/** END OF SHORTCUTS **/
@@ -307,13 +295,18 @@
 			loadingTpl: "<div class='fb-view-loader'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>",
 		},
 		
-		view: {
+		views: {
 			
 			/**
 			* View Registry - stores all views by name
 			* @private
 			*/
 			viewRegistry: {},
+			
+			bootView: function(options){
+				Firebrick.utils.clearSplash();
+				return Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", store:options.viewData, async:true});
+			},
 			
 			/**
 			* get view class by name
@@ -489,6 +482,36 @@
 				return target.html(html);
 			}
 			
+		},
+		
+		boot:{
+			prepApplication: function(options){
+				if(options.cache === false){
+					require.config({
+					    urlArgs: "fireb=" + (new Date()).getTime()
+					});
+				}
+				
+				if(options.dev){
+					requirejs.onError = function (err) {
+					    
+					    if (err.requireType === 'timeout') {
+					        console.log('modules: ' + err.requireModules);
+					    }else{
+					    	console.error(err.message);
+					    }
+
+					};
+				}
+				
+				if(options.lang){
+					Firebrick.languages.init(options.lang);
+				}
+				
+				if(options.autoRender !== false){
+					Firebrick.views.bootView(options);
+				}
+			}
 		},
 		
 		utils: {
@@ -1135,7 +1158,7 @@
 				* Used by Firebrick.store.Base.load();
 				* @private
 				* @param store = Firebrick.store.Base object
-				* @param options :: object :: {async:boolean (optional - default true), callback:function(jsonObject, status, response), scope: object}
+				* @param options :: object :: {async:boolean (optional - default store.async), callback:function(store, jsonObject, status, response), scope: object}
 				* @return store
 				**/
 				loadStore: function(store, options){
@@ -1156,13 +1179,13 @@
 
 					$.ajax({
 						datatype: store.datatype,
-						async:$.type(async) == "boolean" ? async : true,
+						async: async,
 						url: store.url,
 						success:function(jsonObject, status, response){
 							store.setData(jsonObject);
 							store.status = status;
 							if($.isFunction(options.callback)){
-								options.callback.apply(options.scope || store, [jsonObject, status, response]);
+								options.callback.apply(options.scope || store, [store, jsonObject, status, response]);
 							}
 						},
 						error:function(reponse, error, errorMessage){
@@ -1497,20 +1520,31 @@
 		* Extensions of the view files
 		*/
 		viewExtension: "html",
+		
+		/**
+		 * whether or not the template is to load asyncronously
+		 */
+		async:true,
 
 		/**
 		 * @private
+		 * @param callback
 		 */
-		_init:function(){
+		_init:function(callback){
 			var me = this;
 			if(me.autoRender){
 				me.startLoader();
 			}
 			//get the view
-			Firebrick.utils.require(me._classname, function(tpl){
+			var a = Firebrick.utils.require(me._classname, function(tpl){
 				//save the template
 				me.tpl = tpl;
-			}, false, "html", me.viewExtension);
+				callback.call();
+			}, me.async, "html", me.viewExtension);
+			if(!a.length){
+				//nothing was loaded - ie. already loaded
+				callback.call();
+			}
 			return this;
 		},
 		
@@ -1520,18 +1554,18 @@
 		init: function(){
 			var me = this;
 			
-			me._init();
-			
 			me.overrideReadyEvent = "base";
 			me.on(me.overrideReadyEvent, function(){
-				//check the data of the view is in the correct format
-				me.initStore();
-				//parse html with data
-				me.initView(me.tpl, me.getData());
-				
-				me.initSubViews();
-				
-				me.fireEvent("ready");
+				me._init(function(){
+					//check the data of the view is in the correct format
+					me.initStore();
+					//parse html with data
+					me.initView(me.tpl, me.getData());
+					
+					me.initSubViews();
+					
+					me.fireEvent("ready");
+				});
 			});
 			
 			return me.callParent();
@@ -1549,7 +1583,7 @@
 		* @returns object
 		*/
 		getData: function(){
-			return this.getStore().data;
+			return this.getStore().getData();
 		},
 		
 		/**
@@ -1573,14 +1607,44 @@
 		 * @private
 		 */
 		initSubViews: function(){
-			return Firebrick.view.initSubViews(this);
+			return Firebrick.views.initSubViews(this);
 		},
 		
 		/**
 		* @returns jquery object
 		*/
 		getTarget: function(){
-			return Firebrick.view.getTarget(this.target);
+			return Firebrick.views.getTarget(this.target);
+		},
+		
+		unbind:function(){
+			var me = this,
+				target = me.getTarget();
+			if(target && target.attr("fb-view-bind")){
+				var el = target[0];
+				ko.cleanNode(el);
+				target.removeAttr("fb-view-bind");
+			}
+		},
+		
+		bind: function(){
+			var me = this,
+			target = me.getTarget();
+			if(target && !target.attr("fb-view-bind")){
+				var el = target[0];
+				Firebrick.views.renderTo(target, me.html);
+				me.hide();
+				me.state = "rendered";
+				var data = me.getData();
+				if(data && !$.isEmptyObject(data)){
+					target.attr("fb-view-bind", me.getClassId());
+					ko.applyBindings(data, el);
+					me.setDisposeCallback(el);	
+				}
+				me.stopLoader();
+				me.show();
+				me.fireEvent("rendered", me);
+			}
 		},
 		
 		/**
@@ -1594,29 +1658,12 @@
 			 
 			if(target){
 				
-				var el = target[0];
-				if(target.attr("fb-view-bind")){
-					ko.cleanNode(el);
-					target.removeAttr("fb-view-bind");
-				}
+				me.unbind();
 				
-				if(!target.attr("fb-view-bind")){
-					Firebrick.view.renderTo(target, me.html);
-					me.stopLoader();
-					me.state = "rendered";
-					
-					var data = me.getData();
-					if(data && !$.isEmptyObject(data)){
-						target.attr("fb-view-bind", me.getClassId());
-						ko.applyBindings(me.store.getData(), el);
-						me.setDisposeCallback(el);	
-					}
-					
-					me.fireEvent("rendered", me);
-				}
+				me.bind();
 				
 			}else{
-				console.warn("unable to render, no target found for", ovt || me.target, this);
+				console.warn("unable to render, no target found for", me.target, this);
 			}
 			
 			return me;
@@ -1818,6 +1865,10 @@
 		 * default value 
 		 */
 		async: true,
+		/**
+		 * used when calling getData()
+		 */
+		root: null,
 		
 		/**
 		* Load the store
@@ -1837,7 +1888,13 @@
 		* @returns store data
 		*/
 		getData:function(){
-			return this.data;
+			var me = this;
+			if(me.root){
+				if($.isPlainObject(me.data)){
+					return $.isFunction(me.data[me.root]) ? me.data[me.root]() : me.data[me.root];
+				}
+			}
+			return me.data;
 		},
 		
 		/**
@@ -1850,7 +1907,9 @@
 			if(initial){
 				return me._initialData;
 			}
-			return ko.toJS(me.getData());
+			var b = me.getData();
+			b = $.isFunction(b) ? b() : b;
+			return ko.toJS(b);
 		},
 		
 		/**

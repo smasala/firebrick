@@ -1,13 +1,14 @@
 define([
         "controller/view/NavController", 
-        "controller/app/MainController", 
+        "controller/app/MainController",
+        "controller/examples/PaperController",
         "popover"], function(){
 	
 	return Firebrick.create("MyApp.controller.ViewController", {
 		extend:"Firebrick.controller.Base",
 		init:function(){
 			var me = this;
-			
+			Firebrick.fireEvent("showLoad");
 			this.app.on({
 				".langIcon":{
 					click:function(event, el){
@@ -16,7 +17,6 @@ define([
 				},
 				scope:this
 			})
-			
 			me.initView();
 			
 			me.initPopovers();
@@ -30,6 +30,15 @@ define([
 		},
 		
 		initView:function(){
+			
+			Firebrick.addListener({
+				"updateBreadcrumb": function(event, page){
+					Firebrick.getView("MyApp.view.components.Breadcrumbs").store.getData().text(page);
+				},
+				scope:this
+			});
+			
+			
 			Firebrick.createView("MyApp.view.components.Nav",{
 				target:"navigation",
 				store:{
@@ -49,25 +58,32 @@ define([
 						currentActive: "app_Users",
 						setActive: function(id){
 							this.currentActive(id);
+							Firebrick.fireEvent("showLoad");
 							Firebrick.fireEvent("startview_" + id);
 						},
 						isActive:function(id){
 							return id == this.currentActive();
 						}
 					},
-					
+				listeners:{
+					"ready": function(){
+						Firebrick.createView("MyApp.view.components.Breadcrumbs", {
+							target:"breadcrumbs",
+							store:{
+								text:""
+							},
+							listeners:{
+								"ready": function(){
+									Firebrick.fireEvent("viewReady");
+									Firebrick.fireEvent("showLoadDone");
+								}
+							}
+						});
+					}
+				}	
 			});
 			
-			Firebrick.createView("MyApp.view.components.Breadcrumbs", {
-				target:"breadcrumbs",
-				store:{
-					text:""
-				}
-			});
-			
-			Firebrick.fireEvent("viewReady");
 		}
-		
 		
 	});
 });

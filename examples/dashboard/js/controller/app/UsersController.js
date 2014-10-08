@@ -53,7 +53,7 @@ define(["store/UserStore", "typeahead"], function(userStore){
 						 	highlight: true,
 						 	minLength: 1						
 						},{
-							source: substringMatcher(userStore.getRawData().users),
+							source: substringMatcher(userStore.getRawData()),
 							templates:{
 								suggestion:function(obj){
 									return "<p><a data-ta-index='" + obj.index + "' class='user-suggestion'> " + obj.name +"</a></p>"
@@ -64,7 +64,6 @@ define(["store/UserStore", "typeahead"], function(userStore){
 				},
 				scope:me
 			});
-			
 			me.callParent();
 		},
 		
@@ -78,7 +77,7 @@ define(["store/UserStore", "typeahead"], function(userStore){
 		},
 		
 		getUsers: function(){
-			return Firebrick.get("MyApp.store.UserStore").data.users();
+			return Firebrick.get("MyApp.store.UserStore").getData();
 		},
 		
 		getCountries: function(){
@@ -109,14 +108,24 @@ define(["store/UserStore", "typeahead"], function(userStore){
 					this.on("destroyed", function(){
 						me.isOnShow = false
 					});
+					
+					this.on("ready", function(){
+						Firebrick.createView("MyApp.view.components.Pagination", {
+							target:"pagination",
+							store: me.initPageData(),
+							listeners:{
+								"ready": function(){
+									Firebrick.fireEvent("showLoadDone");
+								}
+							}
+						});
+					})
+					
 					this.callParent();
 				}
 			});
 			
-			Firebrick.createView("MyApp.view.components.Pagination", {
-				target:"pagination",
-				store: me.initPageData()
-			});
+			
 			
 			Firebrick.fireEvent("updateBreadcrumb", "users_title");
 		},

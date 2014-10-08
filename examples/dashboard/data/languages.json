@@ -38,7 +38,8 @@
         "nav_item_exports": "Exports",
         "nav_item_analytics": "Analytics",
         "rp_info": "Something about reports comes in here",
-        "bgcolour": "Background Colour"
+        "bgcolour": "Background Colour",
+        "paper_examples": "Paper Examples"
     },
     "de": {
         "newsletter": "Newsletter",
@@ -79,6 +80,7 @@
         "nav_item_exports": "Exports",
         "nav_item_analytics": "Analytics",
         "rp_info": "Etwas über berichte kommt hier",
-        "bgcolour": "Hintergrundfarbe"
+        "bgcolour": "Hintergrundfarbe",
+        "paper_examples": "Paper Beispiele"
     }
 }

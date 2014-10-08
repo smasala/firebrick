@@ -1,3 +1,13 @@
+v0.7.7
+----------------------------
+* when defining the root parameter in a store - this will be taken into account when calling getData()
+* firebrick dev mode so that requirejs errors are output to console 
+* clear up ready function internal
+* change "Firebrick.view" to "views"
+* views are loaded asynchronously by default
+* views can be loaded synchronously by setting the parameter false
+* pass the store as first argument in load callback
+
 v0.6.1
 ----------------------------
 * stores load by default asynchronously

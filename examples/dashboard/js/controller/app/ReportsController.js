@@ -25,6 +25,11 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 						me.startGraph();
 					});
 					this.callParent();
+				},
+				listeners:{
+					"ready": function(){
+						Firebrick.fireEvent("showLoadDone");
+					}
 				}
 			});
 		},

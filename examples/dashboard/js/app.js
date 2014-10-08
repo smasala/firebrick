@@ -37,8 +37,7 @@ require(["knockout", "firebrick", "bootstrap", "jquery"], function(ko){
 					"(Now) But now these days are gone (These days are gone), I'm not so self assured" +
 					"<br>" +
 					"(I know I've found) Now I find I've changed my mind and opened up the doors</p>";
-
-
+	
 	Firebrick.ready({
 		app:{
 			name:"MyApp",
@@ -51,6 +50,7 @@ require(["knockout", "firebrick", "bootstrap", "jquery"], function(ko){
 		lang:"/data/languages.json",
 		require: ["controller/ViewController"],
 		cache:false,
+		dev: true,
 		go:function(){
 			//do your thing
 		}
