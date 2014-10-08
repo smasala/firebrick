@@ -37,12 +37,6 @@
 			path: ""
 		},
 		
-		/**
-		 * whether to use caching
-		 * set false to append timestamps to requests
-		 */
-		cache:true,
-		
 		/** ready function to kick start the application
 		* @fires main-viewRendered || view object
 		* @param options :: object = {
@@ -493,10 +487,10 @@
 		boot:{
 			prepApplication: function(options){
 				if(options.cache === false){
-					Firebrick.cache = options.cache;
 					require.config({
 					    urlArgs: "fb=" + (new Date()).getTime()
 					});
+					$.ajaxSetup({cache: false})
 				}
 				
 				if(options.dev){
@@ -750,7 +744,6 @@
 						async:$.type(async) == "boolean" ? async : true,
 						dataType:data_type,
 						url:path,
-						data: !Firebrick.cache ? "fb" + (new Date()).getTime() : "",
 						success:function(){
 							newCallback.apply(this, arguments);
 						},
@@ -1185,28 +1178,22 @@
 					
 					store.status = "preload";
 
-					var ajaxConfig = {
-							datatype: store.datatype,
-							async: async,
-							url: store.url,
-							success:function(jsonObject, status, response){
-								store.setData(jsonObject);
-								store.status = status;
-								if($.isFunction(options.callback)){
-									options.callback.apply(options.scope || store, [store, jsonObject, status, response]);
-								}
-							},
-							error:function(reponse, error, errorMessage){
-								console.warn("unable to load store '", store.classname, "' with path:", store.url);
-								console.error(error, errorMessage);
+					$.ajax({
+						datatype: store.datatype,
+						async: async,
+						url: store.url,
+						success:function(jsonObject, status, response){
+							store.setData(jsonObject);
+							store.status = status;
+							if($.isFunction(options.callback)){
+								options.callback.apply(options.scope || store, [store, jsonObject, status, response]);
 							}
+						},
+						error:function(reponse, error, errorMessage){
+							console.warn("unable to load store '", store.classname, "' with path:", store.url);
+							console.error(error, errorMessage);
 						}
-					
-					if(!Firebrick.cache){
-						ajaxConfig.data = "fb" + (new Date()).getTime()
-					}
-					
-					$.ajax(ajaxConfig);
+					});
 					
 					return store;
 				},
