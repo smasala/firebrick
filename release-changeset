@@ -1,3 +1,7 @@
+v0.7.8
+----------------------------
+* cache function overlooked when loading store 
+
 v0.7.7
 ----------------------------
 * when defining the root parameter in a store - this will be taken into account when calling getData()

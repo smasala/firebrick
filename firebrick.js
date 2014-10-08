@@ -26,7 +26,7 @@
 
 	var Firebrick = {
 		
-		version: "0.7.7",
+		version: "0.7.8",
 
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -36,6 +36,12 @@
 			name: "",
 			path: ""
 		},
+		
+		/**
+		 * whether to use caching
+		 * set false to append timestamps to requests
+		 */
+		cache:true,
 		
 		/** ready function to kick start the application
 		* @fires main-viewRendered || view object
@@ -487,8 +493,9 @@
 		boot:{
 			prepApplication: function(options){
 				if(options.cache === false){
+					Firebrick.cache = options.cache;
 					require.config({
-					    urlArgs: "fireb=" + (new Date()).getTime()
+					    urlArgs: "fb=" + (new Date()).getTime()
 					});
 				}
 				
@@ -742,7 +749,8 @@
 					$.ajax({
 						async:$.type(async) == "boolean" ? async : true,
 						dataType:data_type,
-						url:path + "?fb" + (new Date()).getTime(),
+						url:path,
+						data: !Firebrick.cache ? "fb" + (new Date()).getTime() : "",
 						success:function(){
 							newCallback.apply(this, arguments);
 						},
@@ -1177,22 +1185,28 @@
 					
 					store.status = "preload";
 
-					$.ajax({
-						datatype: store.datatype,
-						async: async,
-						url: store.url,
-						success:function(jsonObject, status, response){
-							store.setData(jsonObject);
-							store.status = status;
-							if($.isFunction(options.callback)){
-								options.callback.apply(options.scope || store, [store, jsonObject, status, response]);
+					var ajaxConfig = {
+							datatype: store.datatype,
+							async: async,
+							url: store.url,
+							success:function(jsonObject, status, response){
+								store.setData(jsonObject);
+								store.status = status;
+								if($.isFunction(options.callback)){
+									options.callback.apply(options.scope || store, [store, jsonObject, status, response]);
+								}
+							},
+							error:function(reponse, error, errorMessage){
+								console.warn("unable to load store '", store.classname, "' with path:", store.url);
+								console.error(error, errorMessage);
 							}
-						},
-						error:function(reponse, error, errorMessage){
-							console.warn("unable to load store '", store.classname, "' with path:", store.url);
-							console.error(error, errorMessage);
 						}
-					});
+					
+					if(!Firebrick.cache){
+						ajaxConfig.data = "fb" + (new Date()).getTime()
+					}
+					
+					$.ajax(ajaxConfig);
 					
 					return store;
 				},
