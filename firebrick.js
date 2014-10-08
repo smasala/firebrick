@@ -265,7 +265,8 @@
 			* @returns object
 			*/
 			buildClass: function(name, config){
-				var me = this, config = config || {};
+				var me = this; 
+        config = config || {};
 				//is the class extending from something?
 				if(config.extend){
 					//does the parent exist?
@@ -436,7 +437,7 @@
 					if(!config.init){
 						config.init = function(){
 							return this.callParent();
-						}
+						};
 					}
 				}
 				return config;
@@ -490,7 +491,7 @@
 					require.config({
 					    urlArgs: "fb=" + (new Date()).getTime()
 					});
-					$.ajaxSetup({cache: false})
+					$.ajaxSetup({cache: false});
 				}
 				
 				if(options.dev){
@@ -635,8 +636,9 @@
 			 */
 			setInterval: function(){
 				var me = this,
-					fArg = arguments[0];
-					id = $.isFunction(fArg) ? fArg.id : fArg;
+					fArg = arguments[0],
+					id = $.isFunction(fArg) ? fArg.id : fArg,
+          newId;
 				
 				if(!me.isIntervalRunning(id)){
 					if($.isFunction(fArg)){
@@ -655,13 +657,13 @@
 			 * @return id :: string
 			 */
 			int_applyInterval: function(id, callback, interval, scope){
-				var me = this,
+				var me = this;
 					id = id || me.uniqId();
 				
 				var f = function(){
 					callback.id = id;
 					callback.apply(scope || callback, arguments);
-				}
+				};
 				
 				//start the interval
 				f.intId = window.setInterval(f, interval);
@@ -687,7 +689,8 @@
 			* @returns object :: new object clone
 			*/
 			clone: function(object, config){
-				var clone = {}, config = config || {};
+				var clone = {};
+        config = config || {};
 				$.each(object, function(key, value){
 					clone[key] = value;
 				});
@@ -709,9 +712,10 @@
 			*/
 			require: function(names, callback, async, data_type, ext){
 				var me = this, 
-					path, 
-					data_type = data_type || "script",
-					ext = ext || "js"; 
+					path;
+					
+       	data_type = data_type || "script";
+				ext = ext || "js"; 
 				
 				if(!$.isArray(names)){
 					names = [names];
@@ -728,18 +732,18 @@
 					//prepare callback function
 					newCallback = function(){
 						ajaxCounter--;
-						if(ajaxCounter == 0){
+						if(ajaxCounter === 0){
 							if(callback && $.isFunction(callback)){
 								callback.apply(this, arguments);
 							}
 						}
 					};
 
-				//iterate of each file and get them
-				for(var i = 0, l = names.length; i<l; i++){
-					//convert the name into the correct path
-					me.requiredFiles[names[i]] = true;
-					path = me.getPathFromName(names[i], ext);
+        //iterate of each file and get them
+        $.each(names, function(index, name){
+          //convert the name into the correct path
+					me.requiredFiles[name] = true;
+					path = me.getPathFromName(name, ext);
 					$.ajax({
 						async:$.type(async) == "boolean" ? async : true,
 						dataType:data_type,
@@ -748,12 +752,12 @@
 							newCallback.apply(this, arguments);
 						},
 						error:function(reponse, error, errorMessage){
-							console.warn("unable to load file/class '", names[i], "' at:", path);
+							console.warn("unable to load file/class '", name, "' at:", path);
 							console.error(error, errorMessage);
 							newCallback.apply(this, arguments);
 						}
 					});
-				}
+        });
 				
 				return names;
 			},
@@ -768,7 +772,8 @@
 			getPathFromName: function(name, ext){
 				var me = this,
 					homePath = Firebrick.app.path,
-					appName = Firebrick.app.name,
+					appName = Firebrick.app.name;
+        
 					ext = ext || "js";
 				
 				//check whether user has added the trailing / to the path
@@ -781,7 +786,7 @@
 				
 				if(name.indexOf(".") > 0){
 					//check if the appName is found at the beginning
-					if(name.indexOf(appName) == 0){
+					if(name.indexOf(appName) === 0){
 						//replace the appName with the target path
 						name = name.replace(appName, homePath);
 						//replace all . with /
@@ -861,9 +866,9 @@
 			 * @returns string
 			 */
 			getByKey: function(key){
-				var me = this;
-					key = key.toLowerCase(),
-					a = me.keys()[me.lang()];
+        key = key.toLowerCase();
+				var me = this,
+            a = me.keys()[me.lang()];
 				return a && a[key] ? a[key] : key;
 			},
 			
@@ -872,7 +877,7 @@
 			 * @param langKey :: string
 			 */
 			setLang: function(langKey){
-				this.lang(langKey)
+				this.lang(langKey);
 			},
 			
 			/**
@@ -890,7 +895,7 @@
 			allLanguages: function(){
 				var me = this,
 					langs = [];
-				$.each(ko.mapping.toJS(me.keys), function(lang, keys){
+				$.each(ko.mapping.toJS(me.keys), function(lang){	//lang, keys
 					langs.push(lang);
 				});
 				return langs;
@@ -975,13 +980,13 @@
 			removeListener: function(eventName, funct){
 				var me = this, reg = me.eventRegistry[eventName];
 				if(reg){
-					if(funct.conf.callbackId || funct.conf.callbackId == 0){
+					if(funct.conf.callbackId || funct.conf.callbackId === 0){
 						for(var i = 0, l = reg.length; i<l; i++){
 							//compare callbackId's
 							if(reg[i].conf.callbackId == funct.conf.callbackId){
 								//function found so remove from array of listeners
 								reg.splice(i, 1);
-								if(reg.length == 0){
+								if(reg.length === 0){
 									delete me.eventRegistry[eventName];
 								}
 							}
@@ -1000,7 +1005,7 @@
 			* @param eventName :: string
 			* @param data :: any... :: arguments passed to event when fired
 			*/
-			fireEvent: function(eventName, data){
+			fireEvent: function(eventName){
 				var me = this, reg = me.eventRegistry[eventName];
 				if(reg){
 					//get the argument from this function call
@@ -1163,10 +1168,12 @@
 				* @return store
 				**/
 				loadStore: function(store, options){
+          options = options || {};
 					var me = this, 
-						options = options || {}
-						url = store.url,
+						url = store.url,       
 						async = options.async;
+          
+          
 					
 					if($.type(async) != "boolean"){
 						async = store.async;
@@ -1254,7 +1261,7 @@
 			 * @params config :: object
 			 * @param callback :: function (optional)
 			 */
-			set: function(config, callback){
+			set: function(config){
 				var me = this,
 					route = function(){};
 				
@@ -1268,7 +1275,7 @@
 								if(Firebrick.router.is("#" + hash)){
 									cb.apply(this, arguments);
 									return false;
-								};
+								}
 							});
 						};
 					}
@@ -1590,10 +1597,9 @@
 		/**
 		* Construct the view with template and data binding
 		* @param html_template :: string (optional) :: html
-		* @param data :: object (optional) :: data to bind to the template
 		* @returns self
 		*/
-		initView: function(html_template, data){
+		initView: function(html_template){
 			var me = this;
 			me.html = html_template;
 			
@@ -1654,7 +1660,6 @@
 		*/
 		render:function(){
 			var me = this,
-				ovt = me.target,
 				target = me.getTarget();
 			 
 			if(target){
@@ -1953,6 +1958,7 @@
 		* @returns object
 		*/
 		toPlainObject: function(){
+      var me = this;
 			return $.isFunction(me.data) ? ko.toJS(me.data) : me.data;
 		},
 		
