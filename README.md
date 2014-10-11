@@ -53,7 +53,7 @@ Checkout the [Dashboard ](http://demo.firebrickjs.com) demo
 		Firebrick.ready({
 			app:{
 				name:"MyApp",
-				path:"/js"
+				path:"js/"
 			},
 			go:function(){
 				//Do your thing
