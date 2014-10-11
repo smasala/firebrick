@@ -240,7 +240,9 @@
 			        clazz = me.define(name, config);
 			    }
 
-		        clazz.init();   
+			    if(clazz.init){
+			    	clazz.init();
+			    }
 			    
 			    return clazz;
 			},
