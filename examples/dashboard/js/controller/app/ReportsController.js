@@ -17,21 +17,28 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 		},
 		
 		initView:function(){
-			var me = this;
-			Firebrick.createView("MyApp.view.app.Reports", {
-				target:"#main-content",
-				init:function(){
-					this.on("rendered", function(){
-						me.startGraph();
-					});
-					this.callParent();
-				},
-				listeners:{
-					"ready": function(){
-						Firebrick.fireEvent("showLoadDone");
+			var me = this,
+				view = Firebrick.get("MyApp.view.app.Reports");
+			if(!view){
+				Firebrick.createView("MyApp.view.app.Reports", {
+					target:"#main-content",
+					init:function(){
+						this.on("rendered", function(){
+							me.startGraph();
+						});
+						this.callParent();
+					},
+					listeners:{
+						"ready": function(){
+							Firebrick.fireEvent("showLoadDone");
+						}
 					}
-				}
-			});
+				});
+			}else{
+				view.render();
+				Firebrick.fireEvent("showLoadDone");
+			}
+			
 		},
 		
 		startGraph: function(){

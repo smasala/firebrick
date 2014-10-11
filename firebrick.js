@@ -26,7 +26,7 @@
 
 	var Firebrick = {
 		
-		version: "0.7.8",
+		version: "0.8.0",
 
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -106,16 +106,8 @@
 			return this.shortcut(this.utils, "require", arguments);
 		},
 		
-		getView: function(){
-			return this.shortcut(this.views, "getView", arguments);
-		},
-		
 		loadRaw: function(){
 			return this.shortcut(this.views, "loadRaw", arguments);
-		},
-		
-		getViewById: function(){
-			return this.shortcut(this.views, "getViewById", arguments);
 		},
 		
 		createView: function(){
@@ -177,8 +169,8 @@
 			* @param config :: object
 			* @returns object
 			*/
-			get: function(name, config){
-				return this.createClass(name, config);
+			get: function(name){
+				return this.classRegistry[name];
 			},
 			
 			/**
@@ -190,7 +182,7 @@
 				var me = this,
 					clazz;
 				$.each(me.classRegistry, function(k,v){
-					if(v.getClassId && v.getClassId() == id){
+					if(v._classId && v.getClassId && v.getClassId() == id){
 						clazz = v;
 						//found class, stop iteration
 						return false;
@@ -201,6 +193,39 @@
 			},
 			
 			/**
+			 * pass a simple object and a super class that you wish to extend from OOP
+			 * @param obj :: plain object
+			 * @param _super :: object class
+			 * @return obj prototype of _super (i.e. obj which extends from _super
+			 */
+			extend: function(obj, _super){
+				var clazz;
+				//iterate over all obj parameters
+				for(p in obj){
+					if(obj.hasOwnProperty(p)){
+						//replace the property with a descriptor object
+						obj[p] = Object.getOwnPropertyDescriptor(obj, p);
+						//if the property is found in the super class and is a function
+						if(_super[p] && $.isFunction(_super[p])){
+							//enable the function to call its super function by calling this.callParent
+							obj[p].value = (function(func, parent){
+								return function(){
+									this.callParent = parent;
+		                            var r = func.apply(this, arguments);
+		                            delete this.callParent;
+		                            return r;
+		                        }
+	                    	})(obj[p].value, _super[p]);
+		               }                
+					}
+	        	}
+				//create a tmp version of the super object
+		        var tmp = Object.create(_super);
+		        //create a new object with the descriptors that inherit from super
+		        return Object.create(Object.getPrototypeOf(tmp), obj);
+			},
+			
+			/**
 			* get or returns a firebrick class by name and calls init()
 			* @param name :: string
 			* @param config :: object
@@ -208,39 +233,16 @@
 			*/
 			create: function(name, config){
 				var me = this,
-					clazz = me.define(name, config);
-					
-				//initalise the class
-				if(clazz && clazz.init && !clazz._created){
-					clazz.init();
-				}
-				
-				//return it
-				return clazz;
-			},
-			
-			/**
-			* creates the specified class, fetches it if no already
-			* @private
-			* @param name :: string
-			* @param config :: object
-			* @returns object
-			*/
-			createClass:function(name, config){
-				var me = this, clazz = me.classRegistry[name];
-			
-				if($.isPlainObject(name)){
-					//object has been passed, just return it
-					return name;
-				}
-				
-				if(clazz && config){
-					//if config is passed, extend the class
-					clazz = Firebrick.utils.extend(clazz, config);
-					me.classRegistry[name] = clazz;
-				}
-				
-				return clazz;
+					clazz;
+			    if(me.classRegistry[name]){
+			        clazz = me.extend(config, me.classRegistry[name]);
+			    }else{
+			        clazz = me.define(name, config);
+			    }
+
+		        clazz.init();   
+			    
+			    return clazz;
 			},
 			
 			/**
@@ -250,42 +252,22 @@
 			* @returns the newly created class
 			*/
 			define: function(name, config){
-				//build class with inheritance if present
 				var me = this,
-					clazz = me.buildClass(name, config);
-					me.classRegistry[name] = clazz;
-				return clazz;
-			},
-			
-			/**
-			* build the class with inheriting from the classes in which they extend from
-			* @private
-			* @param name :: string
-			* @param config :: class object
-			* @returns object
-			*/
-			buildClass: function(name, config){
-				var me = this; 
-        config = config || {};
-				//is the class extending from something?
-				if(config.extend){
-					//does the parent exist?
-					var parent = me.classRegistry[config.extend];
-					if(parent){
-						//iterate over the parents configuration
-						config = Firebrick.utils.extend(config, parent);
-						config._super = parent;						
-					}else{
-						console.warn("unable to build class or inherit from:", config.extend);
-					}
-					
-				}
-				
+					clazz;
+			    
 				config._classname = name;
+			    
+			    if(config.extend){
+			        var _super = me.classRegistry[config.extend];
+			        clazz = me.extend(config, _super);
+			    }else{
+			        clazz = Object.create(config);
+			    }
+			    me.classRegistry[name] = clazz;
+			    return clazz;
 				
-				return config;
 			}
-		
+			
 		},
 		
 		templates:{
@@ -298,41 +280,9 @@
 		
 		views: {
 			
-			/**
-			* View Registry - stores all views by name
-			* @private
-			*/
-			viewRegistry: {},
-			
 			bootView: function(options){
 				Firebrick.utils.clearSplash();
 				return Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", store:options.viewData, async:true});
-			},
-			
-			/**
-			* get view class by name
-			* @param name :: string
-			* @return class
-			*/
-			getView: function(name){
-				return this.viewRegistry[name];
-			},
-			/**
-			* get a class by classId
-			* @param string
-			* @return object
-			*/
-			getViewById: function(id){
-				var me = this,
-					clazz;
-				$.each(me.viewRegistry, function(k,v){
-					if(v.getClassId && v.getClassId() == id){
-						clazz = v;
-						//found class, stop iteration
-						return false;
-					}
-				});
-				return clazz;
 			},
 			
 			/**
@@ -342,16 +292,8 @@
 			* @returns Firebrick.view.Base || object
 			**/
 			createView: function(name, config){
-				//get, define and call the constructor of the view
-				var me = this,
-					view = me.defineView(name, config);
-				if(!view._created){
-					view.init();
-				}else if(view.autoRender){
-					view.render();
-					view.initSubViews();
-				}
-				return view;
+				config = this.basicViewConfigurations(config);
+				return Firebrick.create(name, config);
 			},
 			/**
 			* Note: different to Firebrick.define() for classes -
@@ -362,16 +304,8 @@
 			*/
 			defineView: function(name, config){
 				var me = this;
-				
-				if(!me.viewRegistry[name]){
-					//set basic configurations for view class
-					config = me.basicViewConfigurations(config);
-					//save the view in the registry
-					var view = Firebrick.classes.buildClass(name, config);
-					me.viewRegistry[name] = view;
-				}
-				//return the new view
-				return me.viewRegistry[name];
+				config = me.basicViewConfigurations(config);
+				return Firebrick.define(name, config);
 			},
 			
 			/**
@@ -405,7 +339,14 @@
 					subView = Firebrick.createView(subView, {autoRender:false});
 				}else if($.isPlainObject(subView)){
 					if(subView.isView){
-						subView = Firebrick.createView(subView._classname);
+						if(subView._state == "unbound"){
+							subView = subView.render();
+						}else{
+							var a = Firebrick.createView(subView._classname);
+							subView = a;
+							Firebrick.classes.classRegistry[subView._classname] = a;
+						}
+						
 					}
 				}
 				return subView;
@@ -434,11 +375,6 @@
 				config = config || {};
 				if(!config.extend){
 					config.extend = "Firebrick.view.Base";
-					if(!config.init){
-						config.init = function(){
-							return this.callParent();
-						};
-					}
 				}
 				return config;
 			},
@@ -1142,21 +1078,19 @@
 					if($.type(name) == "string"){
 						//return the created class
 						var clazz = Firebrick.get(name);
-						clazz = Firebrick.utils.overwrite(clazz, config || {});
-						clazz.init();
+						if(clazz){
+							clazz = Firebrick.classes.extend(config, clazz);
+							clazz.init();
+						}else{
+							clazz = Firebrick.create(name, config);
+						}
 						return clazz;
 					}else{
-						
 						//only 1 parameter in this case, name is then config.
 						config = name || {};
-						
-						//if no extend is defined (which is standard case) - give it one - ie. the store base class
-						if(!config.extend){
-							config.extend = "Firebrick.store.Base";
-						}
-						
+						var _super = Firebrick.get("Firebrick.store.Base");
 						//return a new object based on the Base class
-						return Firebrick.classes.buildClass("Firebrick.store.Base", config).init();
+						return Firebrick.classes.extend(config, _super).init();
 					}
 				},
 				
@@ -1168,12 +1102,10 @@
 				* @return store
 				**/
 				loadStore: function(store, options){
-          options = options || {};
+					options = options || {};
 					var me = this, 
 						url = store.url,       
 						async = options.async;
-          
-          
 					
 					if($.type(async) != "boolean"){
 						async = store.async;
@@ -1325,22 +1257,8 @@
 				me.on(me.listeners);
 			}
 			me.fireEvent(me.overrideReadyEvent || "ready");
-			me._created = true;
 			return me;
 		},
-		
-		destroy:function(){
-			var me = this;
-			me.fireEvent("destroyed", me);
-			//remove all events
-			delete me.localEventRegistry[me.getClassId()];
-			me._created = false;
-		},
-		
-		/**
-		 * wether a class has been created already
-		 */
-		_created:false,
 		
 		/**
 		 * @private use getClassId()
@@ -1350,7 +1268,7 @@
 		 * event registry
 		 * @private
 		 */
-		localEventRegistry: {},
+		//localEventRegistry: null,
 
 		/**
 		 * get the id for the current class
@@ -1386,17 +1304,16 @@
 		* @returns self
 		*/
 		on: function(eventName, callback, scope){
-			var me = this,
-				classId = this.getClassId();	
+			var me = this;
 			
-			if(!me.localEventRegistry[classId]){
-				me.localEventRegistry[classId] = {};
+			if(!me.localEventRegistry){
+				me.localEventRegistry = {};
 			}
 			
 			var addEvent = function(eventName, func, sc){
 				//init the registry
-				if(!me.localEventRegistry[classId][eventName]){
-					me.localEventRegistry[classId][eventName] = [];
+				if(!me.localEventRegistry[eventName]){
+					me.localEventRegistry[eventName] = [];
 				}
 				//give the function an id
 				func.id = Firebrick.utils.uniqId();
@@ -1404,7 +1321,7 @@
 					//add the scope if needed
 					func.scope = sc;
 				}
-				me.localEventRegistry[classId][eventName].push(func);
+				me.localEventRegistry[eventName].push(func);
 			};
 			
 			if($.isPlainObject(eventName)){
@@ -1430,12 +1347,11 @@
 		* @returns self
 		*/
 		off: function(eventName, callback){
-			var me = this,
-				classId = me.getClassId();
-			if(me.localEventRegistry[classId] && me.localEventRegistry[classId][eventName]){
-				$.each(me.localEventRegistry[classId][eventName], function(i, func){
+			var me = this;
+			if(me.localEventRegistry && me.localEventRegistry[eventName]){
+				$.each(me.localEventRegistry[eventName], function(i, func){
 					if(func.id == callback.id){
-						me.localEventRegistry[classId][eventName].splice(i, 1);
+						me.localEventRegistry[eventName].splice(i, 1);
 						return false;
 					}
 				});
@@ -1451,8 +1367,7 @@
 		*/
 		fireEvent: function(){
 			var me = this,
-				classId = me.getClassId(),
-				events = me.localEventRegistry[classId],
+				events = me.localEventRegistry,
 				args = arguments, 
 				eventName = arguments[0];	//get first argument - i.e. the event name
 			if(events && events[eventName]){
@@ -1510,7 +1425,7 @@
 		* State the view is current in. "Initial", "Rendered"
 		* @private
 		*/
-		state:"initial",
+		_state:"initial",
 		/**
 		 * define subviews to load after creation of this view
 		 * string / array of strings / object / array of objects
@@ -1561,16 +1476,13 @@
 		*/
 		init: function(){
 			var me = this;
-			
 			me.overrideReadyEvent = "base";
 			me.on(me.overrideReadyEvent, function(){
 				me._init(function(){
 					//check the data of the view is in the correct format
 					me.initStore();
 					//parse html with data
-					me.initView(me.tpl, me.getData());
-					
-					me.initSubViews();
+					me.initView();
 					
 					me.fireEvent("ready");
 				});
@@ -1578,6 +1490,8 @@
 			
 			return me.callParent();
 		},
+		
+		
 		
 		/**
 		* Returns the store linked to the view
@@ -1596,12 +1510,11 @@
 		
 		/**
 		* Construct the view with template and data binding
-		* @param html_template :: string (optional) :: html
 		* @returns self
 		*/
-		initView: function(html_template){
+		initView: function(){
 			var me = this;
-			me.html = html_template;
+			me.html = me.tpl;
 			
 			if(me.autoRender){
 				me.render();
@@ -1641,7 +1554,7 @@
 				var el = target[0];
 				Firebrick.views.renderTo(target, me.html);
 				me.hide();
-				me.state = "rendered";
+				me._state = "rendered";
 				var data = me.getData();
 				if(data && !$.isEmptyObject(data)){
 					target.attr("fb-view-bind", me.getClassId());
@@ -1668,6 +1581,8 @@
 				
 				me.bind();
 				
+				me.initSubViews();
+				
 			}else{
 				console.warn("unable to render, no target found for", me.target, this);
 			}
@@ -1677,9 +1592,17 @@
 		
 		setDisposeCallback: function(el){
 			ko.utils.domNodeDisposal.addDisposeCallback(el, function(el){
-				var view = Firebrick.getViewById($(el).attr("fb-view-bind"));
-				view.destroy();
+				var view = Firebrick.getById($(el).attr("fb-view-bind"));
+				view.unbound();
 			});
+		},
+		
+		/**
+		 * @private
+		 */
+		unbound:function(){
+			this._state = "unbound";
+			this.fireEvent("unbound", this);
 		},
 		
 		show: function(){

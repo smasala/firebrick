@@ -99,33 +99,33 @@ define(["store/UserStore", "typeahead"], function(userStore){
 		},
 		
 		initView:function(){
-			var me = this;
+			var me = this,
+				view = Firebrick.get("MyApp.view.app.Users");
 
-			Firebrick.createView("MyApp.view.app.Users", {
-				store: {activePage:me.startPage, users: me.getUsers(), countries:me.getCountries()},
-				target:"#main-content",
-				init:function(){
-					this.on("destroyed", function(){
-						me.isOnShow = false
-					});
-					
-					this.on("ready", function(){
-						Firebrick.createView("MyApp.view.components.Pagination", {
-							target:"pagination",
-							store: me.initPageData(),
-							listeners:{
-								"ready": function(){
-									Firebrick.fireEvent("showLoadDone");
-								}
-							}
+			if(!view){
+				Firebrick.createView("MyApp.view.app.Users", {
+					store: {activePage:me.startPage, users: me.getUsers(), countries:me.getCountries()},
+					target:"#main-content",
+					init:function(){
+						this.on("unbound", function(){
+							me.isOnShow = false
 						});
+						this.callParent();
+					},
+					subViews: Firebrick.defineView("MyApp.view.components.Pagination", {
+						target:"pagination",
+						store: me.initPageData(),
+						listeners:{
+							"ready": function(){
+								Firebrick.fireEvent("showLoadDone");
+							}
+						}
 					})
-					
-					this.callParent();
-				}
-			});
-			
-			
+				});
+			}else{
+				view.render();
+				Firebrick.fireEvent("showLoadDone");
+			}
 			
 			Firebrick.fireEvent("updateBreadcrumb", "users_title");
 		},
@@ -146,7 +146,7 @@ define(["store/UserStore", "typeahead"], function(userStore){
 		
 		prevPage: function(){
 			var me = this, 
-				ap = Firebrick.getView("MyApp.view.components.Pagination").getData().activePage() - 1;
+				ap = Firebrick.get("MyApp.view.components.Pagination").getData().activePage() - 1;
 			if(me.pageExist(ap)){
 				me.updateBindingsForPage(ap);
 			}
@@ -154,21 +154,21 @@ define(["store/UserStore", "typeahead"], function(userStore){
 		
 		nextPage: function(){
 			var me = this,
-				ap = Firebrick.getView("MyApp.view.components.Pagination").getData().activePage() + 1;
+				ap = Firebrick.get("MyApp.view.components.Pagination").getData().activePage() + 1;
 			if(me.pageExist(ap)){
 				me.updateBindingsForPage(ap);
 			}
 		},
 		
 		updateBindingsForPage:function(ap){
-			Firebrick.getView("MyApp.view.app.Users").getData().activePage(ap);
-			Firebrick.getView("MyApp.view.components.Pagination").getData().activePage(ap);
+			Firebrick.get("MyApp.view.app.Users").getData().activePage(ap);
+			Firebrick.get("MyApp.view.components.Pagination").getData().activePage(ap);
 		},
 		
 		showUser: function(event, el){
 			var me = this;
 			if(!me.isOnShow){
-				Firebrick.getView("MyApp.view.components.Nav").getData().setActive("app_Users");
+				Firebrick.get("MyApp.view.components.Nav").getData().setActive("app_Users");
 			}
 			me.updateBindingsForPage( $(el).attr("data-ta-index") );
 		}

@@ -1,3 +1,16 @@
+v0.8.0
+----------------------------
+* internal changes on how create and define work
+* javascript prototype oop when using create and define and not mixin
+* calling create() on an already created object returns the original object and uses the second "config" argument as a mixin
+* change "destroyed" event to "unbound"
+* call render() to re-render an "unbound" view
+* createView and defineView are shortcuts of create() and define()
+* viewRegistry removed and merged with classRegistry
+* getViewById removed - use getById()
+* getView removed - use get()
+* dashboard demo update
+
 v0.7.8
 ----------------------------
 * cache function overlooked when loading store 

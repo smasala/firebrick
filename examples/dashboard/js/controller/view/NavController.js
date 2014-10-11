@@ -64,15 +64,20 @@ define(["store/ProfileStore", "jquery-minicolors"], function(){
 		
 		showProfilePanel: function(){
 
-			Firebrick.createView("MyApp.view.components.Popup").getData().header(fb.text("profile")());
+			Firebrick.get("MyApp.view.components.Popup").getData().header(fb.text("profile")());
 			
 			Firebrick.createStore("MyApp.store.ProfileStore").load({
 				callback:function(store){
-					console.info(arguments)
-					Firebrick.createView("MyApp.view.general.Profile", {
-						target: "popup .modal-body",
-						store: store
-					});
+					var view = Firebrick.get("MyApp.view.general.Profile");
+					if(!view){
+						Firebrick.createView("MyApp.view.general.Profile", {
+							target: "popup .modal-body",
+							store: store
+						});
+					}else{
+						view.render();
+					}
+					
 				}
 			})
 			
@@ -87,17 +92,23 @@ define(["store/ProfileStore", "jquery-minicolors"], function(){
 		showSettingsPanel: function(){
 			require(["jquery-minicolors"], function(){
 				
-				Firebrick.createView("MyApp.view.components.Popup").getData().header(fb.text("settings")());
+				Firebrick.get("MyApp.view.components.Popup").getData().header(fb.text("settings")());
 				
-				Firebrick.createView("MyApp.view.general.Settings", {
-					target: "popup .modal-body",
-					listeners:{
-						"ready": function(){
-							//colour picker
-						    $('.colorPicker').minicolors({theme:null});
+				var view = Firebrick.get("MyApp.view.general.Settings");
+				if(!view){
+					Firebrick.createView("MyApp.view.general.Settings", {
+						target: "popup .modal-body",
+						listeners:{
+							"ready": function(){
+								//colour picker
+							    $('.colorPicker').minicolors({theme:null});
+							}
 						}
-					}
-				});
+					});
+				}else{
+					view.render();
+				}
+				
 				
 				//bootstrap command
 				$('popup .modal').modal('show');

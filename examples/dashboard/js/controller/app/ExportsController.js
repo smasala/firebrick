@@ -20,15 +20,22 @@ define(["store/ExportsStore"], function(){
 			var me = this;
 			Firebrick.createStore("MyApp.store.ExportsStore").load({
 				callback:function(store){
-					Firebrick.createView("MyApp.view.app.Exports", {
-						target:"#main-content",
-						store:store,
-						listeners:{
-							"ready": function(){
-								Firebrick.fireEvent("showLoadDone");
+					var view = Firebrick.get("MyApp.view.app.Exports");
+					if(!view){
+						Firebrick.createView("MyApp.view.app.Exports", {
+							target:"#main-content",
+							store:store,
+							listeners:{
+								"ready": function(){
+									Firebrick.fireEvent("showLoadDone");
+								}
 							}
-						}
-					});
+						});
+					}else{
+						view.render();
+						Firebrick.fireEvent("showLoadDone");
+					}
+					
 				}
 			})
 			

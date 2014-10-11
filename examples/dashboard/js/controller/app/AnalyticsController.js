@@ -18,20 +18,28 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 		},
 		a:0,
 		initView:function(){
-			var me = this;
-			Firebrick.createView("MyApp.view.app.Analytics", {
-				store:{name: "steven"},
-				target:"#main-content",
-				listeners:{
-					"destroyed": function(){
-						me.stopTimers();
-					},
-					"ready": function(){
-						me.startGraph();
-						Firebrick.fireEvent("showLoadDone");
+			var me = this,
+				view = Firebrick.get("MyApp.view.app.Analytics");
+			
+			if(!view){
+				Firebrick.createView("MyApp.view.app.Analytics", {
+					store:{name: "steven"},
+					target:"#main-content",
+					listeners:{
+						"unbound": function(){
+							me.stopTimers();
+						},
+						"ready": function(){
+							me.startGraph();
+							Firebrick.fireEvent("showLoadDone");
+						}
 					}
-				}
-			});
+				});
+			}else{
+				view.render();
+				Firebrick.fireEvent("showLoadDone");
+			}
+			
 		},
 		currentIds:[],
 		stopTimers:function(){
@@ -40,10 +48,8 @@ define(["/plugins/flot/jquery.flot.js"], function(){
 				Firebrick.utils.clearInterval(v);
 		    });
 		    me.currentIds = [];
-		    console.info("stop")
 		},
 		startGraph:function(){
-			console.info("start")
 			var me = this, 
 				containers = $(".flot-moving-line-chart");
 			

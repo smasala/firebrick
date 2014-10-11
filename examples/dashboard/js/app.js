@@ -1,4 +1,5 @@
 require.config({
+	urlArgs: "fb=" + (new Date()).getTime(),
 	paths:{
 		"jquery": "../bower_components/jquery/jquery",
 		"popover": "../bower_components/bootstrap/js/popover",
@@ -49,7 +50,7 @@ require(["knockout", "firebrick", "bootstrap", "jquery"], function(ko){
 		},
 		lang:"/data/languages.json",
 		require: ["controller/ViewController"],
-		cache:false,
+		cache: false,
 		dev: true,
 		go:function(){
 			//do your thing

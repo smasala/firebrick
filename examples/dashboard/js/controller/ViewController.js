@@ -33,7 +33,7 @@ define([
 			
 			Firebrick.addListener({
 				"updateBreadcrumb": function(event, page){
-					Firebrick.getView("MyApp.view.components.Breadcrumbs").store.getData().text(page);
+					Firebrick.get("MyApp.view.components.Breadcrumbs").store.getData().text(page);
 				},
 				scope:this
 			});

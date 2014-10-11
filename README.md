@@ -1,4 +1,4 @@
-#Firebrick JS v0.7.8 Stable
+#Firebrick JS v0.8.0 Stable
 
 JavaScript MVC Framework built with:
 
