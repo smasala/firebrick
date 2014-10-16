@@ -74,9 +74,6 @@
 					me.utils.clearSplash();
 					var args = arguments;
 					$(document).ready(function(){
-						if(options.autoRender !== false){
-							Firebrick.views.bootView(options);
-						}
 						options.go.apply(options.go, args);
 					});
 				});
@@ -84,9 +81,6 @@
 			}else{
 				me.utils.clearSplash();
 				$(document).ready(function(){
-					if(options.autoRender !== false){
-						Firebrick.views.bootView(options);
-					}
 					options.go()
 				});
 			}
@@ -480,6 +474,10 @@
 				
 				if(options.lang){
 					Firebrick.languages.init(options.lang);
+				}
+				
+				if(options.autoRender !== false){
+					Firebrick.views.bootView(options);
 				}
 				
 			}
