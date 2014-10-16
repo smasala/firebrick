@@ -1,3 +1,10 @@
+v0.8.4
+----------------------------
+* fix the shortcut Firebrick.createStore("MyStore", {...}) when creating a store "on-the-fly"
+* update bower jquery dep from ~2.0.0 to ~2.1.1
+* added shortcut createController() - saves using having to define extend property "Firebrick.controller.Base"
+* fix bug viewReady not fired when creating view/Index.html
+
 v0.8.0
 ----------------------------
 * internal changes on how create and define work

@@ -26,7 +26,7 @@
 
 	var Firebrick = {
 		
-		version: "0.8.0",
+		version: "0.8.4",
 
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -72,12 +72,23 @@
 
 				require(options.require, function(){
 					me.utils.clearSplash();
-					options.go.apply(options.go, arguments);
+					var args = arguments;
+					$(document).ready(function(){
+						if(options.autoRender !== false){
+							Firebrick.views.bootView(options);
+						}
+						options.go.apply(options.go, args);
+					});
 				});
 			
 			}else{
 				me.utils.clearSplash();
-				options.go();
+				$(document).ready(function(){
+					if(options.autoRender !== false){
+						Firebrick.views.bootView(options);
+					}
+					options.go()
+				});
 			}
 		},
 		
@@ -100,6 +111,10 @@
 		
 		define: function(){
 			return this.shortcut(this.classes, "define", arguments);
+		},
+		
+		createController: function(){
+			return this.shortcut(this.controllers, "createController", arguments);
 		},
 		
 		require: function(){
@@ -272,6 +287,16 @@
 			
 		},
 		
+		controllers:{
+			
+			createController: function(name, config){
+				config = config || {};
+				config.extend = "Firebrick.controller.Base";
+				return Firebrick.create(name, config);
+			}
+			
+		},
+		
 		templates:{
 			/**
 			 * General loading tpl
@@ -284,7 +309,16 @@
 			
 			bootView: function(options){
 				Firebrick.utils.clearSplash();
-				return Firebrick.createView(Firebrick.app.name + ".view.Index", {target:"body", store:options.viewData, async:true});
+				return Firebrick.createView(Firebrick.app.name + ".view.Index", {
+					target:"body", 
+					store:options.viewData, 
+					async:true,
+					listeners:{
+						"ready": function(){
+							Firebrick.fireEvent("viewReady", this);
+						}
+					}
+				});
 			},
 			
 			/**
@@ -448,9 +482,6 @@
 					Firebrick.languages.init(options.lang);
 				}
 				
-				if(options.autoRender !== false){
-					Firebrick.views.bootView(options);
-				}
 			}
 		},
 		
@@ -1084,6 +1115,7 @@
 							clazz = Firebrick.classes.extend(config, clazz);
 							clazz.init();
 						}else{
+							config = me.basicStoreConfigurations(config);
 							clazz = Firebrick.create(name, config);
 						}
 						return clazz;
@@ -1094,6 +1126,21 @@
 						//return a new object based on the Base class
 						return Firebrick.classes.extend(config, _super).init();
 					}
+				},
+				
+				/**
+				* Basic view configurations when defining/creating a view
+				* @private
+				* @param config :: object (optional)
+				* @returns object
+				*/
+				basicStoreConfigurations: function(config){
+					var me = this;
+					config = config || {};
+					if(!config.extend){
+						config.extend = "Firebrick.store.Base";
+					}
+					return config;
 				},
 				
 				/**
@@ -1285,7 +1332,7 @@
 		},
 		
 		/**
-		 * shorthand for defining class listeners so you don't have to create the init function
+		 * shorthand for defining class listeners so you don't have to create the init function and us this.on()
 		 * @usage: listeners:{
 		 * 				"ready": function(){},
 		 * 				scope:this
