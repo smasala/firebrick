@@ -1,3 +1,22 @@
+v0.8.19
+----------------------------
+* overwrite/mixin function deep option
+* firebrick.require returns and object of responses when requiring multiple files
+* add utils function mixinFor - iterate all parents of an object and mix the object properties and values for a specified property name together
+* bower json update (typo)
+* create a view "on-the-fly" by not passing a name when using Firebrick.createView({...})
+* bug fix amd load where firebrick was not returned
+* remove redundant extend function utils.extend - use classes.extend instead
+* a view tpl parameter that is a function (rather than an html string) is executed and returned before it is rendered ...in the init stage
+* add passEvent function to classes
+* when using listeners:{} to declare event listeners in a class default the scope to itself if listeners.scope is not defined
+* when lang key is not found, return the unmodified key
+* Firebrick UI support in views with use of the "items" parameter
+* .contains is not supported in IE - change to indexOf
+* add event "beforeRender" to views
+* added parameter "appendContent", when the view is rendered, if true the view html is appended to the target instead of overwriting its contents
+* fix when bug when creating a class on-the-fly without name .create({...})
+
 v0.8.4
 ----------------------------
 * fix the shortcut Firebrick.createStore("MyStore", {...}) when creating a store "on-the-fly"

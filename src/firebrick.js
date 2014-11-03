@@ -1,4 +1,4 @@
-/**
+/*!
 * Firebrick JS - JavaScript MVC Framework powered by jQuery, Bootstrap and Knockout JS
 * Author: Steven Masala
 * dependencies: jquery, bootstrap, knockout js
@@ -26,7 +26,7 @@
 
 	var Firebrick = {
 		
-		version: "0.8.4",
+		version: "0.8.19",
 
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -208,30 +208,30 @@
 			 * @return obj prototype of _super (i.e. obj which extends from _super
 			 */
 			extend: function(obj, _super){
-				var clazz;
+				var objTemp = {};
 				//iterate over all obj parameters
 				for(p in obj){
 					if(obj.hasOwnProperty(p)){
 						//replace the property with a descriptor object
-						obj[p] = Object.getOwnPropertyDescriptor(obj, p);
+						objTemp[p] = Object.getOwnPropertyDescriptor(obj, p);
 						//if the property is found in the super class and is a function
 						if(_super[p] && $.isFunction(_super[p])){
 							//enable the function to call its super function by calling this.callParent
-							obj[p].value = (function(func, parent){
+							objTemp[p].value = (function(func, parent){
 								return function(){
 									this.callParent = parent;
 		                            var r = func.apply(this, arguments);
 		                            delete this.callParent;
 		                            return r;
 		                        }
-	                    	})(obj[p].value, _super[p]);
+	                    	})(objTemp[p].value, _super[p]);
 		               }                
 					}
 	        	}
 				//create a tmp version of the super object
 		        var tmp = Object.create(_super);
 		        //create a new object with the descriptors that inherit from super
-		        return Object.create(Object.getPrototypeOf(tmp), obj);
+		        return Object.create(Object.getPrototypeOf(tmp), objTemp);
 			},
 			
 			/**
@@ -274,9 +274,10 @@
 			    }else{
 			        clazz = Object.create(config);
 			    }
-			    me.classRegistry[name] = clazz;
+			    if(name){
+			    	me.classRegistry[name] = clazz;
+			    }
 			    return clazz;
-				
 			}
 			
 		},
@@ -322,6 +323,19 @@
 			* @returns Firebrick.view.Base || object
 			**/
 			createView: function(name, config){
+				if(name && !config){
+					if($.isPlainObject(name)){
+						//one parameter passed
+						//createView({
+						// ...
+						//})
+						config = name;
+						name = null;
+					}else{
+						//createView("MyView")
+						config = {};
+					}
+				}
 				config = this.basicViewConfigurations(config);
 				return Firebrick.create(name, config);
 			},
@@ -443,9 +457,13 @@
 			* @private
 			* @param target :: jquery object ::
 			* @param html :: string :: template or html
+			* @param append :: boolean :: default false, if true will append to instead of overwriting content of target
 			* @returns target as jquery object
 			*/
-			renderTo:function(target, html){
+			renderTo:function(target, html, append){
+				if(append === true){
+					return target.append(html);
+				}
 				return target.html(html);
 			}
 			
@@ -524,48 +542,49 @@
 			},
 			
 			/**
-			* extend class 1 with properties of class 2
-			* @param config :: object :: object to extend
-			* @param obj2 :: object :: properties to extend from 
-			* @returns merged object
-			*/
-			extend: function(config, obj2){
-				var me = this;
-				$.each(obj2, function(key, value){
-					//doesn't exist then copy it over
-					if(!config.hasOwnProperty(key)){
-						config[key] = value;
-					}else{
-						//does exists
-						//is a function
-						if($.isFunction(config[key])){
-							//enable function to call its obj2 : http://stackoverflow.com/a/22073649/425226
-							//TODO: stop recursion on itself when obj2 has no callParent	
-							(function(current, parent){
-								config[key] =  function() { // inherit
-											this.callParent = parent;
-											var res = current.apply(this, arguments);
-											delete this.callParent;
-											return res;
-										};
-							})(config[key], value);
-						}
-					}
-				});
-				return config;
-			},
-			
-			/**
 			* overwrite properties in the first object from that of the second
 			* @param obj1 :: object
 			* @param obj2 :: object
+			* @param deep :: boolean (optional) :: if true doesn't simply replace an object but iterates of the properties
 			* @returns object
 			*/
-			overwrite: function(obj1, obj2){
+			overwrite: function(obj1, obj2, deep){
+				var me = this;
 				$.each(obj2, function(k,v){
-					obj1[k] = v;
+					if(!deep || !$.isPlainObject(obj1[k])){
+						obj1[k] = v;
+					}else{
+						obj1[k] = me.overwrite(obj1[k], v);
+					}
 				});
 				return obj1;
+			},
+			
+			/**
+			 *  @private
+			 *  recursively iterate over prototypes and mix all the properties of an object together from its inherited parents for a specified property (name)
+			 *  @param propName :: string :: name of param to mixin
+			 *  @param object :: object :: object to iterate through
+			 *  @param a :: used when calling itself recursively
+			 *  @usage mixinFor("a", {a:{a:"s"},__proto__:{a:{a:1, b:2, c:3}}})
+			 *  		return {a:{a:"s", b:2, c:3},__proto__:{a:{a:1, b:2, c:3}}}
+			 *  @return same object with property (name) mixed in
+			 */
+			mixinFor:function(propName, object, a){
+				var me = this,
+					proto = Object.getPrototypeOf(a || object);
+				
+				if(proto.hasOwnProperty(propName)){
+					$.each(proto[propName], function(k,v){
+						if(!(k in object[propName])){
+							object[propName][k] = v;
+						}
+					});
+					//mixin deeper (recursive)
+					me.mixinFor(propName, object, proto);
+				}
+				
+				return object;
 			},
 			
 			/**
@@ -605,7 +624,7 @@
 				var me = this,
 					fArg = arguments[0],
 					id = $.isFunction(fArg) ? fArg.id : fArg,
-          newId;
+					newId;
 				
 				if(!me.isIntervalRunning(id)){
 					if($.isFunction(fArg)){
@@ -657,7 +676,7 @@
 			*/
 			clone: function(object, config){
 				var clone = {};
-        config = config || {};
+				config = config || {};
 				$.each(object, function(key, value){
 					clone[key] = value;
 				});
@@ -679,9 +698,10 @@
 			*/
 			require: function(names, callback, async, data_type, ext){
 				var me = this, 
-					path;
+					path,
+					callbackResponse = {};
 					
-       	data_type = data_type || "script";
+				data_type = data_type || "script";
 				ext = ext || "js"; 
 				
 				if(!$.isArray(names)){
@@ -696,8 +716,7 @@
 				
 				//mark how files are to be fetched
 				var ajaxCounter = names.length,
-					//prepare callback function
-					newCallback = function(){
+					newCallback = function(){	//prepare callback function
 						ajaxCounter--;
 						if(ajaxCounter === 0){
 							if(callback && $.isFunction(callback)){
@@ -705,26 +724,32 @@
 							}
 						}
 					};
-
-        //iterate of each file and get them
-        $.each(names, function(index, name){
-          //convert the name into the correct path
-					me.requiredFiles[name] = true;
-					path = me.getPathFromName(name, ext);
-					$.ajax({
-						async:$.type(async) == "boolean" ? async : true,
-						dataType:data_type,
-						url:path,
-						success:function(){
-							newCallback.apply(this, arguments);
-						},
-						error:function(reponse, error, errorMessage){
-							console.warn("unable to load file/class '", name, "' at:", path);
-							console.error(error, errorMessage);
-							newCallback.apply(this, arguments);
-						}
-					});
-        });
+				
+		        //iterate of each file and get them
+		        $.each(names, function(index, name){
+		          //convert the name into the correct path
+							me.requiredFiles[name] = true;
+							path = me.getPathFromName(name, ext);
+							$.ajax({
+								async:$.type(async) == "boolean" ? async : true,
+								dataType:data_type,
+								url:path,
+								success:function(){
+									if(names.length > 1){
+										callbackResponse[name] = arguments;
+										newCallback.call(this, callbackResponse);
+										
+									}else{
+										newCallback.apply(this, arguments);
+									}
+								},
+								error:function(reponse, error, errorMessage){
+									console.warn("unable to load file/class '", name, "' at:", path);
+									console.error(error, errorMessage);
+									newCallback.apply(this, arguments);
+								}
+							});
+		        });
 				
 				return names;
 			},
@@ -833,10 +858,10 @@
 			 * @returns string
 			 */
 			getByKey: function(key){
-        key = key.toLowerCase();
 				var me = this,
-            a = me.keys()[me.lang()];
-				return a && a[key] ? a[key] : key;
+					keyLower = key.toLowerCase(),
+					a = me.keys()[me.lang()];
+				return a && a[keyLower] ? a[keyLower] : key;
 			},
 			
 			/**
@@ -1284,7 +1309,7 @@
 			* @returns boolean
 			*/
 			is: function(pattern){
-				if(pattern.contains("#")){
+				if(pattern.indexOf("#") !== -1){
 					return window.location.hash == pattern;
 				}
 				
@@ -1301,11 +1326,14 @@
 			//inits of all inits :)
 			var me = this;
 			if(me.listeners){
+				Firebrick.utils.mixinFor("listeners", me);	
 				me.on(me.listeners);
 			}
 			me.fireEvent(me.overrideReadyEvent || "ready");
 			return me;
 		},
+		
+		_idPrefix: "fb-",
 		
 		/**
 		 * @private use getClassId()
@@ -1322,11 +1350,12 @@
 		 * @returns string
 		 */
 		getClassId: function(){
-			if(!this._classId){
+			var me = this;
+			if(!me._classId){
 				//generate an id if it doesnt have one already
-				this._classId = "fb-" + Firebrick.utils.uniqId();
+				me._classId = me._idPrefix + Firebrick.utils.uniqId();
 			}
-			return this._classId;
+			return me._classId;
 		},
 		
 		/**
@@ -1373,7 +1402,7 @@
 			
 			if($.isPlainObject(eventName)){
 				//first argument is an object
-				var s = eventName.scope;
+				var s = eventName.scope || me;
 				$.each(eventName, function(k,v){
 					if(k !== "scope"){
 						addEvent(k, v, s);
@@ -1423,7 +1452,20 @@
 				});
 			}
 			return me;
-		}
+		},
+		
+		/**
+		 * get a passed event
+		 * @param argument :: arguments array
+		 * @usage 	classOne.on("someEvent", function(){
+		 * 				//basically fire the same event on the second object with all the arguments of the first
+		 *		 		classTwo.passEvent(arguments);	//same as classTwo.fireEvent("someEvent", arg1, arg2, arg3, ...)
+		 * 			});
+		 * @returns value from fireEvent
+		 */
+		passEvent: function(){
+			return this.fireEvent.apply(this, arguments[0]);
+		},
 	});
 	
 	Firebrick.define("Firebrick.view.Base", {
@@ -1495,7 +1537,16 @@
 		 * whether or not the template is to load asyncronously
 		 */
 		async:true,
-
+		
+		/**
+		 * used in conjuction with FirebrickUI
+		 */
+		items: false,
+		/**
+		 * whether to append or overwrite the content of the target
+		 */
+		appendContent:false,
+		
 		/**
 		 * @private
 		 * @param callback
@@ -1505,16 +1556,36 @@
 			if(me.autoRender){
 				me.startLoader();
 			}
+			
+			if(me.items){
+				if(Firebrick.ui){
+					me.tpl = Firebrick.ui.build({
+						items: me.items,
+						view: me
+					});
+				}else{
+					console.error("in order to use the components property please add Firebrick UI")
+				}
+			}
+			
 			//get the view
-			var a = Firebrick.utils.require(me._classname, function(tpl){
-				//save the template
-				me.tpl = tpl;
-				callback.call();
-			}, me.async, "html", me.viewExtension);
-			if(!a.length){
-				//nothing was loaded - ie. already loaded
+			if(!me.tpl){
+				var a = Firebrick.utils.require(me._classname, function(tpl){
+					//save the template
+					me.tpl = tpl;
+					callback.call();
+				}, me.async, "html", me.viewExtension);
+				if(!a.length){
+					//nothing was loaded - ie. already loaded
+					callback.call();
+				}
+			}else{
+				if($.isFunction(me.tpl)){
+					me.tpl = me.tpl.call(me);
+				}
 				callback.call();
 			}
+			
 			return this;
 		},
 		
@@ -1599,7 +1670,7 @@
 			target = me.getTarget();
 			if(target && !target.attr("fb-view-bind")){
 				var el = target[0];
-				Firebrick.views.renderTo(target, me.html);
+				Firebrick.views.renderTo(target, me.html, me.appendContent);
 				me.hide();
 				me._state = "rendered";
 				var data = me.getData();
@@ -1623,6 +1694,8 @@
 				target = me.getTarget();
 			 
 			if(target){
+				
+				me.fireEvent("beforeRender", me)
 				
 				me.unbind();
 				
@@ -1946,4 +2019,6 @@
 	//global
 	window.Firebrick = Firebrick;
 	window.fb = window.Firebrick;
+	
+	return Firebrick;
 }));
