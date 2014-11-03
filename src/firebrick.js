@@ -26,7 +26,7 @@
 
 	var Firebrick = {
 		
-		version: "0.8.19",
+		version: "0.8.20",
 
 		/**
 		* used to store configurations set Firebrick.ready()
@@ -858,6 +858,7 @@
 			 * @returns string
 			 */
 			getByKey: function(key){
+				key = $.isFunction(key) ? key() : key;
 				var me = this,
 					keyLower = key.toLowerCase(),
 					a = me.keys()[me.lang()];

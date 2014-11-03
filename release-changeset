@@ -1,3 +1,7 @@
+v0.8.20
+----------------------------
+* fb.text accepts a function aswell
+
 v0.8.19
 ----------------------------
 * overwrite/mixin function deep option

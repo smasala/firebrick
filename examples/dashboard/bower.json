@@ -2,7 +2,7 @@
 	"name": "firebrick_proto",
 	"version": "0.0.0",
 	"dependencies": {
-		"firebrick": "~0.8.19",
+		"firebrick": "~0.8.20",
 		"typeahead.js": "~0.10.5",
 		"jquery-minicolors": "~2.1.7"
 	}
