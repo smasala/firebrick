@@ -1,12 +1,12 @@
 require.config({
 	urlArgs: "fb=" + (new Date()).getTime(),
 	paths:{
-		"jquery": "../bower_components/jquery/jquery",
+		"jquery": "../bower_components/jquery/dist/jquery",
 		"popover": "../bower_components/bootstrap/js/popover",
 		"tooltip": "../bower_components/bootstrap/js/tooltip",
 		"knockout": "../bower_components/knockoutjs/dist/knockout",
 		"knockout-mapping": "../bower_components/knockout-mapping/knockout.mapping",
-		"firebrick": "../bower_components/firebrick/firebrick",
+		"firebrick": "../bower_components/firebrick/dist/firebrick",
 		"bootstrap": "../bower_components/bootstrap/dist/js/bootstrap.min",
 		"typeahead": "../bower_components/typeahead.js/dist/typeahead.bundle.min",
 		"jquery-minicolors": "../bower_components/jquery-minicolors/jquery.minicolors.min"
