@@ -24,35 +24,46 @@
 		return;
 	}
 
+	/**
+	 * A lightweight JavaScript MVC Framework powered with jQuery, Bootstrap, Knockout JS and Require JS
+	 * 
+	 * @module Firebrick
+	 * @class Firebrick
+	 */
 	var Firebrick = {
 		
+		/**
+		 * @property version
+		 * @type {String}
+		 */
 		version: "0.8.20",
 
-		/**
+		/**2
 		* used to store configurations set Firebrick.ready()
 		* @private
+		* @property app
+		* @type {Object}
 		*/
 		app: {
 			name: "",
 			path: ""
 		},
 		
-		/** ready function to kick start the application
-		* @fires main-viewRendered || view object
-		* @param options :: object = {
-					go:function(), //called on document ready
-					app:{
-						name: string, //name of the app
-						path: string //path of the app
-					},
-					autoRender: boolean //whether to call first view automatically  "{app.name}.view.Index",
-					viewData: object //viewData to be passed to the autoRender view,
-					splash: string //html or string to be rendered before the document is loaded - removed on document.ready
-					require:string or array of string //these file(s) are required
-					cache: boolean default true - whether require should cache files or not,
-					lang: language file name or store,
-					dev: default false, true to print requirejs exceptions to console
-				}
+		/** 
+		 * ready function to kick start the application
+		* @method ready
+		* @param {Object} options
+		* @param {Object} options.go {Function} - called on document ready
+		* @param {Object} options.app
+		* @param {Object} options.app.name name of the app
+		* @param {Object} options.app.path path of the app
+		* @param {Object} options.autoRender {Boolean} whether to call first view automatically  "{app.name}.view.Index",
+		* @param {Object} options.viewData {Object} viewData to be passed to the autoRender view,
+		* @param {Object} options.splash {String} - html or string to be rendered before the document is loaded - removed on document.ready
+		* @param {Object} options.require {String, Array of Strings} file(s) are required
+		* @param {Object} options.cache {Boolean} [cache=true] whether require should cache files or not,
+		* @param {Object} options.dev {Boolean} [dev=false] true to print requirejs exceptions to console
+		* @param {Object} options.lang language file name or store,
 		*/
 		ready: function(options){
 			var me = this;
@@ -86,106 +97,173 @@
 			}
 		},
 		
-		/** SHORTCUTS **/
+		/**
+		 * @method shortcut
+		 * @private
+		 * @param scope {Object}
+		 * @param func {String}
+		 * @param args {Args..}
+		 * @return {Many}
+		 */
 		shortcut: function(scope, func, args){
 			return scope[func].apply(scope, args);
 		},
 		
+		/**
+		 * shortcut for Firebrick.classes:get
+		 * @method get
+		 */
 		get: function(){
 			return this.shortcut(this.classes, "get", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.classes:getById
+		 * @method getById
+		 */
 		getById: function(){
 			return this.shortcut(this.classes, "getById", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.classes:create
+		 * @method create
+		 */
 		create: function(){
 			return this.shortcut(this.classes, "create", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.classes:define
+		 * @method define
+		 */
 		define: function(){
 			return this.shortcut(this.classes, "define", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.controllers.createController
+		 * @method createController
+		 */
 		createController: function(){
 			return this.shortcut(this.controllers, "createController", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.utils.require
+		 * @method require
+		 */
 		require: function(){
 			return this.shortcut(this.utils, "require", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.views.loadRaw
+		 * @method loadRaw
+		 */
 		loadRaw: function(){
 			return this.shortcut(this.views, "loadRaw", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.views.createView
+		 * @method createView
+		 */
 		createView: function(){
 			return this.shortcut(this.views, "createView", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.views.defineView
+		 * @method defineView
+		 */
 		defineView: function(){
 			return this.shortcut(this.views, "defineView", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.views.getBody
+		 * @method getBody
+		 */
 		getBody: function(){
 			return this.shortcut(this.views, "getBody", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.utils.delay
+		 * @method delay
+		 */
 		delay: function(){
 			return this.shortcut(this.utils, "delay", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.events.addListener
+		 * @method addListener
+		 */
 		addListener: function(){
 			return this.shortcut(this.events, "addListener", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.events.removeListener
+		 * @method removeListener
+		 */
 		removeListener: function(){
 			return this.shortcut(this.events, "removeListener", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.events.fireEvent
+		 * @method fireEvent
+		 */
 		fireEvent: function(){
 			return this.shortcut(this.events, "fireEvent", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.events.on
+		 * @method on
+		 */
 		on: function(){
 			return this.shortcut(this.events, "on", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.events.off
+		 * @method off
+		 */
 		off: function(){
 			return this.shortcut(this.events, "off", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.data.store.createStore
+		 * @method createStore
+		 */
 		createStore: function(){
 			return this.shortcut(this.data.store, "createStore", arguments);
 		},
-		
+		/**
+		 * shortcut for Firebrick.languages.getByKey
+		 * @method text
+		 */
 		text: function(){
 			return this.shortcut(this.languages, "getByKey", arguments); 
 		},
-		/** END OF SHORTCUTS **/
-		
+		/**
+		 * @for Firebrick
+		 * @class Classes
+		 */
 		classes: {
 		
 			/**
 			* Class Registry
+			* @property classRegistry
 			* @private
+			* @type {Object} map of all classes
 			*/
 			classRegistry: {},
 			
 			/**
-			* get or returns a firebrick class by name
-			* @param name :: string
-			* @param config :: object
-			* @returns object
+			* returns a firebrick class by name from the registry
+			* @method get
+			* @param name {String}
+			* @return {Object}
 			*/
 			get: function(name){
 				return this.classRegistry[name];
 			},
 			
 			/**
-			 * get a class by classId
-			 * @param string
-			 * @return object
+			 * get a class by property: classId
+			 * @method getById
+			 * @param {String} id
+			 * @return {Object}
 			 */
 			getById: function(id){
 				var me = this,
@@ -203,9 +281,10 @@
 			
 			/**
 			 * pass a simple object and a super class that you wish to extend from OOP
-			 * @param obj :: plain object
-			 * @param _super :: object class
-			 * @return obj prototype of _super (i.e. obj which extends from _super
+			 * @method extend
+			 * @param {Object} obj
+			 * @param {Object} _super object class
+			 * @return {Object} prototype of _super (i.e. obj which extends from _super
 			 */
 			extend: function(obj, _super){
 				var objTemp = {};
@@ -236,9 +315,10 @@
 			
 			/**
 			* get or returns a firebrick class by name and calls init()
-			* @param name :: string
-			* @param config :: object
-			* @returns object
+			* @method create
+			* @param name {String}
+			* @param config {Object}
+			* @return {Object} class
 			*/
 			create: function(name, config){
 				var me = this,
@@ -258,9 +338,10 @@
 			
 			/**
 			* define a firebrick class
-			* @param name :: string
-			* @param config :: object :: optional
-			* @returns the newly created class
+			* @method define
+			* @param name {String}
+			* @param config {Object} optional
+			* @return {Object} the newly created class
 			*/
 			define: function(name, config){
 				var me = this,
@@ -281,9 +362,18 @@
 			}
 			
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Controllers
+		 */
 		controllers:{
-			
+			/**
+			 * shorthand method. Same as calling Firebrick:create, however it sets the extend value on the config to "Firebrick.controller.Base" automatically
+			 * @method createController
+			 * @param name {String}
+			 * @param config {Object} optional
+			 * @return {Object} class
+			 */
 			createController: function(name, config){
 				config = config || {};
 				config.extend = "Firebrick.controller.Base";
@@ -291,17 +381,30 @@
 			}
 			
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Templates
+		 */
 		templates:{
 			/**
-			 * General loading tpl
-			 * @private
+			 * General loading tpl - override to change the loading mask
+			 * @property loadingTpl
 			 */
 			loadingTpl: "<div class='fb-view-loader'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>",
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Views
+		 */
 		views: {
-			
+			/**
+			 * used by Firebrick.Boot:prepApplication to render the "view/Index.html" when autoRender is true
+			 * @private
+			 * @event viewReady
+			 * @method bootView
+			 * @param {Object} options
+			 * @param {Object} options.viewData to pass to the view Store parameter
+			 */
 			bootView: function(options){
 				Firebrick.utils.clearSplash();
 				return Firebrick.createView(Firebrick.app.name + ".view.Index", {
@@ -317,11 +420,12 @@
 			},
 			
 			/**
-			* Create and render a view
-			* @param name :: string :: MyApp.view.MyView
-			* @param config :: object (optional) :: object to config the View class with
-			* @returns Firebrick.view.Base || object
-			**/
+			* Create and render a view (shorthand function)
+			* @method createView
+			* @param name {String} example: "MyApp.view.MyView"
+			* @param config {Object} (optional) object to config the View class with
+			* @return {Object} Firebrick.view.Base class
+			*/
 			createView: function(name, config){
 				if(name && !config){
 					if($.isPlainObject(name)){
@@ -342,21 +446,22 @@
 			/**
 			* Note: different to Firebrick.define() for classes -
 			* Firebrick.defineView, defines and fetches if not already loaded the given view by name
-			* @param name :: string :: name of the view to me shown "MyApp.view.MyView"
-			* @param config :: object (optional) :: object to config the View class with
-			* @returns Firebrick.view.Base :: object
+			* @method defineView
+			* @param name {String} name of the view to me shown "MyApp.view.MyView"
+			* @param config {Object} (optional) object to config the View class with
+			* @return {Object} Firebrick.view.Base class
 			*/
 			defineView: function(name, config){
 				var me = this;
 				config = me.basicViewConfigurations(config);
 				return Firebrick.define(name, config);
 			},
-			
 			/**
 			 * initialise subviews of a view
 			 * @private
-			 * @param view :: view object
-			 * @returns view
+			 * @method initSubViews
+			 * @param view {Object}
+			 * @return {Object} view passed
 			 */
 			initSubViews:function(view){
 				var me = this,
@@ -377,6 +482,9 @@
 			/**
 			 * used by initSubViews
 			 * @private
+			 * @method internal_loadSubView
+			 * @param subView {Object}
+			 * @return {Object} subView passed
 			 */
 			internal_loadSubView: function(subView){
 				if($.type(subView) == "string"){
@@ -395,9 +503,11 @@
 				}
 				return subView;
 			},
-			
 			/**
-			 * load html file raw
+			 * load a file as raw HTML - syncronous function
+			 * @method loadRaw
+			 * @param name {String} not standard path but Firebrick namespace path: "MyApp.views.MyView"
+			 * @return {String} html
 			 */
 			loadRaw: function(name){
 				var me = this,
@@ -407,12 +517,12 @@
 				}, false, "html", "html");
 				return raw;
 			},
-			
 			/**
-			* Basic view configurations when defining/creating a view
+			* Basic view configurations when defining/creating a view with shorthand function calls
 			* @private
-			* @param config :: object (optional)
-			* @returns object
+			* @method basicViewConfigurations
+			* @param config {Object} (optional)
+			* @return {Object}
 			*/
 			basicViewConfigurations: function(config){
 				var me = this;
@@ -422,43 +532,44 @@
 				}
 				return config;
 			},
-			
 			/**
-			* jQuery body object (cache) - is set initally by getBody()
+			* jQuery body object (cache) - is set initally by {{crossLink Firebrick.views:getBody}}{{/crossLink}}
 			* @private
+			* @property _body
+			* @type {Object} jquery object
 			*/
-			body: null,
-			
+			_body: null,
 			/**
 			* Shortcut to get jQuery("body")
-			* @param refresh :: boolean (optional) :: defaults to false - if true gets the body object fresh and not from cache
-			* @returns jquery object of body
+			* @method getBody
+			* @param refresh {Boolean} [default=false] (optional) if true gets the body object fresh from dom and not from cache
+			* @return {Object} jquery object
 			*/
 			getBody: function(refresh){
 				var me = this;
-				if(refresh === true || !me.body){
-					me.body = $("body");
+				if(refresh === true || !me._body){
+					me._body = $("body");
 				}
-				return me.body;
+				return me._body;
 			},
-			
 			/**
 			* find the target using a selector - same as jQuery(selector)
-			* @param selector :: string || jquery object
-			* @returns jquery object || null
+			* @method getTarget
+			* @param selector {String, jQuery Object}
+			* @return {Object, Null} jquery object || null
 			*/
 			getTarget: function(selector){
 				var a = selector && selector.jquery ? selector : $(selector);
 				return a.length > 0 ? a : null;
 			},
-			
 			/**
 			* Render HTML or Template to the given target
 			* @private
-			* @param target :: jquery object ::
-			* @param html :: string :: template or html
-			* @param append :: boolean :: default false, if true will append to instead of overwriting content of target
-			* @returns target as jquery object
+			* @method renderTo
+			* @param target {jQuery Object}
+			* @param html {String} template or html
+			* @param append {Boolean} [default=false] if true will append to instead of overwriting content of target
+			* @return {jQuery Object} target
 			*/
 			renderTo:function(target, html, append){
 				if(append === true){
@@ -468,8 +579,21 @@
 			}
 			
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Boot
+		 */
 		boot:{
+			/**
+			 * used by Firebrick:ready
+			 * @method prepApplication
+			 * @private
+			 * @param {Object} options
+			 * @param {Object} options.cache
+			 * @param {Object} options.dev
+			 * @param {Object} options.lang
+			 * @param {Object} options.autoRender
+			 */
 			prepApplication: function(options){
 				if(options.cache === false){
 					require.config({
@@ -500,32 +624,42 @@
 				
 			}
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Utils
+		 */
 		utils: {
-		
 			/**
 			 * keep track of all require requests
+			 * @property requiredFiles
 			 * @private
+			 * @type {Object} map
 			 */
 			requiredFiles:{},
-			
 			/**
 			 * keep track of all the interval functions running
 			 * @private
+			 * @property intervalRegistry
+			 * @type {Object} map
 			 */
 			intervalRegistry:{},
-			
 			/**
-			 * @private
 			 * used by init&Clear Splash
+			 * @private
+			 * @property splashCleared
+			 * @type {Object} map
 			 */
 			splashCleared: false, 
-			
 			/**
-			 * html is appended to the html tag before the document is ready 
-			 * @usage splash paramter with Firebrick.ready({splash:html});
+			 * html is appended to the $("html") tag before the document is ready 
+			 * used by Firebrick:ready
+			 * @example 
+					Firebrick.ready({
+						splash:"<div></div>"
+					});
+			 * @method initSplash
 			 * @private
-			 * @param html :: string
+			 * @param {String} html
 			 */
 			initSplash: function(html){
 				var me = this;
@@ -535,18 +669,22 @@
 					}
 				}, 1);
 			},
-			
+			/**
+			 * removes splash tag $("#fb-splash")
+			 * @private
+			 * @method clearSplash
+			 */
 			clearSplash: function(){
 				this.splashCleared = true;
 				$("#fb-splash").remove();
 			},
-			
 			/**
-			* overwrite properties in the first object from that of the second
-			* @param obj1 :: object
-			* @param obj2 :: object
-			* @param deep :: boolean (optional) :: if true doesn't simply replace an object but iterates of the properties
-			* @returns object
+			* overwrite properties in {obj1} with properties from {obj2} (mixin)
+			* @method overwrite
+			* @param obj1 {Object}
+			* @param obj2 {Object}
+			* @param deep {Booelan} [deep=false] (optional) if true doesn't simply replace an object but iterates of the properties
+			* @return {Object} obj1 mixed in with obj2
 			*/
 			overwrite: function(obj1, obj2, deep){
 				var me = this;
@@ -559,16 +697,17 @@
 				});
 				return obj1;
 			},
-			
 			/**
-			 *  @private
 			 *  recursively iterate over prototypes and mix all the properties of an object together from its inherited parents for a specified property (name)
-			 *  @param propName :: string :: name of param to mixin
-			 *  @param object :: object :: object to iterate through
-			 *  @param a :: used when calling itself recursively
-			 *  @usage mixinFor("a", {a:{a:"s"},__proto__:{a:{a:1, b:2, c:3}}})
-			 *  		return {a:{a:"s", b:2, c:3},__proto__:{a:{a:1, b:2, c:3}}}
-			 *  @return same object with property (name) mixed in
+			 *  @private
+			 *  @method mixinFor
+			 *  @param propName {String} name of param to mixin
+			 *  @param object {Object} object/class to iterate through
+			 *  @param a {Object} (optional) used when calling itself recursively
+			 *  @example 
+			 *  		mixinFor("a", {a:{a:"s"},__proto__:{a:{a:1, b:2, c:3}}})
+			 *  		//returns {a:{a:"s", b:2, c:3},__proto__:{a:{a:1, b:2, c:3}}}
+			 *  @return {Object} object : same object with property (name) mixed in
 			 */
 			mixinFor:function(propName, object, a){
 				var me = this,
@@ -589,20 +728,23 @@
 			
 			/**
 			*	Javascript setTimout function
-			* @usage delay(function(){}, 1000, scope);
-			* @param callback :: function
-			* @param timeout :: integer :: miliseconds
-			* @param args :: any :: pass to delay function
-			* @param scope :: object (optional) :: scope of the callback function. Defaults to: window
+			* @example
+			* 	delay(function(){}, 1000, scope);
+			* @method delay
+			* @param callback {Function}
+			* @param timeout {Integer} miliseconds
+			* @param args {any} pass to delay function
+			* @param scope {Object} (optional) scope of the callback function. Defaults to: window
 			*/
 			delay: function(callback, timeout, args, scope){
 				setTimeout(function(args1){
 					callback.apply(scope || this, args1);
 				}, timeout, args);
 			},
-			
 			/**
 			 * clear the interval running by id
+			 * @method clearInterval
+			 * @param id {String}
 			 */
 			clearInterval:function(id){
 				var me = this,
@@ -612,13 +754,13 @@
 					delete this.intervalRegistry[id];
 				}
 			},
-			
 			/**
 			 * set an interval and prevent any duplicates
-			 * @param id :: string (optional)
-			 * @param callback :: function
-			 * @param timeout :: int :: miliseconds
-			 * @param scope :: object :: scope to apply to the callback
+			 * @method setInterval
+			 * @param id {String} (optional)
+			 * @param callback {Function}
+			 * @param timeout {Integer} miliseconds
+			 * @param scope {Object} scope to apply to the callback
 			 */
 			setInterval: function(){
 				var me = this,
@@ -636,11 +778,15 @@
 				
 				return newId;
 			},
-			
 			/**
-			 * @private use setInterval()
-			 * @param id :: string (optional)
-			 * @return id :: string
+			 * use Firebrick.utils:setInterval()
+			 * @method int_applyInterval
+			 * @private 
+			 * @param id {String} (optional)
+			 * @param callback {Function}
+			 * @param interval {Interger}
+			 * @param scope {Object}
+			 * @return id {String}
 			 */
 			int_applyInterval: function(id, callback, interval, scope){
 				var me = this;
@@ -659,20 +805,21 @@
 				//return the id
 				return id;
 			},
-			
 			/**
 			 * Check whether interval already exists
-			 * @param id :: string
+			 * @method isIntervalRunning
+			 * @param id {String}
+			 * @return {Object} interval function
 			 */
 			isIntervalRunning: function(id){
 				return this.intervalRegistry[id];
 			},
-		
 			/**
 			* Basic clone from one object to a new one object
-			* @param object :: object :: object you wish to clone
-			* @param config :: object :: new properties you wish to add to the clone
-			* @returns object :: new object clone
+			* @method clone
+			* @param object {Object} object you wish to clone
+			* @param config {Object} new properties you wish to add to the clone
+			* @return {Object} cloned object
 			*/
 			clone: function(object, config){
 				var clone = {};
@@ -685,16 +832,17 @@
 				});
 				return clone;
 			},
-		
 			/**
 			* Get a script/file from path
-			* @usage require("MyApp.controller.MyController", function(){}, true, "html", "js");
-			* @param name :: string || [string] :: MyApp.controller.MyController
-			* @param callback :: function (optional) :: called when last require has completed or failed
-			* @param async :: boolean :: defaults true
-			* @param data_type :: string :: jQuery ajax datatype. defauts to 'script'
-			* @param ext :: string :: file extension. defaults to 'js'
-			* @returns the files that were eventually loaded
+			* @example 
+			* 	require("MyApp.controller.MyController", function(){}, true, "html", "js");
+			* @method require
+			* @param name {String, Array of Strings} MyApp.controller.MyController
+			* @param callback {Function} (optional) called when last require has completed or failed
+			* @param async {Boolean} [default=true]
+			* @param data_type {String} [default='script'] jQuery ajax datatype
+			* @param ext {String} [defaults='js'] file extension.
+			* @return {Array of Strings} the files that were eventually loaded
 			*/
 			require: function(names, callback, async, data_type, ext){
 				var me = this, 
@@ -753,13 +901,13 @@
 				
 				return names;
 			},
-			
 			/**
 			* Converts a name like "MyApp.controller.MyController" to a path MyApp/controller/MyController
 			* @private
-			* @param name :: string
-			* @param ext :: string :: default to 'js'
-			* @returns string
+			* @method getPathFromName
+			* @param name {String}
+			* @param ext {String} [default='js']
+			* @return {String}
 			*/
 			getPathFromName: function(name, ext){
 				var me = this,
@@ -789,21 +937,29 @@
 				//local file
 				return homePath + "/" + name;
 			},
-			
 			/**
-			*	returns a unique id: http://stackoverflow.com/a/19223188
+			* @property _globalC
 			* @private
 			*/
-			globalC: 1,
+			_globalC: 1,
+			/**
+			 * returns a unique id: http://stackoverflow.com/a/19223188
+			 * @method uniqId
+			 * @return {String} unique id
+			 */
 			uniqId: function() {
 				var me = this,
 					d = new Date(),
 					m = d.getMilliseconds() + "",
-					u = ++d + m + (++me.globalC === 10000 ? (me.globalC = 1) : me.globalC);
+					u = ++d + m + (++me._globalC === 10000 ? (me._globalC = 1) : me._globalC);
 
 				return u;
 			},
-			
+			/**
+			 * load css file and append to HEAD
+			 * @method loadCSS
+			 * @param {String} url
+			 */
 			loadCSS: function(url) {
 			    var link = document.createElement("link");
 			    link.type = "text/css";
@@ -813,26 +969,34 @@
 			}
 			
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Languages
+		 */
 		languages:{
-			
 			/**
-			 * @private
 			 * use get/setLang() to change the language
+			 * @property lang
+			 * @private
+			 * @type {ko.observable}
+			 * @default ko.observable("en")
 			 */
 			lang: ko.observable("en"),
-			
 			/**
-			 * store of keys
+			 * store of keys ko.observale
 			 * @private
+			 * @property keys
+			 * @type {ko.observable}
+			 * @default ko.observable({})
 			 */
 			keys:ko.observable({}),
-			
 			/**
 			 * initial the language keys
+			 * @example
+			 * 	Firebrick.ready({lang:...}) //to set language
 			 * @private
-			 * @use Firebrick.ready({lang:...}) to set language
-			 * @param lang :: string or store object :: string = url to load
+			 * @method
+			 * @param lang {String, Store} string = url to load
 			 */
 			init:function(lang){
 				var me = this;
@@ -854,8 +1018,9 @@
 			
 			/**
 			 * get text by its key
-			 * @param key :: string
-			 * @returns string
+			 * @method getByKey
+			 * @param key {String}
+			 * @return {String}
 			 */
 			getByKey: function(key){
 				key = $.isFunction(key) ? key() : key;
@@ -864,26 +1029,26 @@
 					a = me.keys()[me.lang()];
 				return a && a[keyLower] ? a[keyLower] : key;
 			},
-			
 			/**
 			 * set the app language
-			 * @param langKey :: string
+			 * @method setLang
+			 * @param langKey {String}
 			 */
 			setLang: function(langKey){
 				this.lang(langKey);
 			},
-			
 			/**
 			 * get Lang as string
-			 * @returns string
+			 * @method getLang
+			 * @return {String}
 			 */
 			getLang: function(){
 				return this.lang();
 			},
-			
 			/**
 			 * available langages
-			 * @returns array of strings :: all possible languages
+			 * @method allLanguages
+			 * @return {Array of Strings} all possible languages
 			 */
 			allLanguages: function(){
 				var me = this,
@@ -895,33 +1060,40 @@
 			}
 			
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Events
+		 */
 		events: {
-			
 			/**
 			* Event registry
 			* @private
+			* @property eventRegistry
+			* @type {Object} map
 			*/
 			eventRegistry: {},
-			
 			/**
 			* Event Counter - used to make callbacks by id
+			* @method eventCounter
+			* @type {Integer}
 			* @private
 			*/
 			eventCounter: 0,
-			
 			/**
 			* add a listener to a specific event by name
-			* @usage addListener("myEvent", myFunction(){}, this);
-			* @usage addListener({
+			* @example 
+			* 		addListener("myEvent", myFunction(){}, this);
+			* @example
+			* 		addListener({
 						"myEvent": function(){},
 						"mySecondEvent": function(){},
 						scope: this
 					})
-			* @param eventName :: string || object
-			* @param callback :: function
-			* @param scope :: object (optional) :: scope in which the listener is fired in
-			* @returns the function with the assigned callbackId;
+			* @method addListener
+			* @param eventName {String, Object}
+			* @param callback {Function}
+			* @param scope {Object} (optional) scope in which the listener is fired in
+			* @return {Function} the function with the assigned callbackId;
 			*/
 			addListener: function(eventName, callback, scope){
 				var me = this;
@@ -945,16 +1117,17 @@
 				me.eventRegistry[eventName].push(callback);
 				return callback;
 			},
-			
 			/**
-			* Use Firebrick.events.addListeners
+			* Use Firebrick.events:addListeners
 			* @private
-			* @usage addListeners_internal({
+			* @method addListener_internal
+			* @example
+			* 	 addListeners_internal({
 					"myEvent": function(){},
 					"mySecondEvent": function(){},
 					scope: this
 				})
-			* @param object :: object
+			* @param {Object} object
 			*/
 			addListener_internal: function(object){
 				var me = this, scope = object.scope;
@@ -963,12 +1136,13 @@
 					me.addListener(eventName, callback, scope);
 				});
 			},
-			
 			/**
 			* remove listener by eventName and function
-			* @usage removeListener("myEvent", function);
-			* @param eventName :: string
-			* @param function :: optional :: if non given will remove all listeners for event
+			* @example
+			* 		removeListener("myEvent", function);
+			* @method removeListener
+			* @param eventName {String}
+			* @param funct {Function} (optional) if non given will remove all listeners for event
 			*/
 			removeListener: function(eventName, funct){
 				var me = this, reg = me.eventRegistry[eventName];
@@ -991,12 +1165,13 @@
 					console.warn("Unable to remove listener. No events found for:", eventName);
 				}
 			},
-			
 			/**
 			* Fire an event by name
-			* @usage fireEvent("eventFired", 1, "test", false);
-			* @param eventName :: string
-			* @param data :: any... :: arguments passed to event when fired
+			* @example 
+			* 		fireEvent("eventFired", 1, "test", false);
+			* @method fireEvent
+			* @param eventName {String}
+			* @param arguments {Any...} arguments passed to event when fired
 			*/
 			fireEvent: function(eventName){
 				var me = this, reg = me.eventRegistry[eventName];
@@ -1020,8 +1195,10 @@
 			
 			/**
 			* creates the event object to be passed as argument when event is fired
+			* @method createEventData
 			* @private
-			* @param eventName :: string
+			* @param eventName {String}
+			* @return {Object} event object
 			*/
 			createEventData: function(eventName){
 				var me = this, ev = {
@@ -1029,7 +1206,9 @@
 					conf: null,
 					/**
 					* removes the listener it called from within
-					* @usage event.removeSelf();
+					* @example
+					* @method removeSelf
+					* 		event.removeSelf();
 					*/
 					removeSelf: function(){
 						me.removeListener(eventName, ev.funct);
@@ -1038,21 +1217,23 @@
 				
 				return ev;
 			},
-			
 			/**
 			* Define events and their callbacks, similar to $(selector).on(eventname, callback)
-			* @usage on("click", "a.mylink", function(){})
-			* @usage on({
-							"a.link":{
-								click:function(){},
-								mouseover:function(){}
-							},
-							scope:this
-						})
-			* @param eventName :: string ||  object || same as jquery selector(s)
-			* @param selector :: string (optional) :: use if first arg is not an object
-			* @param callback :: function (optional) :: use if first arg is not an object
-			* @param scope :: object (optional) :: change scope on callback function use if first arg is not an object
+			* @example
+			* 		on("click", "a.mylink", function(){}, newScope)
+			* @example 
+			* 		on({
+						"a.link":{
+							click:function(){},
+							mouseover:function(){}
+						},
+						scope:this
+					})
+			* @method on
+			* @param eventName {String, Object} string =  same as jquery selector(s)
+			* @param selector {String} (optional) use if first arg is not an object
+			* @param callback {Function} (optional) use if first arg is not an object
+			* @param scope {Object} (optional) change scope on callback function use if first arg is not an object
 			*/
 			on: function(eventName, selector, callback, scope){
 				var me = this;
@@ -1063,29 +1244,32 @@
 				//register single event
 				return me.register_on_event(eventName, selector, callback, scope);
 			},
-			
 			/**
 			* Makes use of the jQuery .off() function
-			* @usage .off( "click", "#theone", function(){} )
-			* @param selector :: string
-			* @param eventName :: string
-			* @param callback :: function :: the function used in on()
+			* @example
+			* 		off( "click", "#theone", function(){} )
+			* @method
+			* @param selector {String}
+			* @param eventName {String}
+			* @param callback {Function} the function used in on()
 			*/
 			off: function(eventName, selector, callback){
 				$(document.body).off(eventName, selector, callback);
 			},
-			
 			/**
-			* use Firebrick.events.on()
-			* @param object :: object :: {
+			* use Firebrick.events:on
+			* @example 
+			* 		on_internal({
 							"a.link":{
 								click:function(){},
 								mouseover:function(){}
 							},
 							scope:this
 						}
+			* @method on_internal
+			* @param {Object} object
 			* @private
-			**/
+			*/
 			on_internal: function(object){
 				var me = this, scope = object.scope;
 				$.each(object, function(selector, value){
@@ -1096,9 +1280,9 @@
 					}
 				});
 			},
-			
 			/**
-			* use Firebrick.events.on()
+			* use Firebrick.events:on
+			* @method register_on_event
 			* @private
 			*/
 			register_on_event: function(eventName, selector, callback, scope){
@@ -1111,22 +1295,32 @@
 			}
 			
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Data
+		 */
 		data: {
-			
-			//store functions
+			/**
+			 * @for Data
+			 * @namespace Data
+			 * @class Store
+			 */
 			store: {
-				
 				/**
 				* creates a new Firebrick.store.Base store to be used OR if a name and config are supplied, then Firebrick.create() is called
-				* @usage createStore({
+				* @example
+				* 		//creates a new class Firebrick.store.Base to be used
+				* 		createStore({
 							data:{name:"bob"}
-						}); :: creates a new class Firebrick.store.Base to be used
-				* @usage createStore("MyApp.store.MyStore", {}); :: Firebrick.create() is called
-				* @usage createStore() :: returns a Store class to be used
-				* @param name || config :: string (optional) || object :: if string, then Firebrick.create(name, config) is called
-				* @param config :: object (optional) :: data to config the class with - called in conjuction when name is set
-				* @returns Firebrick.store.Base
+						}); 
+				* @example 
+				* 		createStore("MyApp.store.MyStore", {}); //Firebrick.create() is called
+				* @example 
+				* 		createStore() //returns a Store class to be used
+				* @method createStore
+				* @param name {String} if string, then Firebrick:create is called
+				* @param config {Object} data to config the class with - called in conjuction when name is set
+				* @return {Object} Firebrick.store.Base
 				*/
 				createStore:function(name, config){
 					var me = this; 
@@ -1151,12 +1345,12 @@
 						return Firebrick.classes.extend(config, _super).init();
 					}
 				},
-				
 				/**
 				* Basic view configurations when defining/creating a view
 				* @private
-				* @param config :: object (optional)
-				* @returns object
+				* @method basicStoreConfigurations
+				* @param config {Object} (optional)
+				* @return {Object}
 				*/
 				basicStoreConfigurations: function(config){
 					var me = this;
@@ -1166,14 +1360,17 @@
 					}
 					return config;
 				},
-				
 				/**
-				* Used by Firebrick.store.Base.load();
+				* Used by Firebrick.store.Base:load
 				* @private
-				* @param store = Firebrick.store.Base object
-				* @param options :: object :: {async:boolean (optional - default store.async), callback:function(store, jsonObject, status, response), scope: object}
-				* @return store
-				**/
+				* @method loadStore
+				* @param store {Object} Firebrick.store.Base object
+				* @param {Object} options 
+				* @param {Boolean} options.async [default=store.async] 
+				* @param {Function} options.callback [store, jsonObject, status, response]
+				* @param {Object} options.scope
+				* @return {Object} store
+				*/
 				loadStore: function(store, options){
 					options = options || {};
 					var me = this, 
@@ -1209,13 +1406,13 @@
 					
 					return store;
 				},
-				
 				/**
 				* Submit the given store with its data to the specified url
 				* @private
-				* @param store :: Firebricks.store.Base class
-				* @param callback :: function (optional) :: function to call on store submission success
-				* @returns store
+				* @method submit
+				* @param store {Object} //Firebricks.store.Base class
+				* @param callback {Function} (optional) function to call on store submission success
+				* @return {Object} store
 				*/
 				submit: function(store, callback){
 					var me = this,
@@ -1251,20 +1448,23 @@
 				},
 				
 			}
-			
 		},
-		
+		/**
+		 * @for Firebrick
+		 * @class Router
+		 */
 		router:{
-			
 			/**
 			 * set route definitions
-			 * @usage Firebrick.router.set({
-			 * 		"users/abc": function(){},
-			 * 		"contact": function(){}
-			 * })
-			 * @usage: Firebrick.router.set(function(){}) //call function regardless of route
-			 * @params config :: object
-			 * @param callback :: function (optional)
+			 * @example
+			 * 		Firebrick.router.set({
+			 * 			"users/abc": function(){},
+			 * 			"contact": function(){}
+			 * 		})
+			 * @example
+			 * 		Firebrick.router.set(function(){}) //call function regardless of route
+			 * @method set
+			 * @param config {Object}
 			 */
 			set: function(config){
 				var me = this,
@@ -1289,25 +1489,30 @@
 					
 				return me.onHashChange(route);
 			},
-		
 			/**
 			* Call a function when the hash changes on the site
-			* @usage Firebrick.router
-			* @private || use Firebrick.route.set()
-			* @param config
-			* @param callback
+			* use Firebrick.route:set
+			* @example
+					Firebrick.router.onHashChange(function(){
+						//something happens
+					})
+			* @private
+			* @method onHashChange
+			* @param callback {Function}
+			* @return {Object} jQuery object
 			*/
 			onHashChange: function(callback){
 				return $(window).on("hashchange", function(){
 					callback.apply(this, arguments);
 				});
 			},
-		
 			/**
 			* Check whether the pattern or hash is present
-			* @usage Firebrick.router.is("#/completed") :: returns true or false
-			* @param pattern :: string
-			* @returns boolean
+			* @example
+			* 	Firebrick.router.is("#/completed") // returns true or false
+			* @method is
+			* @param pattern {String}
+			* @return {Boolean}
 			*/
 			is: function(pattern){
 				if(pattern.indexOf("#") !== -1){
@@ -1321,8 +1526,14 @@
 		
 	};
 	
+	/**
+	 * @class class.Base
+	 * @module Firebrick.class
+	 */
 	Firebrick.define("Firebrick.class.Base", {
-
+		/**
+		 * @method init
+		 */
 		init:function(){
 			//inits of all inits :)
 			var me = this;
@@ -1333,22 +1544,30 @@
 			me.fireEvent(me.overrideReadyEvent || "ready");
 			return me;
 		},
-		
-		_idPrefix: "fb-",
-		
 		/**
-		 * @private use getClassId()
+		 * @private
+		 * @property _idPrefix
+		 * @type {String}
+		 */
+		_idPrefix: "fb-",
+		/**
+		 * use Firebrick.class.Base:getClassId
+		 * @private 
+		 * @property _classId
+		 * @type {String}
 		 */
 		_classId:null,
 		/**
 		 * event registry
 		 * @private
+		 * @property localEventRegistry
+		 * @type {Object} map
 		 */
-		//localEventRegistry: null,
-
+		localEventRegistry: null,
 		/**
 		 * get the id for the current class
-		 * @returns string
+		 * @method getClassId
+		 * @return {String}
 		 */
 		getClassId: function(){
 			var me = this;
@@ -1358,27 +1577,31 @@
 			}
 			return me._classId;
 		},
-		
 		/**
-		 * shorthand for defining class listeners so you don't have to create the init function and us this.on()
-		 * @usage: listeners:{
+		 * shorthand for defining class listeners so you don't have to create the init function and use this.on()
+		 * @example
+		 * 		 listeners:{
 		 * 				"ready": function(){},
 		 * 				scope:this
 		 * 			}
+		 * @property listeners
+		 * @type {Object} map
 		 */
 		listeners:null,
-	
 		/**
 		* register a listener to this object, when the object fires a specific event
-		* @usage .on("someEvent", callback)
-		* @usage .on({
+		* @example 
+		* 	on("someEvent", callback)
+		* @example 
+		* 	on({
 		*     "someevent": callback,
 		*     "someotherevent": callback1
-		* })
-		* @param eventName :: string
-		* @param callback :: function
-		* @param scope :: object (optional)
-		* @returns self
+		* 	})
+		* @method on
+		* @param eventName {String}
+		* @param callback {Function}
+		* @param scope {Object} (optional)
+		* @return {Object} self
 		*/
 		on: function(eventName, callback, scope){
 			var me = this;
@@ -1416,12 +1639,12 @@
 			
 			return me;
 		},
-		
 		/**
 		* remove a listener that was registered with .on()
-		* @param eventName :: string
-		* @param callback :: function :: the function that was used during .on()
-		* @returns self
+		* @method off
+		* @param eventName {String}
+		* @param callback {Function} the function that was used when registering the event with .on()
+		* @return {Object}
 		*/
 		off: function(eventName, callback){
 			var me = this;
@@ -1435,12 +1658,12 @@
 			}
 			return me;
 		},
-		
 		/**
 		* Fire an event on this object
-		* @param eventName :: string :: name of the event to fire`
-		* @param args :: any... (optional)
-		* @returns self
+		* @method fireEvent
+		* @param eventName {String} name of the event to fire
+		* @param args {Any...} (optional)
+		* @return {Object} self
 		*/
 		fireEvent: function(){
 			var me = this,
@@ -1454,103 +1677,154 @@
 			}
 			return me;
 		},
-		
 		/**
-		 * get a passed event
+		 * pass an event to another object - fire the same event on the second object with all the arguments of the first
+		 * @method passEvent
 		 * @param argument :: arguments array
-		 * @usage 	classOne.on("someEvent", function(){
-		 * 				//basically fire the same event on the second object with all the arguments of the first
+		 * @example
+		 * 		 	classOne.on("someEvent", function(){
+		 * 				//fire the same event on the second object with all the arguments of the first
 		 *		 		classTwo.passEvent(arguments);	//same as classTwo.fireEvent("someEvent", arg1, arg2, arg3, ...)
 		 * 			});
-		 * @returns value from fireEvent
+		 * @return {Any} value from fireEvent
 		 */
 		passEvent: function(){
 			return this.fireEvent.apply(this, arguments[0]);
 		},
 	});
 	
+	/**
+	 * Extends {{#crossLink Firebrick.class.Base}}{{/crossLink}}
+	 * @extends class.Base
+	 * @class view.Base
+	 */
 	Firebrick.define("Firebrick.view.Base", {
 		extend:"Firebrick.class.Base",
 		/**
 		* set when the view is loaded by the ajax request
-		* @private
+		* @property tpl
+		* @type {String} 
+		* @default ""
 		*/
 		tpl: "",
 		/**
 		 * bind a store or plain data to the view
+		 * @property store
+		 * @type {String|Store Object}
+		 * @default null
 		 */
 		store:null,
 		/**
 		* parsed html using the tpl and data
+		* @property html
+		* @type {String} html
+		* @default ""
 		*/
 		html:"",
 		/**
 		* Target to which to render the html content
-		* string || object :: jquery selector || jquery object
+		* @property target
+		* @type {String|Object} jquery selector || jquery object
+		* @default null
 		*/
 		target:null,
 		/**
 		* render the view on class creation
+		* @property autoRender
+		* @type {Boolean}
+		* @default true
 		*/
 		autoRender:true,
 		/**
 		* controller to bind to the view
-		* string || object :: name of the controller || controller class itself
+		* @property controller
+		* @type {String|Object} name of the controller || controller class itself
+		* @default null
 		*/
 		controller: null,
 		/**
 		 * loading template - loaded into target is showLoading == true
+		 * @property loadingTpl
+		 * @type {String}
+		 * @default Firebrick.templates:loadingTpl
 		 */
 		loadingTpl: Firebrick.templates.loadingTpl,
 		/**
 		 * whether the loader is being shown or not
 		 * @private
+		 * @property loading
+		 * @type {Boolean}
+		 * @default false
 		 */
 		loading: false,
 		/**
 		 * whether to show that the view is loading
+		 * @property showLoading
+		 * @type {Boolean}
+		 * @default true
 		 */
 		showLoading: true,
 		/**
 		* State the view is current in. "Initial", "Rendered"
+		* @property _state
+		* @type {String}
 		* @private
+		* @default "initial"
 		*/
 		_state:"initial",
 		/**
 		 * define subviews to load after creation of this view
-		 * string / array of strings / object / array of objects
-		 * @usage subViews: MyApp.view.MyView
-		 * @usage subViews: ["MyApp.view.MyView", "MyApp.view.MyView1"]
-		 * @usage subViews: Firebrick.defineView(...)
-		 * @usage subViews: [Firebrick.defineView(...), Firebrick.defineView(...)]
+		 * @example 
+		 * 		subViews: MyApp.view.MyView
+		 * @example 
+		 * 		subViews: ["MyApp.view.MyView", "MyApp.view.MyView1"]
+		 * @example 
+ 		 *		subViews: Firebrick.defineView(...)
+		 * @example 
+		 * 		subViews: [Firebrick.defineView(...), Firebrick.defineView(...)]
+		 * @property subViews
+		 * @type {String|Array of Strings|Object|Array of Objects}
 		 */
 		subViews:null,
 		/**
 		 * boolean whether class is view
+		 * @property isView
+		 * @private
+		 * @type {Boolean}
 		 */
 		isView: true,
 		/**
 		* Extensions of the view files
+		* @property viewExtension
+		* @type {String}
+		* @default "html"
 		*/
 		viewExtension: "html",
-		
 		/**
 		 * whether or not the template is to load asyncronously
+		 * @property async
+		 * @type {Boolean}
+		 * @default true
 		 */
 		async:true,
-		
 		/**
-		 * used in conjuction with FirebrickUI
+		 * used in conjuction with Firebrick.ui
+	 	 * @property items
+		 * @type {Object}
+		 * @default null
 		 */
-		items: false,
+		items: null,
 		/**
 		 * whether to append or overwrite the content of the target
+		 * @property appendContent
+		 * @type {Boolean}
+		 * @default false
 		 */
 		appendContent:false,
-		
 		/**
 		 * @private
-		 * @param callback
+		 * @method _init
+		 * @param callback {Function}
 		 */
 		_init:function(callback){
 			var me = this;
@@ -1592,6 +1866,7 @@
 		
 		/**
 		* Called on creation
+		* @method init
 		*/
 		init: function(){
 			var me = this;
@@ -1609,27 +1884,25 @@
 			
 			return me.callParent();
 		},
-		
-		
-		
 		/**
 		* Returns the store linked to the view
+		* @method getStore
 		*/
 		getStore: function(){
 			return this.store;
 		},
-		
 		/**
 		*	Returns data store data as object
-		* @returns object
+		* @method getData
+		* @return {Object}
 		*/
 		getData: function(){
 			return this.getStore().getData();
 		},
-		
 		/**
 		* Construct the view with template and data binding
-		* @returns self
+		* @method initView
+		* @return {Object} self
 		*/
 		initView: function(){
 			var me = this;
@@ -1641,21 +1914,24 @@
 			
 			return me;
 		},
-		
 		/**
 		 * @private
+		 * @method initSubViews
 		 */
 		initSubViews: function(){
 			return Firebrick.views.initSubViews(this);
 		},
-		
 		/**
-		* @returns jquery object
+		 * @method getTarget
+		* @return {Object} jquery object
 		*/
 		getTarget: function(){
 			return Firebrick.views.getTarget(this.target);
 		},
-		
+		/**
+		 * Called by view.Base:render()
+		 * @method unbind
+		 */
 		unbind:function(){
 			var me = this,
 				target = me.getTarget();
@@ -1665,7 +1941,10 @@
 				target.removeAttr("fb-view-bind");
 			}
 		},
-		
+		/**
+		 * Called by view.Base:render()
+		 * @method bind
+		 */
 		bind: function(){
 			var me = this,
 			target = me.getTarget();
@@ -1688,7 +1967,8 @@
 		
 		/**
 		* Calls renderTo without parameters
-		* @returns self
+		* @method render
+		* @return {Object} self
 		*/
 		render:function(){
 			var me = this,
@@ -1710,22 +1990,29 @@
 			
 			return me;
 		},
-		
+		/**
+		 * @method setDisposeCallback
+		 * @param el {HTMLElement}
+		 */
 		setDisposeCallback: function(el){
 			ko.utils.domNodeDisposal.addDisposeCallback(el, function(el){
 				var view = Firebrick.getById($(el).attr("fb-view-bind"));
 				view.unbound();
 			});
 		},
-		
 		/**
+		 * called by view.Base:setDisposeCallback
 		 * @private
+		 * @method unbound
 		 */
 		unbound:function(){
 			this._state = "unbound";
 			this.fireEvent("unbound", this);
 		},
-		
+		/**
+		 * show target view.Base:getTarget
+		 * @method show
+		 */
 		show: function(){
 			var me = this,
 				t = me.getTarget();
@@ -1733,7 +2020,10 @@
 				t.show();
 			}
 		},
-		
+		/**
+		 * hide target view.Base:getTarget
+		 * @method hide
+		 */
 		hide: function(){
 			var me = this,
 				t = me.getTarget();
@@ -1741,7 +2031,9 @@
 				t.hide();
 			}
 		},
-		
+		/**
+		 * @method isVisible
+		 */
 		isVisible: function(){
 			var me = this,
 			t = me.getTarget();
@@ -1750,12 +2042,12 @@
 			}
 			return false;
 		},
-		
 		/**
 		* Converts View data into a Store if not already done
 		* @private
-		* @param :: object :: Firebrick.view.Base object
-		* @returns view
+		* @method initStore
+		* @param {Object} Firebrick.view.Base object
+		* @return {Object} self
 		*/
 		initStore:function(){
 			var me = this;
@@ -1765,18 +2057,21 @@
 			}
 			return me;
 		},
-		
 		/**
-		* update the view with new dataa
-		* @param data :: object :: extra data you wish to pass to the view
-		* @returns self
+		* update the view with new data
+		* @method update
+		* @param data {Object} extra data you wish to pass to the view
+		* @return {Object} self
 		*/
 		update:function(data){
 			var me = this;
 			me.getStore().setData(data);
 			return me;
 		},
-		
+		/**
+		 * @method startLoader
+		 * @private
+		 */
 		startLoader: function(){
 			var me = this,
 				t = me.getTarget();
@@ -1792,7 +2087,10 @@
 				
 			}
 		},
-		
+		/**
+		 * @method stopLoader
+		 * @private
+		 */
 		stopLoader: function(){
 			var me = this;
 			if(me.loading){
@@ -1803,28 +2101,42 @@
 		}
 		
 	});
-	
+	/**
+	 * Extends {{#crossLink Firebrick.class.Base}}{{/crossLink}}
+	 * @extends class.Base
+	 * @class controller.Base
+	 */
 	Firebrick.define("Firebrick.controller.Base", {
 		extend:"Firebrick.class.Base",
-		
 		/**
 		* Called on creation
+		* @method init
 		*/
 		init: function(){
 			return this.callParent();
 		},
-		
+		/**
+		 * @property app
+		 * @type {Object}
+		 * @example
+		 * 		controller.app.on(...)
+		 * 		controller.app.listeners(...)
+		 */
 		app:{
 		
 			/**
-			* @see Firebrick.events.on()
+			 * see Firebrick.events:on
+			* @property on
+			* @type {Function} 
 			*/
 			on: function(){
 				return Firebrick.events.on.apply(Firebrick.events, arguments);
 			},
 			
 			/**
-			*	@see Firebrick.events.addListener
+			 * see Firebrick.events:addListener
+			* @property listeners
+			* @type {Function} 
 			*/
 			listeners:function(){
 				return Firebrick.events.addListener.apply(Firebrick.events, arguments);
@@ -1832,11 +2144,16 @@
 		},
 		
 	});
-	
+	/**
+	 * Extends {{#crossLink Firebrick.class.Base}}{{/crossLink}}
+	 * @extends class.Base
+	 * @class store.Base
+	 */
 	Firebrick.define("Firebrick.store.Base", {
 		extend:"Firebrick.class.Base",
 		/**
 		* Called on creation
+		* @method init
 		*/
 		init: function(){
 			var me = this;
@@ -1851,91 +2168,128 @@
 			}
 			return this.callParent();
 		},
-		
 		/**
 		* Default store configurations
 		* any types that jQuery allows in $.ajax()
-		**/
+		* @property datatype
+		* @type {String}
+		* @default "json"
+		*/
 		datatype: "json",
 		/**
 		* URL Config:
-		* string :: only a get store - i.e. 1-way store, get information from the server
-		* object :: mutliple directional store - get and send information to and from the server
-		* @usage: url: "/getusers.php"
-		* @usage: url: {
+		* @property url
+		* @type {String, Object} string :: only a get store - i.e. 1-way store, get information from the server. object :: mutliple directional store - get and send information to and from the server
+		* @example
+		* 	 url: "/getusers.php"
+		* @example
+		* 		 url: {
 						get:"/getusers.php",
 						submit: "/saveusers.php"
 					}	
 		*/
 		url:{
+			/**
+			 * @property get
+			 * @type {String}
+			 * @default null
+			 */
 			get:null,	//strings
+			/**
+			 * @property submit
+			 * @type {String}
+			 * @default null
+			 */
 			submit:null //strings 
 		},
-		
 		/**
 		* set the connection protocol, POST or GET for submit
+		* @property protocol
+		* @type {String}
+		* @default "POST"
 		*/
 		protocol: "POST",
-		
 		/**
 		* Store status
-		* @private
 		* 1. initial :: store has just been created
 		* 2. preload :: store is just about to fire the $.ajax event
 		* 3. any :: success status of $.ajax()
+		* @private
+		* @property status
+		* @type {String}
 		*/
 		status:"initial",
 		/**
 		* Simple property to check whether this object is a store
 		* @private
+		* @property isStore
+		* @type {Boolean}
+		* @default true
 		*/
 		isStore:true,
 		/**
 		* Whether the data in the store has been initialised, ie. convert to records etc.
 		* @private
-		**/
+		* @property dataInitialised
+		* @type {Boolean}
+		* @default false
+		*/
 		dataInitialised: false,
-		
 		/**
 		 * load store on creation
-		 * default false
+		 * @property autoLoad
+		 * @type {Boolean}
+		 * @default false
 		 */
 		autoLoad:false,
 		/**
 		 * data store - use setData()
 		 * @private
+		 * @property data
+		 * @type {Object}
+		 * @default null
 		 */
 		data: null,
 		/**
 		 * initial raw data that was passed when setting the store with setData() function
 		 * @private
+		 * @property _initialData
+		 * @type {Object}
+		 * @default null
 		 */
 		_initialData:null,
 		/**
-		 * default value 
+		 * default value
+		 * @property async
+		 * @type {Boolean}
+		 * @default true
 		 */
 		async: true,
 		/**
-		 * used when calling getData()
+		 * specify a root - used when calling getData()
+		 * @property root
+		 * @type {String}
+		 * @default null
 		 */
 		root: null,
-		
 		/**
-		* Load the store
-		* @usage load({
+		* Load the store - see data.store:loadStore
+		* @example 
+		* 		load({
 					callback:function(){},
 					scope:this //scope for callback
 				})
-		* @param options :: object
-		* @returns self
+		* @method load
+		* @param options {Object}
+		* @return {Object} self
 		*/
 		load: function(options){
 			return Firebrick.data.store.loadStore(this, options);
 		},
-		
 		/**
 		* Returns the store data attribute
-		* @returns store data
+		* @method getData
+		* @return {Object} store data
 		*/
 		getData:function(){
 			var me = this;
@@ -1946,11 +2300,11 @@
 			}
 			return me.data;
 		},
-		
 		/**
 		 * provide the raw data
-		 * @param initial :: optional :: boolean :: set to true if you want the original data passed to setData() - if left out or false - it will parse the ko-ed data back to a JS object
-		 * @returns JS object
+		 * @method getRawData
+		 * @param initial {Boolean} [default=false] (optional) set to true if you want the original data passed to setData() - if left out or false - it will parse the ko-ed data back to a JS object
+		 * @return {Object}
 		 */
 		getRawData: function(initial){
 			var me = this;
@@ -1961,11 +2315,11 @@
 			b = $.isFunction(b) ? b() : b;
 			return ko.toJS(b);
 		},
-		
 		/**
 		* Converts a json object into stores with records
-		* @param data :: json object
-		* @returns self
+		* @method setData
+		* @param data {Object}
+		* @return {Object} self
 		*/
 		setData: function(data){
 			var me = this;
@@ -1988,37 +2342,49 @@
 			
 			return me;
 		},
-		
 		/**
 		* Submit the store data to the specified url.submit path
-		* @returns store
+		* see data.store:submit
+		* @method submit
+		* @return {Object} self
 		*/
 		submit: function(){
 			return Firebrick.data.store.submit(this);
 		},
-		
 		/**
 		* convert store data to a plain object
-		* @returns object
+		* @method toPlainObject
+		* @return {Object}
 		*/
 		toPlainObject: function(){
-      var me = this;
+			var me = this;
 			return $.isFunction(me.data) ? ko.toJS(me.data) : me.data;
 		},
-		
 		/**
 		* Convert store data to json string
-		* @returns json string
+		* @method toJson
+		* @return {String} json
 		*/
 		toJson: function(){
 			return JSON.stringify(this.toPlainObject());
 		}
 		
-		
 	});
+	/**
+	 * @class window
+	 * @module Global
+	 */
 	
-	//global
+	/**
+	 * @property Firebrick 
+	 * @type {Object}
+	 */
 	window.Firebrick = Firebrick;
+	
+	/**
+	 * @property fb 
+	 * @type {Object}
+	 */
 	window.fb = window.Firebrick;
 	
 	return Firebrick;
