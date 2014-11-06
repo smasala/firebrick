@@ -2311,7 +2311,7 @@
         {
             "file": "src\\firebrick.js",
             "line": 1767,
-            "description": "State the view is current in. \"Initial\", \"Rendered\"",
+            "description": "State the view is current in. \"initial\", \"rendered\"",
             "itemtype": "property",
             "name": "_state",
             "type": "{String}",

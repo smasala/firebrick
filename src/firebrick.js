@@ -1765,7 +1765,7 @@
 		 */
 		showLoading: true,
 		/**
-		* State the view is current in. "Initial", "Rendered"
+		* State the view is current in. "initial", "rendered"
 		* @property _state
 		* @type {String}
 		* @private
