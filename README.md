@@ -2,10 +2,10 @@
 
 JavaScript MVC Framework built with:
 
-* jQuery
-* Bootstrap
-* Knockout JS
-* Require JS
+* jQuery 2
+* Bootstrap 3
+* Knockout JS 3
+* Require JS 2
 
 ## Install with Bower
 ```
