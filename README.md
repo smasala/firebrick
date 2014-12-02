@@ -3,7 +3,6 @@
 JavaScript MVC Framework built with:
 
 * jQuery 2
-* Bootstrap 3
 * Knockout JS 3
 * Require JS 2
 
@@ -21,13 +20,6 @@ Checkout the [Dashboard ](http://demo.firebrickjs.com) demo
 ###Require JS
 
 ```
-	<!-- Bootstrap -->
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css" />
-	
-	<!-- Firebrick JS -->
-	<link rel="stylesheet" href="bower_components/firebrick/firebrick.css" />
-
 	<!-- Require JS and App Start -->
 	<script data-main="js/app" src="bower_components/requirejs/require.js"></script>
 ```
@@ -40,12 +32,10 @@ Checkout the [Dashboard ](http://demo.firebrickjs.com) demo
 			"jquery": "../bower_components/jquery/jquery",
 			"knockout": "../bower_components/knockoutjs/dist/knockout",
 			"knockout-mapping": "../bower_components/knockout-mapping/knockout.mapping",
-			"firebrick": "../bower_components/firebrick/firebrick",
-			"bootstrap": "../bower_components/bootstrap/dist/js/bootstrap.min",
+			"firebrick": "../bower_components/firebrick/firebrick"
 		},
 		shim:{
-			"knockout-mapping": ["knockout"],
-			"bootstrap": ["jquery"],
+			"knockout-mapping": ["knockout"]
 		}
 	});
 

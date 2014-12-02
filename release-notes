@@ -1,3 +1,8 @@
+v0.8.27
+----------------------------
+* bootstrap dependency removed and moved to firebrick.ui
+* css file removed
+
 v0.8.25
 ----------------------------
 * comment typo

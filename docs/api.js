@@ -28,7 +28,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "Firebrick",
             "name": "Firebrick",
-            "description": "A lightweight JavaScript MVC Framework powered with jQuery, Bootstrap, Knockout JS and Require JS"
+            "description": "A lightweight JavaScript MVC Framework powered with jQuery, Knockout JS and Require JS"
         },
         {
             "displayName": "Firebrick.class",

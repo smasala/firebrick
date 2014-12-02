@@ -1,7 +1,7 @@
 /*!
-* Firebrick JS - JavaScript MVC Framework powered by jQuery, Bootstrap and Knockout JS
+* Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
 * Author: Steven Masala
-* dependencies: jquery, bootstrap, knockout js
+* dependencies: jquery, knockout js
 * contact: me@smasala.com
 */
 

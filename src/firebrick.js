@@ -1,7 +1,7 @@
 /*!
-* Firebrick JS - JavaScript MVC Framework powered by jQuery, Bootstrap and Knockout JS
+* Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
 * Author: Steven Masala
-* dependencies: jquery, bootstrap, knockout js
+* dependencies: jquery, knockout js
 * contact: me@smasala.com
 */ 
 
@@ -25,7 +25,7 @@
 	}
 
 	/**
-	 * A lightweight JavaScript MVC Framework powered with jQuery, Bootstrap, Knockout JS and Require JS
+	 * A lightweight JavaScript MVC Framework powered with jQuery, Knockout JS and Require JS
 	 * 
 	 * @module Firebrick
 	 * @class Firebrick
@@ -433,6 +433,7 @@
 		templates:{
 			/**
 			 * General loading tpl - override to change the loading mask
+			 * Bootstrap is needed for this to work
 			 * @property loadingTpl
 			 */
 			loadingTpl: "<div class='fb-view-loader'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>",

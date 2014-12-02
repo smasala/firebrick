@@ -1,6 +1,6 @@
 {
 	"name": "firebrick",
-	"description": "A lightweight JavaScript MVC Framework powered with jQuery, Bootstrap, Knockout JS and Require JS",
+	"description": "A lightweight JavaScript MVC Framework powered with jQuery, Knockout JS and Require JS",
 	"license": "MIT",
 	"homepage": "http://firebrickjs.com",
 	"main": "firebrick.min.js",
@@ -17,7 +17,6 @@
 	"version": "0.8.25",
 	"dependencies": {
 		"jquery": "2.x",
-		"bootstrap": "3.x",
 		"knockoutjs": "3.x",
 		"knockout-mapping": "2.x",
 		"requirejs": "2.x"
