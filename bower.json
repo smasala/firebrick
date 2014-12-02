@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"homepage": "http://firebrickjs.com",
 	"main": "firebrick.min.js",
-	"ignore": "",
+	"ignore": [""],
 	"authors": [
 		"Steven Masala"
 	],
@@ -14,12 +14,12 @@
 		"framework",
 		"javascript"
 	],
-	"version": "0.8.21",
+	"version": "0.8.25",
 	"dependencies": {
-		"jquery": "~2.1.1",
-		"bootstrap": "~3.2.0",
-		"knockoutjs": "~3.2.0",
-		"knockout-mapping": "~2.4.1",
-		"requirejs": "~2.1.15"
+		"jquery": "2.x",
+		"bootstrap": "3.x",
+		"knockoutjs": "3.x",
+		"knockout-mapping": "2.x",
+		"requirejs": "2.x"
 	}
 }

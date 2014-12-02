@@ -36,7 +36,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.8.21",
+		version: "0.8.25",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -320,7 +320,7 @@
 			* @param config {Object}
 			* @return {Object} class
 			*/
-			create: function(name, config){
+			create: function(name, config, newObj){
 				var me = this,
 					clazz;
 			    if(me.classRegistry[name]){
@@ -328,12 +328,51 @@
 			    }else{
 			        clazz = me.define(name, config);
 			    }
-
+			    
 			    if(clazz.init){
 			    	clazz.init();
 			    }
 			    
 			    return clazz;
+			},
+			
+			/**
+			 * @method _initMixins
+			 * @private
+			 * @param clazz {Object}
+			 * @param mix {Object} optional used by recursive
+			 * @return {Object} clazz
+			 */
+			_initMixins: function(clazz){
+				var me = this;
+				if(clazz.mixins){
+					
+					var mixit = function(obj, mix){
+						if($.isPlainObject(mix)){
+							if(!mix._mixedIn){
+								mix._mixedIn = true;
+								Firebrick.utils.overwrite(obj, mix);
+							}
+						}else if(typeof mix == "string"){
+							mix = Firebrick.create(mix);
+							if(!mix){
+								new Error("unable to find mixin", obj.mixins)
+							}
+							mix._mixedIn = true;
+							Firebrick.utils.overwrite(obj, mix);
+						}
+						return mix;
+					}
+					
+					if($.isArray(clazz.mixins)){
+						for(var i = 0, l = clazz.mixins.length; i<l; i++){
+							clazz.mixins[i] = mixit(clazz, clazz.mixins[i]);
+						}
+					}else{
+						clazz.mixins = mixit(clazz, clazz.mixins);
+					}
+				}
+				return clazz;
 			},
 			
 			/**
@@ -347,17 +386,23 @@
 				var me = this,
 					clazz;
 			    
-				config._classname = name;
-			    
 			    if(config.extend){
 			        var _super = me.classRegistry[config.extend];
 			        clazz = me.extend(config, _super);
 			    }else{
 			        clazz = Object.create(config);
 			    }
+			    
+			    clazz = me._initMixins(clazz);
+			    
 			    if(name){
 			    	me.classRegistry[name] = clazz;
 			    }
+			    
+			    if(clazz.constructor){
+			    	clazz.constructor(name);
+			    }
+			    
 			    return clazz;
 			}
 			
@@ -683,33 +728,29 @@
 			* @method overwrite
 			* @param obj1 {Object}
 			* @param obj2 {Object}
-			* @param deep {Booelan} [deep=false] (optional) if true doesn't simply replace an object but iterates of the properties
 			* @return {Object} obj1 mixed in with obj2
 			*/
-			overwrite: function(obj1, obj2, deep){
+			overwrite: function(obj1, obj2, scope){
 				var me = this;
+				//iterate over all properties in obj2
 				$.each(obj2, function(k,v){
-					if(!deep || !$.isPlainObject(obj1[k])){
-						obj1[k] = v;
-					}else{
-						obj1[k] = me.overwrite(obj1[k], v);
-					}
+					obj1[k] = v;	
 				});
 				return obj1;
 			},
 			/**
-			 *  recursively iterate over prototypes and mix all the properties of an object together from its inherited parents for a specified property (name)
+			 *  recursively iterate over prototypes and merge all the properties of an object together from its inherited parents for a specified property (name)
 			 *  @private
-			 *  @method mixinFor
-			 *  @param propName {String} name of param to mixin
+			 *  @method merge
+			 *  @param propName {String} name of property to merge
 			 *  @param object {Object} object/class to iterate through
 			 *  @param a {Object} (optional) used when calling itself recursively
 			 *  @example 
-			 *  		mixinFor("a", {a:{a:"s"},__proto__:{a:{a:1, b:2, c:3}}})
+			 *  		merge("a", {a:{a:"s"},__proto__:{a:{a:1, b:2, c:3}}})
 			 *  		//returns {a:{a:"s", b:2, c:3},__proto__:{a:{a:1, b:2, c:3}}}
-			 *  @return {Object} object : same object with property (name) mixed in
+			 *  @return {Object} object : same object with property (name) merged
 			 */
-			mixinFor:function(propName, object, a){
+			merge:function(propName, object, a){
 				var me = this,
 					proto = Object.getPrototypeOf(a || object);
 				
@@ -720,7 +761,7 @@
 						}
 					});
 					//mixin deeper (recursive)
-					me.mixinFor(propName, object, proto);
+					me.merge(propName, object, proto);
 				}
 				
 				return object;
@@ -1105,6 +1146,9 @@
 				if(!callback.conf){
 					callback.conf = {};
 					callback.conf.callbackId = me.eventCounter++;
+				}else{
+					//already registered
+					return callback;
 				}
 				
 				callback.conf.scope = scope;
@@ -1532,18 +1576,45 @@
 	 */
 	Firebrick.define("Firebrick.class.Base", {
 		/**
+		 * unlike init, this is called when defining a class
+		 * @method constructor
+		 * @param {String} name - class name
+		 * @return {Object} self
+		 */
+		constructor: function(name){
+			var me = this;
+			if(name){
+				me._classname = name;
+			}
+		},
+		/**
 		 * @method init
+		 * @return self
 		 */
 		init:function(){
 			//inits of all inits :)
 			var me = this;
 			if(me.listeners){
-				Firebrick.utils.mixinFor("listeners", me);	
+				Firebrick.utils.merge("listeners", me);
+				$.each(me.listeners, function(k,v){
+					if($.isFunction(v)){
+						me.listeners[k] = function(){
+							//create a copy of the function - otherwise the all mixins point to the same function
+							return v.apply(this, arguments);
+						}
+					}
+				});
 				me.on(me.listeners);
 			}
 			me.fireEvent(me.overrideReadyEvent || "ready");
 			return me;
 		},
+		/**
+		 * @property mixins
+		 * @type {String|Object|[String]}
+		 * @default null
+		 */
+		mixins:null,
 		/**
 		 * @private
 		 * @property _idPrefix
@@ -1628,12 +1699,13 @@
 				//first argument is an object
 				var s = eventName.scope || me;
 				$.each(eventName, function(k,v){
-					if(k !== "scope"){
+					if(k !== "scope" && k !== "abc"){
 						addEvent(k, v, s);
 					}
 				});
 			}else{
 				//just add the event
+				scope = scope || me;
 				addEvent(eventName, callback, scope);
 			}
 			
@@ -1839,7 +1911,7 @@
 						view: me
 					});
 				}else{
-					console.error("in order to use the components property please add Firebrick UI")
+					console.error("in order to use the items property please add Firebrick UI")
 				}
 			}
 			

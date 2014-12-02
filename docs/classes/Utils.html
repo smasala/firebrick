@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.21</em>
+            <em>API Docs for: 0.8.25</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -128,7 +128,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l627"><code>src\firebrick.js:627</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l672"><code>src\firebrick.js:672</code></a>
         </div>
     
 
@@ -237,7 +237,7 @@
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method_mixinFor">mixinFor</a>
+                                <a href="#method_merge">merge</a>
 
                                 
                                 
@@ -365,7 +365,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l744"><code>src\firebrick.js:744</code></a>
+        <a href="../files/src_firebrick.js.html#l785"><code>src\firebrick.js:785</code></a>
         
         </p>
 
@@ -445,7 +445,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l672"><code>src\firebrick.js:672</code></a>
+        <a href="../files/src_firebrick.js.html#l717"><code>src\firebrick.js:717</code></a>
         
         </p>
 
@@ -520,7 +520,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l817"><code>src\firebrick.js:817</code></a>
+        <a href="../files/src_firebrick.js.html#l858"><code>src\firebrick.js:858</code></a>
         
         </p>
 
@@ -657,7 +657,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l729"><code>src\firebrick.js:729</code></a>
+        <a href="../files/src_firebrick.js.html#l770"><code>src\firebrick.js:770</code></a>
         
         </p>
 
@@ -814,7 +814,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l904"><code>src\firebrick.js:904</code></a>
+        <a href="../files/src_firebrick.js.html#l945"><code>src\firebrick.js:945</code></a>
         
         </p>
 
@@ -932,7 +932,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l653"><code>src\firebrick.js:653</code></a>
+        <a href="../files/src_firebrick.js.html#l698"><code>src\firebrick.js:698</code></a>
         
         </p>
 
@@ -1056,7 +1056,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l781"><code>src\firebrick.js:781</code></a>
+        <a href="../files/src_firebrick.js.html#l822"><code>src\firebrick.js:822</code></a>
         
         </p>
 
@@ -1208,7 +1208,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l808"><code>src\firebrick.js:808</code></a>
+        <a href="../files/src_firebrick.js.html#l849"><code>src\firebrick.js:849</code></a>
         
         </p>
 
@@ -1310,7 +1310,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l958"><code>src\firebrick.js:958</code></a>
+        <a href="../files/src_firebrick.js.html#l999"><code>src\firebrick.js:999</code></a>
         
         </p>
 
@@ -1356,8 +1356,8 @@ used by Firebrick:ready</p>
 </div>
 
                 
-                    <div id="method_mixinFor" class="method item private">
-    <h3 class="name"><code>mixinFor</code></h3>
+                    <div id="method_merge" class="method item private">
+    <h3 class="name"><code>merge</code></h3>
 
     
         <div class="args">
@@ -1416,7 +1416,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l700"><code>src\firebrick.js:700</code></a>
+        <a href="../files/src_firebrick.js.html#l741"><code>src\firebrick.js:741</code></a>
         
         </p>
 
@@ -1427,7 +1427,7 @@ used by Firebrick:ready</p>
     </div>
 
     <div class="description">
-        <p>recursively iterate over prototypes and mix all the properties of an object together from its inherited parents for a specified property (name)</p>
+        <p>recursively iterate over prototypes and merge all the properties of an object together from its inherited parents for a specified property (name)</p>
 
     </div>
 
@@ -1446,7 +1446,7 @@ used by Firebrick:ready</p>
                     
 
                     <div class="param-description">
-                        <p>name of param to mixin</p>
+                        <p>name of property to merge</p>
 
                     </div>
 
@@ -1498,7 +1498,7 @@ used by Firebrick:ready</p>
                     
                         <span class="type">Object</span>:
                     
-                    <p>object : same object with property (name) mixed in</p>
+                    <p>object : same object with property (name) merged</p>
 
                 
             </div>
@@ -1510,7 +1510,7 @@ used by Firebrick:ready</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>    mixinFor(&quot;a&quot;, {a:{a:&quot;s&quot;},__proto__:{a:{a:1, b:2, c:3}}})
+                <pre class="code prettyprint"><code>    merge(&quot;a&quot;, {a:{a:&quot;s&quot;},__proto__:{a:{a:1, b:2, c:3}}})
     //returns {a:{a:&quot;s&quot;, b:2, c:3},__proto__:{a:{a:1, b:2, c:3}}}</code></pre>
 
             </div>
@@ -1535,12 +1535,6 @@ used by Firebrick:ready</p>
                 <li class="arg">
                     
                         <code>obj2</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>deep</code>
                     
                 </li>
             
@@ -1577,7 +1571,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l681"><code>src\firebrick.js:681</code></a>
+        <a href="../files/src_firebrick.js.html#l726"><code>src\firebrick.js:726</code></a>
         
         </p>
 
@@ -1623,22 +1617,6 @@ used by Firebrick:ready</p>
 
                     <div class="param-description">
                          
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">deep</code>
-                        <span class="type">Booelan</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>[deep=false] (optional) if true doesn&#39;t simply replace an object but iterates of the properties</p>
-
                     </div>
 
                     
@@ -1738,7 +1716,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l835"><code>src\firebrick.js:835</code></a>
+        <a href="../files/src_firebrick.js.html#l876"><code>src\firebrick.js:876</code></a>
         
         </p>
 
@@ -1932,7 +1910,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l757"><code>src\firebrick.js:757</code></a>
+        <a href="../files/src_firebrick.js.html#l798"><code>src\firebrick.js:798</code></a>
         
         </p>
 
@@ -2062,7 +2040,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l945"><code>src\firebrick.js:945</code></a>
+        <a href="../files/src_firebrick.js.html#l986"><code>src\firebrick.js:986</code></a>
         
         </p>
 
@@ -2132,7 +2110,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l940"><code>src\firebrick.js:940</code></a>
+        <a href="../files/src_firebrick.js.html#l981"><code>src\firebrick.js:981</code></a>
         
         </p>
 
@@ -2178,7 +2156,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l639"><code>src\firebrick.js:639</code></a>
+        <a href="../files/src_firebrick.js.html#l684"><code>src\firebrick.js:684</code></a>
         
         </p>
 
@@ -2225,7 +2203,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l632"><code>src\firebrick.js:632</code></a>
+        <a href="../files/src_firebrick.js.html#l677"><code>src\firebrick.js:677</code></a>
         
         </p>
 
@@ -2272,7 +2250,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l646"><code>src\firebrick.js:646</code></a>
+        <a href="../files/src_firebrick.js.html#l691"><code>src\firebrick.js:691</code></a>
         
         </p>
 

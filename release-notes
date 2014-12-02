@@ -1,3 +1,10 @@
+v0.8.25
+----------------------------
+* comment typo
+* allow use of mixins for classes by injecting them when classes are defined
+* classes now have a constructor function - this is called when defining the class
+* changed function "mixinFor" to "merge"
+
 v0.8.21
 ----------------------------
 * minor changes
@@ -5,7 +12,7 @@ v0.8.21
 
 v0.8.20
 ----------------------------
-* fb.text accepts a function aswell
+* fb.text accepts a function as well
 
 v0.8.19
 ----------------------------
