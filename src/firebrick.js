@@ -36,7 +36,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.8.25",
+		version: "0.8.27",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
