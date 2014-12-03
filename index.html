@@ -29,7 +29,7 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h1>
-<a id="firebrick-js-v0825-stable" class="anchor" href="#firebrick-js-v0825-stable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Firebrick JS v0.8.25 Stable</h1>
+<a id="firebrick-js-stable" class="anchor" href="#firebrick-js-stable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Firebrick JS <span id="fb-ver"></span> Stable</h1>
 
 <p>JavaScript MVC Framework built with:</p>
 
@@ -131,6 +131,20 @@
               var pageTracker = _gat._getTracker("UA-55394521-3");
             pageTracker._trackPageview();
             } catch(err) {}
+          </script>
+          
+          <script type="text/javascript">
+	          var getVersion = function(repo, id){
+		      	  	$.ajax({
+		      		  	url:"https://api.github.com/repos/smasala/"+repo+"/tags",
+		      		  	type:"get",
+		      		  	success:function(releases){
+		      	    		$("#" + id).html(releases[0].name);
+		      		  	}
+		      		});
+		        }
+		        
+		        getVersion("firebrick", "fb-ver");
           </script>
 
   </body>
