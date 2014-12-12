@@ -1,3 +1,16 @@
+v0.8.35
+----------------------------
+* add Firebrick.classes.overwrite to overwrite defined classes
+* removed view references to Firebrick.ui and placed them in the ui framework
+* "extend" bug fix for overwriting functions to primitives
+* fix arguments bug when calling this.callParent(arguments)
+* add arguments parameter to all "callParent" calls
+* activate jshint and "use strict"
+* only init store view if the store is already set
+* change $.each loops to "for" loops - performance : http://jsperf.com/loops/188 - http://jsperf.com/lodash-each-vs-object-keys/6 - http://jsperf.com/fastest-array-loops-in-javascript/287
+* check if mixin has been injected with ".hasMixin({String}) function"
+
+
 v0.8.27
 ----------------------------
 * bootstrap dependency removed and moved to firebrick.ui
