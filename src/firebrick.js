@@ -1,25 +1,27 @@
 /*!
 * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
-* Author: Steven Masala
+* @author Steven Masala [me@smasala.com]
 * dependencies: jquery, knockout js
-* contact: me@smasala.com
-*/ 
+*/
 
-(function(root, factory) {
-	
-  "use strict";
+(function (root, factory) {
 
-  if (typeof define === "function" && define.amd) {
-    define(["jquery", "knockout", "knockout-mapping"], function($, ko, kom) {
-    	ko.mapping = kom;
-    	return factory($, ko);
-    });
-  } else {
-    factory(root.jQuery, root.ko);
-  }
+    "use strict";
 
-}(this, function($, ko) {
-	if(window.Firebrick || window.fb){
+    if (typeof define === "function" && define.amd) {
+        define(["jquery", "knockout", "knockout-mapping"], function ($, ko, kom) {
+            ko.mapping = kom;
+            return factory($, ko);
+        });
+    } else {
+        factory(root.jQuery, root.ko);
+    }
+
+}(this, function ($, ko) {
+    
+    "use strict";
+    
+	if (window.Firebrick || window.fb) {
 		console.error("unable to initialise FirebrickJS, window.Firebrick or window.fb are already defined");
 		return;
 	}
@@ -36,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.8.27",
+		version: "0.8.35",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -65,34 +67,35 @@
 		* @param {Object} options.dev {Boolean} [dev=false] true to print requirejs exceptions to console
 		* @param {Object} options.lang language file name or store,
 		*/
-		ready: function(options){
+		ready: function (options) {
 			var me = this;
-				me.app = options.app;
+			
+            me.app = options.app;
 			
 			me.utils.initSplash(options.splash || me.templates.loadingTpl);
 
 			Firebrick.boot.prepApplication(options);
 			
 			//if files need to be required first, then require them and fire the application
-			if(options.require && options.require.length > 0){
+			if (options.require && options.require.length > 0) {
 			
-				if(!$.isArray(options.require)){
+				if (!$.isArray(options.require)) {
 					//convert to array if no already
 					options.require = [options.require];
 				}
 
-				require(options.require, function(){
+				require(options.require, function () {
 					me.utils.clearSplash();
 					var args = arguments;
-					$(document).ready(function(){
+					$(document).ready(function () {
 						options.go.apply(options.go, args);
 					});
 				});
 			
-			}else{
+			} else {
 				me.utils.clearSplash();
-				$(document).ready(function(){
-					options.go()
+				$(document).ready(function () {
+					options.go();
 				});
 			}
 		},
@@ -105,7 +108,7 @@
 		 * @param args {Args..}
 		 * @return {Many}
 		 */
-		shortcut: function(scope, func, args){
+		shortcut: function (scope, func, args) {
 			return scope[func].apply(scope, args);
 		},
 		
@@ -113,127 +116,127 @@
 		 * shortcut for Firebrick.classes:get
 		 * @method get
 		 */
-		get: function(){
+		get: function () {
 			return this.shortcut(this.classes, "get", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.classes:getById
 		 * @method getById
 		 */
-		getById: function(){
+		getById: function () {
 			return this.shortcut(this.classes, "getById", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.classes:create
 		 * @method create
 		 */
-		create: function(){
+		create: function () {
 			return this.shortcut(this.classes, "create", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.classes:define
 		 * @method define
 		 */
-		define: function(){
+		define: function () {
 			return this.shortcut(this.classes, "define", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.controllers.createController
 		 * @method createController
 		 */
-		createController: function(){
+		createController: function () {
 			return this.shortcut(this.controllers, "createController", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.utils.require
 		 * @method require
 		 */
-		require: function(){
+		require: function () {
 			return this.shortcut(this.utils, "require", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.views.loadRaw
 		 * @method loadRaw
 		 */
-		loadRaw: function(){
+		loadRaw: function () {
 			return this.shortcut(this.views, "loadRaw", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.views.createView
 		 * @method createView
 		 */
-		createView: function(){
+		createView: function () {
 			return this.shortcut(this.views, "createView", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.views.defineView
 		 * @method defineView
 		 */
-		defineView: function(){
+		defineView: function () {
 			return this.shortcut(this.views, "defineView", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.views.getBody
 		 * @method getBody
 		 */
-		getBody: function(){
+		getBody: function () {
 			return this.shortcut(this.views, "getBody", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.utils.delay
 		 * @method delay
 		 */
-		delay: function(){
+		delay: function () {
 			return this.shortcut(this.utils, "delay", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.events.addListener
 		 * @method addListener
 		 */
-		addListener: function(){
+		addListener: function () {
 			return this.shortcut(this.events, "addListener", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.events.removeListener
 		 * @method removeListener
 		 */
-		removeListener: function(){
+		removeListener: function () {
 			return this.shortcut(this.events, "removeListener", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.events.fireEvent
 		 * @method fireEvent
 		 */
-		fireEvent: function(){
+		fireEvent: function () {
 			return this.shortcut(this.events, "fireEvent", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.events.on
 		 * @method on
 		 */
-		on: function(){
+		on: function () {
 			return this.shortcut(this.events, "on", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.events.off
 		 * @method off
 		 */
-		off: function(){
+		off: function () {
 			return this.shortcut(this.events, "off", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.data.store.createStore
 		 * @method createStore
 		 */
-		createStore: function(){
+		createStore: function () {
 			return this.shortcut(this.data.store, "createStore", arguments);
 		},
 		/**
 		 * shortcut for Firebrick.languages.getByKey
 		 * @method text
 		 */
-		text: function(){
-			return this.shortcut(this.languages, "getByKey", arguments); 
+		text: function () {
+			return this.shortcut(this.languages, "getByKey", arguments);
 		},
 		/**
 		 * @for Firebrick
@@ -255,7 +258,7 @@
 			* @param name {String}
 			* @return {Object}
 			*/
-			get: function(name){
+			get: function (name) {
 				return this.classRegistry[name];
 			},
 			
@@ -265,50 +268,77 @@
 			 * @param {String} id
 			 * @return {Object}
 			 */
-			getById: function(id){
+			getById: function (id) {
 				var me = this,
-					clazz;
-				$.each(me.classRegistry, function(k,v){
-					if(v._classId && v.getClassId && v.getClassId() == id){
-						clazz = v;
-						//found class, stop iteration
-						return false;
+					clazz,
+					k,v;
+				
+				for(k in me.classRegistry){
+					if(me.classRegistry.hasOwnProperty(k)){
+						v = me.classRegistry[k];
+						if (v.getClassId && v.getClassId() === id) {
+							clazz = v;
+							//found class, stop iteration
+							break;
+						}
 					}
-				});
+				}
 				
 				return clazz;
+			},
+			
+			/**
+			 * remove a class from the registry 
+			 * @method removeClass
+			 * @param clazz {Object|String} clazz object or classname
+			 */
+			removeClass: function(clazz){
+				delete Firebrick.classes.classRegistry[ (typeof clazz === "string" ? clazz : clazz._classname) ];	
+			},
+			
+			/**
+			 * @method _callParentConstructor
+			 * @private
+			 * @param func {Function}
+			 * @param parent {Function}
+			 * @return new function {Function}
+			 */
+			_callParentConstructor: function(func, parent){
+				return function () {
+					this.callParent = function () {
+						return parent.apply(this, Firebrick.utils.stripArguments(arguments));
+					};
+                    var r = func.apply(this, arguments);
+                    delete this.callParent;
+                    return r;
+                };
 			},
 			
 			/**
 			 * pass a simple object and a super class that you wish to extend from OOP
 			 * @method extend
 			 * @param {Object} obj
-			 * @param {Object} _super object class
-			 * @return {Object} prototype of _super (i.e. obj which extends from _super
+			 * @param {Object} superc object class
+			 * @return {Object} prototype of superc (i.e. obj which extends from super
 			 */
-			extend: function(obj, _super){
-				var objTemp = {};
+			extend: function (obj, superc) {
+				var me = this,
+					objTemp = {},
+                    p;
 				//iterate over all obj parameters
-				for(p in obj){
-					if(obj.hasOwnProperty(p)){
+				for (p in obj) {
+					if (obj.hasOwnProperty(p)) {
 						//replace the property with a descriptor object
 						objTemp[p] = Object.getOwnPropertyDescriptor(obj, p);
 						//if the property is found in the super class and is a function
-						if(_super[p] && $.isFunction(_super[p])){
+						if (superc[p] && $.isFunction(superc[p]) && $.isFunction(obj[p])) {
 							//enable the function to call its super function by calling this.callParent
-							objTemp[p].value = (function(func, parent){
-								return function(){
-									this.callParent = parent;
-		                            var r = func.apply(this, arguments);
-		                            delete this.callParent;
-		                            return r;
-		                        }
-	                    	})(objTemp[p].value, _super[p]);
-		               }                
+							objTemp[p].value = me._callParentConstructor(objTemp[p].value, superc[p]);
+		               }
 					}
-	        	}
+                }
 				//create a tmp version of the super object
-		        var tmp = Object.create(_super);
+		        var tmp = Object.create(superc);
 		        //create a new object with the descriptors that inherit from super
 		        return Object.create(Object.getPrototypeOf(tmp), objTemp);
 			},
@@ -320,7 +350,7 @@
 			* @param config {Object}
 			* @return {Object} class
 			*/
-			create: function(name, config, newObj){
+			create: function(name, config){
 				var me = this,
 					clazz;
 			    if(me.classRegistry[name]){
@@ -344,7 +374,6 @@
 			 * @return {Object} clazz
 			 */
 			_initMixins: function(clazz){
-				var me = this;
 				if(clazz.mixins){
 					
 					var mixit = function(obj, mix){
@@ -354,15 +383,17 @@
 								Firebrick.utils.overwrite(obj, mix);
 							}
 						}else if(typeof mix == "string"){
-							mix = Firebrick.create(mix);
-							if(!mix){
-								new Error("unable to find mixin", obj.mixins)
+							if(!obj.hasMixin(mix)){
+								obj.mixinAdded(mix);
+								mix = Firebrick.create(mix);
+								if(!mix){
+									new Error("unable to find mixin", obj.mixins);
+								}
+								Firebrick.utils.overwrite(obj, mix);
 							}
-							mix._mixedIn = true;
-							Firebrick.utils.overwrite(obj, mix);
 						}
 						return mix;
-					}
+					};
 					
 					if($.isArray(clazz.mixins)){
 						for(var i = 0, l = clazz.mixins.length; i<l; i++){
@@ -389,11 +420,10 @@
 			    if(config.extend){
 			        var _super = me.classRegistry[config.extend];
 			        clazz = me.extend(config, _super);
+			        clazz = me._initMixins(clazz);
 			    }else{
 			        clazz = Object.create(config);
 			    }
-			    
-			    clazz = me._initMixins(clazz);
 			    
 			    if(name){
 			    	me.classRegistry[name] = clazz;
@@ -404,8 +434,18 @@
 			    }
 			    
 			    return clazz;
-			}
+			},
 			
+			/**
+			 * overwrite a class with new properties - uses Firebrick.utils.overwrite
+			 * @method overwrite
+			 * @param name {String}
+			 * @param properties {Object}
+			 * @return Overwritten {Object}
+			 */
+			overwrite: function(name, properties){
+				return Firebrick.utils.overwrite(Firebrick.get(name), properties);
+			}
 		},
 		/**
 		 * @for Firebrick
@@ -514,9 +554,9 @@
 					subViews = view.subViews;
 				if(subViews){
 					if($.isArray(subViews)){
-						$.each(subViews, function(i,v){
-							view.subViews[i] = me.internal_loadSubView(v);
-						});
+						for(var i = 0, l = subViews.length; i<l; i++){
+							view.subViews[i] = me.internal_loadSubView(subViews[i]);
+						}
 					}else{
 						view.subViews = me.internal_loadSubView(subViews);
 					}
@@ -556,8 +596,7 @@
 			 * @return {String} html
 			 */
 			loadRaw: function(name){
-				var me = this,
-					raw;
+				var raw;
 				Firebrick.utils.require(name, function(r){
 					raw = r;
 				}, false, "html", "html");
@@ -571,7 +610,6 @@
 			* @return {Object}
 			*/
 			basicViewConfigurations: function(config){
-				var me = this;
 				config = config || {};
 				if(!config.extend){
 					config.extend = "Firebrick.view.Base";
@@ -655,6 +693,10 @@
 					        console.log('modules: ' + err.requireModules);
 					    }else{
 					    	console.error(err.message);
+					    	console.error(err.text);
+					    	console.error(err.requireMap);
+					    	console.error(err.stack);
+					    	new Error(err);
 					    }
 
 					};
@@ -674,7 +716,7 @@
 		 * @for Firebrick
 		 * @class Utils
 		 */
-		utils: {
+		utils:{
 			/**
 			 * keep track of all require requests
 			 * @property requiredFiles
@@ -731,12 +773,16 @@
 			* @param obj2 {Object}
 			* @return {Object} obj1 mixed in with obj2
 			*/
-			overwrite: function(obj1, obj2, scope){
-				var me = this;
+			overwrite: function(obj1, obj2){
 				//iterate over all properties in obj2
-				$.each(obj2, function(k,v){
-					obj1[k] = v;	
-				});
+				var k;
+				for(k in obj2){
+					//if(obj2.hasOwnProperty(k)){
+					//include object proto properties
+						obj1[k] = obj2[k];
+					//}
+				}
+				
 				return obj1;
 			},
 			/**
@@ -756,11 +802,18 @@
 					proto = Object.getPrototypeOf(a || object);
 				
 				if(proto.hasOwnProperty(propName)){
-					$.each(proto[propName], function(k,v){
-						if(!(k in object[propName])){
-							object[propName][k] = v;
+					
+					var k,v, p = proto[propName];
+					
+					for(k in p){
+						if(p.hasOwnProperty(k)){
+							v = p[k];
+							if(!(k in object[propName])){
+								object[propName][k] = v;
+							}
 						}
-					});
+					}
+					
 					//mixin deeper (recursive)
 					me.merge(propName, object, proto);
 				}
@@ -779,7 +832,7 @@
 			* @param scope {Object} (optional) scope of the callback function. Defaults to: window
 			*/
 			delay: function(callback, timeout, args, scope){
-				setTimeout(function(args1){
+				window.setTimeout(function(args1){
 					callback.apply(scope || this, args1);
 				}, timeout, args);
 			},
@@ -856,24 +909,33 @@
 			isIntervalRunning: function(id){
 				return this.intervalRegistry[id];
 			},
+			
 			/**
-			* Basic clone from one object to a new one object
-			* @method clone
-			* @param object {Object} object you wish to clone
-			* @param config {Object} new properties you wish to add to the clone
-			* @return {Object} cloned object
-			*/
-			clone: function(object, config){
-				var clone = {};
-				config = config || {};
-				$.each(object, function(key, value){
-					clone[key] = value;
-				});
-				$.each(config, function(key, value){
-					clone[key] = value;
-				});
-				return clone;
+			 * 
+			 * @use 
+			 * 		var a = function(){
+			 * 			//arguments are [["a"]]
+			 * 			return stripArguments(arguments) //return ["a"]
+			 * 		}
+			 * 		var b = function(){
+			 * 			return a(arguments); //note not called with apply
+			 * 		}
+			 *		b("a")
+			 * used to strip the an arguments "array" inside an wrapper "array" - http://jsfiddle.net/smasala/ppdtLmag/
+			 * @method stripArguments
+			 * @param args {Object}
+			 * @return {Object}
+			 */
+			stripArguments:function(args){
+				if ($.isPlainObject(args) && $.isNumeric(args.length) && args.hasOwnProperty("callee")) {
+					//convert the arguments array back to a simple array
+					if (args.length) {
+						args = args[0];
+					}
+				}
+				return args;
 			},
+			
 			/**
 			* Get a script/file from path
 			* @example 
@@ -916,31 +978,34 @@
 					};
 				
 		        //iterate of each file and get them
-		        $.each(names, function(index, name){
-		          //convert the name into the correct path
-							me.requiredFiles[name] = true;
-							path = me.getPathFromName(name, ext);
-							$.ajax({
-								async:$.type(async) == "boolean" ? async : true,
-								dataType:data_type,
-								url:path,
-								success:function(){
-									if(names.length > 1){
-										callbackResponse[name] = arguments;
-										newCallback.call(this, callbackResponse);
-										
-									}else{
-										newCallback.apply(this, arguments);
-									}
-								},
-								error:function(reponse, error, errorMessage){
-									console.warn("unable to load file/class '", name, "' at:", path);
-									console.error(error, errorMessage);
-									newCallback.apply(this, arguments);
-								}
-							});
-		        });
-				
+					
+				var name;
+				for(var i = 0, l = names.length; i<l; i++){
+					name = names[i];
+					//convert the name into the correct path
+					me.requiredFiles[name] = true;
+					path = me.getPathFromName(name, ext);
+					$.ajax({
+						async:$.type(async) == "boolean" ? async : true,
+						dataType:data_type,
+						url:path,
+						success:function(){
+							if(names.length > 1){
+								callbackResponse[name] = arguments;
+								newCallback.call(this, callbackResponse);
+								
+							}else{
+								newCallback.apply(this, arguments);
+							}
+						},
+						error:function(reponse, error, errorMessage){
+							console.warn("unable to load file/class '", name, "' at:", path);
+							console.error(error, errorMessage);
+							newCallback.apply(this, arguments);
+						}
+					});
+				}
+					
 				return names;
 			},
 			/**
@@ -952,8 +1017,7 @@
 			* @return {String}
 			*/
 			getPathFromName: function(name, ext){
-				var me = this,
-					homePath = Firebrick.app.path,
+				var homePath = Firebrick.app.path,
 					appName = Firebrick.app.name;
         
 					ext = ext || "js";
@@ -1094,10 +1158,16 @@
 			 */
 			allLanguages: function(){
 				var me = this,
-					langs = [];
-				$.each(ko.mapping.toJS(me.keys), function(lang){	//lang, keys
-					langs.push(lang);
-				});
+					langs = [],
+					data = ko.mapping.toJS(me.keys),
+					l;
+				
+				for(l in data){
+					if(data.hasOwnProperty(l)){
+						langs.push(l);
+					}
+				}
+				
 				return langs;
 			}
 			
@@ -1175,11 +1245,18 @@
 			* @param {Object} object
 			*/
 			addListener_internal: function(object){
-				var me = this, scope = object.scope;
+				var me = this, 
+					scope = object.scope,
+					eventName;
+				
 				delete object.scope;
-				$.each(object, function(eventName, callback){
-					me.addListener(eventName, callback, scope);
-				});
+				
+				for(eventName in object){
+					if(object.hasOwnProperty(eventName)){
+						me.addListener(eventName, object[eventName], scope);
+					}
+				}
+				
 			},
 			/**
 			* remove listener by eventName and function
@@ -1222,7 +1299,7 @@
 				var me = this, reg = me.eventRegistry[eventName];
 				if(reg){
 					//get the argument from this function call
-					var args = [].splice.call(arguments, 1),
+					var args = Array.slice(arguments),
 						ev = me.createEventData(eventName);	//create an event object to pass to the function argument
 
 					for(var i = 0, l = reg.length; i<l; i++){
@@ -1316,14 +1393,25 @@
 			* @private
 			*/
 			on_internal: function(object){
-				var me = this, scope = object.scope;
-				$.each(object, function(selector, value){
-					if(selector != "scope"){
-						$.each(value, function(eventName, callback){
-							me.register_on_event(eventName, selector, callback, scope);
-						});
+				var me = this, 
+					scope = object.scope, 
+					selector, 
+					eventName,
+					events;
+				
+				delete object.scope;
+				
+				for(selector in object){
+					if(object.hasOwnProperty(selector)){
+						events = object[selector];
+						for(eventName in events){
+							if(events.hasOwnProperty(eventName)){
+								me.register_on_event(eventName, selector, events[eventName], scope);
+							}
+						}
 					}
-				});
+				}
+				
 			},
 			/**
 			* use Firebrick.events:on
@@ -1333,7 +1421,7 @@
 			register_on_event: function(eventName, selector, callback, scope){
 				$(document).on(eventName, selector, function(){
 					//add scope as last argument, just in case the scope of the function is changed
-					var args = [].splice.call(arguments, 0);
+					var args = Array.slice(arguments);
 					args.push(this);
 					callback.apply(scope || this, args);
 				});
@@ -1398,7 +1486,6 @@
 				* @return {Object}
 				*/
 				basicStoreConfigurations: function(config){
-					var me = this;
 					config = config || {};
 					if(!config.extend){
 						config.extend = "Firebrick.store.Base";
@@ -1418,8 +1505,7 @@
 				*/
 				loadStore: function(store, options){
 					options = options || {};
-					var me = this, 
-						url = store.url,       
+					var url = store.url,       
 						async = options.async;
 					
 					if($.type(async) != "boolean"){
@@ -1460,8 +1546,7 @@
 				* @return {Object} store
 				*/
 				submit: function(store, callback){
-					var me = this,
-						data;
+					var data;
 					
 					if(store && store.url && store.url.submit){
 						
@@ -1475,7 +1560,7 @@
 							beforeSend: function(){
 								return store.fireEvent("beforeSubmit", store, data);
 							},
-							success: function(data, status, response){
+							success: function(data, status){
 								store.status = status;
 								if(callback){
 									callback.apply(store, arguments);
@@ -1521,12 +1606,15 @@
 				}else{
 					if($.isPlainObject(config)){
 						route = function(){
-							$.each(config, function(hash, cb){
-								if(Firebrick.router.is("#" + hash)){
-									cb.apply(this, arguments);
-									return false;
+							var hash;
+							for(hash in config){
+								if(config.hasOwnPropery(hash)){
+									if(Firebrick.router.is("#" + hash)){
+										config[hash].apply(this, arguments);
+										break;
+									}
 								}
-							});
+							}
 						};
 					}
 				}
@@ -1587,6 +1675,20 @@
 			if(name){
 				me._classname = name;
 			}
+			return me;
+		},
+		/**
+		 * create a copy of the listener for each class
+		 * @private
+		 * @method _cloneListener
+		 * @param {Function} function
+		 * @return {Function}
+		 */
+		_cloneListener: function(func){
+			return function(){
+				var r = func.apply(this, arguments);
+				return r;
+			};
 		},
 		/**
 		 * @method init
@@ -1594,17 +1696,19 @@
 		 */
 		init:function(){
 			//inits of all inits :)
-			var me = this;
+			var me = this,
+				k,v;
 			if(me.listeners){
 				Firebrick.utils.merge("listeners", me);
-				$.each(me.listeners, function(k,v){
-					if($.isFunction(v)){
-						me.listeners[k] = function(){
+				for(k in me.listeners){
+					if(me.listeners.hasOwnProperty(k)){
+						v = me.listeners[k];
+						if($.isFunction(v)){
 							//create a copy of the function - otherwise the all mixins point to the same function
-							return v.apply(this, arguments);
+							me.listeners[k] = me._cloneListener(v);
 						}
 					}
-				});
+				}
 				me.on(me.listeners);
 			}
 			me.fireEvent(me.overrideReadyEvent || "ready");
@@ -1616,6 +1720,37 @@
 		 * @default null
 		 */
 		mixins:null,
+		/**
+		 * reference for mixins that have been mixed in.
+		 * works only if "mixins" is a String or array or strings
+		 * @property mixedIn
+		 * @private
+		 * @type {Object}
+		 * @default: null
+		 */
+		_mixins:null,
+		/**
+		 * @method mixinAdded
+		 * @param name {String}
+		 * @return self {Object}
+		 */
+		mixinAdded: function(name){
+			var me = this;
+			if(!me._mixins){
+				me._mixins = {};
+			}
+			me._mixins[name] = 1;
+			return me;
+		},
+		/**
+		 * @method hasMixin
+		 * @param name {String}
+		 * @return {Boolean}
+		 */
+		hasMixin: function(name){
+			var me = this;
+			return !(!me._mixins || !me._mixins[name]);
+		},
 		/**
 		 * @private
 		 * @property _idPrefix
@@ -1698,12 +1833,17 @@
 			
 			if($.isPlainObject(eventName)){
 				//first argument is an object
-				var s = eventName.scope || me;
-				$.each(eventName, function(k,v){
-					if(k !== "scope" && k !== "abc"){
-						addEvent(k, v, s);
+				var s = eventName.scope || me,
+					k;
+				
+				delete eventName.scope;
+				
+				for(k in eventName){
+					if(eventName.hasOwnProperty(k)){
+						addEvent(k, eventName[k], s);
 					}
-				});
+				}
+				
 			}else{
 				//just add the event
 				scope = scope || me;
@@ -1720,14 +1860,19 @@
 		* @return {Object}
 		*/
 		off: function(eventName, callback){
-			var me = this;
+			var me = this,
+				func;
 			if(me.localEventRegistry && me.localEventRegistry[eventName]){
-				$.each(me.localEventRegistry[eventName], function(i, func){
+				
+				for(var i = 0, l = me.localEventRegistry[eventName].length; i<l ; i++){
+					func = me.localEventRegistry[eventName][i];
 					if(func.id == callback.id){
+						//delete listeners from array
 						me.localEventRegistry[eventName].splice(i, 1);
-						return false;
+						break;
 					}
-				});
+				}
+				
 			}
 			return me;
 		},
@@ -1744,9 +1889,13 @@
 				args = arguments, 
 				eventName = arguments[0];	//get first argument - i.e. the event name
 			if(events && events[eventName]){
-				$.each(events[eventName], function(i, func){
+				
+				var func, eObj = events[eventName];
+				for(var i = 0, l = eObj.length; i < l; i++){
+					func = eObj[i];
 					func.apply(func.scope || func, args);
-				});
+				}
+				
 			}
 			return me;
 		},
@@ -1762,7 +1911,7 @@
 		 * @return {Any} value from fireEvent
 		 */
 		passEvent: function(){
-			return this.fireEvent.apply(this, arguments[0]);
+			return this.fireEvent.apply(this, Firebrick.utils.stripArguments(arguments));
 		},
 	});
 	
@@ -1881,13 +2030,6 @@
 		 */
 		async:true,
 		/**
-		 * used in conjuction with Firebrick.ui
-	 	 * @property items
-		 * @type {Object}
-		 * @default null
-		 */
-		items: null,
-		/**
 		 * whether to append or overwrite the content of the target
 		 * @property appendContent
 		 * @type {Boolean}
@@ -1905,17 +2047,6 @@
 				me.startLoader();
 			}
 			
-			if(me.items){
-				if(Firebrick.ui){
-					me.tpl = Firebrick.ui.build({
-						items: me.items,
-						view: me
-					});
-				}else{
-					console.error("in order to use the items property please add Firebrick UI")
-				}
-			}
-			
 			//get the view
 			if(!me.tpl){
 				var a = Firebrick.utils.require(me._classname, function(tpl){
@@ -1929,7 +2060,7 @@
 				}
 			}else{
 				if($.isFunction(me.tpl)){
-					me.tpl = me.tpl.call(me);
+					me.tpl = me.tpl();
 				}
 				callback.call();
 			}
@@ -1950,12 +2081,12 @@
 					me.initStore();
 					//parse html with data
 					me.initView();
-					
+
 					me.fireEvent("ready");
 				});
 			});
 			
-			return me.callParent();
+			return me.callParent(arguments);
 		},
 		/**
 		* Returns the store linked to the view
@@ -1981,7 +2112,7 @@
 			var me = this;
 			me.html = me.tpl;
 			
-			if(me.autoRender){
+			if(me.autoRender && me.getTarget()){
 				me.render();
 			}
 			
@@ -2049,7 +2180,7 @@
 			 
 			if(target){
 				
-				me.fireEvent("beforeRender", me)
+				me.fireEvent("beforeRender", me);
 				
 				me.unbind();
 				
@@ -2079,8 +2210,14 @@
 		 * @method unbound
 		 */
 		unbound:function(){
-			this._state = "unbound";
-			this.fireEvent("unbound", this);
+			var me = this,
+				store = me.getStore();
+			me._state = "unbound";
+			if(store){
+				store.fireEvent("unbound", me);
+				me.store = null;
+			}
+			me.fireEvent("unbound", me);
 		},
 		/**
 		 * show target view.Base:getTarget
@@ -2124,8 +2261,8 @@
 		*/
 		initStore:function(){
 			var me = this;
-			me.store = me.store || {};
-			if(!me.store.isStore){
+			me.store = me.store;
+			if(me.store && !me.store.isStore){
 				me.store = Firebrick.createStore({data:me.store});
 			}
 			return me;
@@ -2186,7 +2323,7 @@
 		* @method init
 		*/
 		init: function(){
-			return this.callParent();
+			return this.callParent(arguments);
 		},
 		/**
 		 * @property app
@@ -2239,7 +2376,14 @@
 					}	
 				}
 			}
-			return this.callParent();
+			if(me.autoDestroy){
+				me.on("unbound", function(){
+					me.data = null;
+					me.status = "destroyed";
+					Firebrick.classes.removeClass(me);
+				});
+			}
+			return this.callParent(arguments);
 		},
 		/**
 		* Default store configurations
@@ -2346,6 +2490,12 @@
 		 */
 		root: null,
 		/**
+		 * @property autoDestroy
+		 * @type {Boolean}
+		 * @default true
+		 */
+		autoDestroy:true,
+		/**
 		* Load the store - see data.store:loadStore
 		* @example 
 		* 		load({
@@ -2447,8 +2597,9 @@
 	 * @class window
 	 * @module Global
 	 */
-	
+
 	/**
+	 * 
 	 * @property Firebrick 
 	 * @type {Object}
 	 */
