@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.35</em>
+            <em>API Docs for: 0.8.47</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -128,7 +128,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l481"><code>src\firebrick.js:481</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l507"><code>src\firebrick.js:507</code></a>
         </div>
     
 
@@ -174,7 +174,14 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
-                                <a href="#method_basicViewConfigurations">basicViewConfigurations</a>
+                                <a href="#method__basicViewConfigurations">_basicViewConfigurations</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__loadSubView">_loadSubView</a>
 
                                 
                                 
@@ -217,13 +224,6 @@
                         
                             <li class="index-item method private">
                                 <a href="#method_initSubViews">initSubViews</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method_internal_loadSubView">internal_loadSubView</a>
 
                                 
                                 
@@ -274,8 +274,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_basicViewConfigurations" class="method item private">
-    <h3 class="name"><code>basicViewConfigurations</code></h3>
+                    <div id="method__basicViewConfigurations" class="method item private">
+    <h3 class="name"><code>_basicViewConfigurations</code></h3>
 
     
         <div class="args">
@@ -322,7 +322,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l605"><code>src\firebrick.js:605</code></a>
+        <a href="../files/src_firebrick.js.html#l637"><code>src\firebrick.js:637</code></a>
         
         </p>
 
@@ -381,6 +381,114 @@
 </div>
 
                 
+                    <div id="method__loadSubView" class="method item private">
+    <h3 class="name"><code>_loadSubView</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>subView</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l600"><code>src\firebrick.js:600</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>used by initSubViews</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">subView</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>subView passed</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_bootView" class="method item private">
     <h3 class="name"><code>bootView</code></h3>
 
@@ -425,7 +533,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l486"><code>src\firebrick.js:486</code></a>
+        <a href="../files/src_firebrick.js.html#l512"><code>src\firebrick.js:512</code></a>
         
         </p>
 
@@ -541,7 +649,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l508"><code>src\firebrick.js:508</code></a>
+        <a href="../files/src_firebrick.js.html#l534"><code>src\firebrick.js:534</code></a>
         
         </p>
 
@@ -615,6 +723,17 @@
     
 
     
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>createView({...})</code></pre>
+<pre class="code prettyprint"><code>createView(&quot;MyApp.view.MyView&quot;)</code></pre>
+<pre class="code prettyprint"><code>createView(&quot;MyApp.view.MyView&quot;, {...})</code></pre>
+
+            </div>
+        </div>
+    
 </div>
 
                 
@@ -670,7 +789,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l532"><code>src\firebrick.js:532</code></a>
+        <a href="../files/src_firebrick.js.html#l564"><code>src\firebrick.js:564</code></a>
         
         </p>
 
@@ -794,7 +913,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             
         
         
-        <a href="../files/src_firebrick.js.html#l626"><code>src\firebrick.js:626</code></a>
+        <a href="../files/src_firebrick.js.html#l658"><code>src\firebrick.js:658</code></a>
         
         </p>
 
@@ -901,7 +1020,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             
         
         
-        <a href="../files/src_firebrick.js.html#l639"><code>src\firebrick.js:639</code></a>
+        <a href="../files/src_firebrick.js.html#l671"><code>src\firebrick.js:671</code></a>
         
         </p>
 
@@ -1009,7 +1128,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             
         
         
-        <a href="../files/src_firebrick.js.html#l545"><code>src\firebrick.js:545</code></a>
+        <a href="../files/src_firebrick.js.html#l577"><code>src\firebrick.js:577</code></a>
         
         </p>
 
@@ -1069,114 +1188,6 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
 </div>
 
                 
-                    <div id="method_internal_loadSubView" class="method item private">
-    <h3 class="name"><code>internal_loadSubView</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>subView</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l568"><code>src\firebrick.js:568</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>used by initSubViews</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">subView</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>subView passed</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
                     <div id="method_loadRaw" class="method item">
     <h3 class="name"><code>loadRaw</code></h3>
 
@@ -1223,7 +1234,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             
         
         
-        <a href="../files/src_firebrick.js.html#l592"><code>src\firebrick.js:592</code></a>
+        <a href="../files/src_firebrick.js.html#l624"><code>src\firebrick.js:624</code></a>
         
         </p>
 
@@ -1344,7 +1355,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             
         
         
-        <a href="../files/src_firebrick.js.html#l649"><code>src\firebrick.js:649</code></a>
+        <a href="../files/src_firebrick.js.html#l681"><code>src\firebrick.js:681</code></a>
         
         </p>
 
@@ -1469,7 +1480,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             
         
         
-        <a href="../files/src_firebrick.js.html#l619"><code>src\firebrick.js:619</code></a>
+        <a href="../files/src_firebrick.js.html#l651"><code>src\firebrick.js:651</code></a>
         
         </p>
 

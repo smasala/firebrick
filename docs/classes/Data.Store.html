@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.35</em>
+            <em>API Docs for: 0.8.47</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -128,7 +128,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l1436"><code>src\firebrick.js:1436</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l1499"><code>src\firebrick.js:1499</code></a>
         </div>
     
 
@@ -172,7 +172,21 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
-                                <a href="#method_basicStoreConfigurations">basicStoreConfigurations</a>
+                                <a href="#method__basicStoreConfigurations">_basicStoreConfigurations</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__loadStore">_loadStore</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__submit">_submit</a>
 
                                 
                                 
@@ -180,20 +194,6 @@
                         
                             <li class="index-item method">
                                 <a href="#method_createStore">createStore</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method_loadStore">loadStore</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method_submit">submit</a>
 
                                 
                                 
@@ -215,8 +215,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method_basicStoreConfigurations" class="method item private">
-    <h3 class="name"><code>basicStoreConfigurations</code></h3>
+                    <div id="method__basicStoreConfigurations" class="method item private">
+    <h3 class="name"><code>_basicStoreConfigurations</code></h3>
 
     
         <div class="args">
@@ -263,7 +263,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1481"><code>src\firebrick.js:1481</code></a>
+        <a href="../files/src_firebrick.js.html#l1544"><code>src\firebrick.js:1544</code></a>
         
         </p>
 
@@ -322,151 +322,8 @@
 </div>
 
                 
-                    <div id="method_createStore" class="method item">
-    <h3 class="name"><code>createStore</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>name</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>config</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l1442"><code>src\firebrick.js:1442</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>creates a new Firebrick.store.Base store to be used OR if a name and config are supplied, then Firebrick.create() is called</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">name</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>if string, then Firebrick:create is called</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">config</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>data to config the class with - called in conjuction when name is set</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>Firebrick.store.Base</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>    //creates a new class Firebrick.store.Base to be used
-    createStore({
-                        data:{name:&quot;bob&quot;}
-                    }); </code></pre>
-<pre class="code prettyprint"><code>    createStore(&quot;MyApp.store.MyStore&quot;, {}); //Firebrick.create() is called</code></pre>
-<pre class="code prettyprint"><code>    createStore() //returns a Store class to be used</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-                
-                    <div id="method_loadStore" class="method item private">
-    <h3 class="name"><code>loadStore</code></h3>
+                    <div id="method__loadStore" class="method item private">
+    <h3 class="name"><code>_loadStore</code></h3>
 
     
         <div class="args">
@@ -519,7 +376,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1495"><code>src\firebrick.js:1495</code></a>
+        <a href="../files/src_firebrick.js.html#l1558"><code>src\firebrick.js:1558</code></a>
         
         </p>
 
@@ -640,8 +497,8 @@
 </div>
 
                 
-                    <div id="method_submit" class="method item private">
-    <h3 class="name"><code>submit</code></h3>
+                    <div id="method__submit" class="method item private">
+    <h3 class="name"><code>_submit</code></h3>
 
     
         <div class="args">
@@ -694,7 +551,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1540"><code>src\firebrick.js:1540</code></a>
+        <a href="../files/src_firebrick.js.html#l1603"><code>src\firebrick.js:1603</code></a>
         
         </p>
 
@@ -767,6 +624,149 @@
         </div>
     
 
+    
+</div>
+
+                
+                    <div id="method_createStore" class="method item">
+    <h3 class="name"><code>createStore</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>config</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1505"><code>src\firebrick.js:1505</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>creates a new Firebrick.store.Base store to be used OR if a name and config are supplied, then Firebrick.create() is called</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>if string, then Firebrick:create is called</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">config</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>data to config the class with - called in conjuction when name is set</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>Firebrick.store.Base</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>    //creates a new class Firebrick.store.Base to be used
+    createStore({
+                        data:{name:&quot;bob&quot;}
+                    }); </code></pre>
+<pre class="code prettyprint"><code>    createStore(&quot;MyApp.store.MyStore&quot;, {}); //Firebrick.create() is called</code></pre>
+<pre class="code prettyprint"><code>    createStore() //returns a Store class to be used</code></pre>
+
+            </div>
+        </div>
     
 </div>
 
