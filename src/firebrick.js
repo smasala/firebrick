@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.8.35",
+		version: "0.8.47",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -100,6 +100,15 @@
 			}
 		},
 		
+		/**
+		 * show stackTrace at any given point by creating an error. This will only work if the application is in "dev" mode.
+		 * @method stackTrace
+		 * @param force {Boolean} [default=false] set to true to force the stacktrace in prod mode too
+		 * @return stack trace
+		 */
+		stackTrace: function(){
+			return new Error().stack;
+		},
 		/**
 		 * @method shortcut
 		 * @private
@@ -305,13 +314,28 @@
 			 */
 			_callParentConstructor: function(func, parent){
 				return function () {
-					this.callParent = function () {
-						return parent.apply(this, Firebrick.utils.stripArguments(arguments));
-					};
-                    var r = func.apply(this, arguments);
-                    delete this.callParent;
+					var me = this,
+						id = Firebrick.utils.uniqId(),
+						scopeCallParentId;
+					//if this callParent has already been set, then callParent is being call from inside a callParent call
+					//make a copy of it to ensure it set to the current value after the parent function is called
+					if(me.callParent){
+						scopeCallParentId = "_scope_callParent_" + id;
+						me[scopeCallParentId] = me.callParent;
+					}
+					me.callParent = function (args) {
+							return parent.apply(me, args);
+						};
+                    var r = func.apply(me, arguments);
+                    //restoring call function scope
+                    if(scopeCallParentId){
+                    	me.callParent = me[scopeCallParentId];
+                    	delete me[scopeCallParentId];	
+                    }else{
+                    	delete me.callParent;	
+                    }
                     return r;
-                };
+                };	
 			},
 			
 			/**
@@ -354,7 +378,9 @@
 				var me = this,
 					clazz;
 			    if(me.classRegistry[name]){
-			        clazz = me.extend(config, me.classRegistry[name]);
+			    	clazz = me.classRegistry[name];
+			    	//check if there are any config options
+			    		clazz = me.extend(config, clazz);	
 			    }else{
 			        clazz = me.define(name, config);
 			    }
@@ -382,10 +408,10 @@
 								mix._mixedIn = true;
 								Firebrick.utils.overwrite(obj, mix);
 							}
-						}else if(typeof mix == "string"){
+						}else if(typeof mix === "string"){
 							if(!obj.hasMixin(mix)){
 								obj.mixinAdded(mix);
-								mix = Firebrick.create(mix);
+								mix = Object.getPrototypeOf(Object.getPrototypeOf(Firebrick.create(mix)));
 								if(!mix){
 									new Error("unable to find mixin", obj.mixins);
 								}
@@ -508,6 +534,12 @@
 			/**
 			* Create and render a view (shorthand function)
 			* @method createView
+			* @example 
+			* 	createView({...})
+			* @example 
+			* 	createView("MyApp.view.MyView")
+			* @example
+			* 	createView("MyApp.view.MyView", {...})
 			* @param name {String} example: "MyApp.view.MyView"
 			* @param config {Object} (optional) object to config the View class with
 			* @return {Object} Firebrick.view.Base class
@@ -526,7 +558,7 @@
 						config = {};
 					}
 				}
-				config = this.basicViewConfigurations(config);
+				config = this._basicViewConfigurations(config);
 				return Firebrick.create(name, config);
 			},
 			/**
@@ -539,7 +571,7 @@
 			*/
 			defineView: function(name, config){
 				var me = this;
-				config = me.basicViewConfigurations(config);
+				config = me._basicViewConfigurations(config);
 				return Firebrick.define(name, config);
 			},
 			/**
@@ -555,10 +587,10 @@
 				if(subViews){
 					if($.isArray(subViews)){
 						for(var i = 0, l = subViews.length; i<l; i++){
-							view.subViews[i] = me.internal_loadSubView(subViews[i]);
+							view.subViews[i] = me._loadSubView(subViews[i]);
 						}
 					}else{
-						view.subViews = me.internal_loadSubView(subViews);
+						view.subViews = me._loadSubView(subViews);
 					}
 				}
 				
@@ -568,16 +600,16 @@
 			/**
 			 * used by initSubViews
 			 * @private
-			 * @method internal_loadSubView
+			 * @method _loadSubView
 			 * @param subView {Object}
 			 * @return {Object} subView passed
 			 */
-			internal_loadSubView: function(subView){
-				if($.type(subView) == "string"){
+			_loadSubView: function(subView){
+				if(typeof subView === "string"){
 					subView = Firebrick.createView(subView, {autoRender:false});
 				}else if($.isPlainObject(subView)){
 					if(subView.isView){
-						if(subView._state == "unbound"){
+						if(subView._state === "unbound"){
 							subView = subView.render();
 						}else{
 							var a = Firebrick.createView(subView._classname);
@@ -605,11 +637,11 @@
 			/**
 			* Basic view configurations when defining/creating a view with shorthand function calls
 			* @private
-			* @method basicViewConfigurations
+			* @method _basicViewConfigurations
 			* @param config {Object} (optional)
 			* @return {Object}
 			*/
-			basicViewConfigurations: function(config){
+			_basicViewConfigurations: function(config){
 				config = config || {};
 				if(!config.extend){
 					config.extend = "Firebrick.view.Base";
@@ -777,10 +809,9 @@
 				//iterate over all properties in obj2
 				var k;
 				for(k in obj2){
-					//if(obj2.hasOwnProperty(k)){
-					//include object proto properties
+					if(obj2.hasOwnProperty(k)){
 						obj1[k] = obj2[k];
-					//}
+					}
 				}
 				
 				return obj1;
@@ -865,9 +896,9 @@
 				
 				if(!me.isIntervalRunning(id)){
 					if($.isFunction(fArg)){
-						newId = me.int_applyInterval(null, arguments[0], arguments[1], arguments[2]);
+						newId = me._applyInterval(null, arguments[0], arguments[1], arguments[2]);
 					}else{
-						newId = me.int_applyInterval.apply(this, arguments);
+						newId = me._applyInterval.apply(this, arguments);
 					}
 				}
 				
@@ -875,7 +906,7 @@
 			},
 			/**
 			 * use Firebrick.utils:setInterval()
-			 * @method int_applyInterval
+			 * @method _applyInterval
 			 * @private 
 			 * @param id {String} (optional)
 			 * @param callback {Function}
@@ -883,7 +914,7 @@
 			 * @param scope {Object}
 			 * @return id {String}
 			 */
-			int_applyInterval: function(id, callback, interval, scope){
+			_applyInterval: function(id, callback, interval, scope){
 				var me = this;
 					id = id || me.uniqId();
 				
@@ -912,7 +943,7 @@
 			
 			/**
 			 * 
-			 * @use 
+			 * @example 
 			 * 		var a = function(){
 			 * 			//arguments are [["a"]]
 			 * 			return stripArguments(arguments) //return ["a"]
@@ -944,16 +975,18 @@
 			* @param name {String, Array of Strings} MyApp.controller.MyController
 			* @param callback {Function} (optional) called when last require has completed or failed
 			* @param async {Boolean} [default=true]
-			* @param data_type {String} [default='script'] jQuery ajax datatype
+			* @param dataType {String} [default='script'] jQuery ajax datatype
 			* @param ext {String} [defaults='js'] file extension.
 			* @return {Array of Strings} the files that were eventually loaded
 			*/
-			require: function(names, callback, async, data_type, ext){
+			require: function(names, callback, async, dataType, ext){
 				var me = this, 
 					path,
-					callbackResponse = {};
+					successResponses = {},
+					ajaxCounter,
+					newCallback;
 					
-				data_type = data_type || "script";
+				dataType = dataType || "script";
 				ext = ext || "js"; 
 				
 				if(!$.isArray(names)){
@@ -961,24 +994,25 @@
 				}
 				
 				//filter out requires that have already been called before
-				var unFilterednames = names;
-				names = unFilterednames.filter(function(value){
+				//copy
+				names = names.filter(function(value){
 					return !me.requiredFiles[value];
 				});
 				
 				//mark how files are to be fetched
-				var ajaxCounter = names.length,
-					newCallback = function(){	//prepare callback function
-						ajaxCounter--;
-						if(ajaxCounter === 0){
-							if(callback && $.isFunction(callback)){
-								callback.apply(this, arguments);
-							}
+				ajaxCounter = names.length;
+				
+				//prepare callback function
+				newCallback = function(){	
+					ajaxCounter--;
+					if(ajaxCounter === 0){
+						if(callback && $.isFunction(callback)){
+							callback.apply(this, arguments);
 						}
-					};
+					}
+				};
 				
 		        //iterate of each file and get them
-					
 				var name;
 				for(var i = 0, l = names.length; i<l; i++){
 					name = names[i];
@@ -986,28 +1020,57 @@
 					me.requiredFiles[name] = true;
 					path = me.getPathFromName(name, ext);
 					$.ajax({
-						async:$.type(async) == "boolean" ? async : true,
-						dataType:data_type,
+						async:typeof async === "boolean" ? async : true,
+						dataType:dataType,
 						url:path,
-						success:function(){
-							if(names.length > 1){
-								callbackResponse[name] = arguments;
-								newCallback.call(this, callbackResponse);
-								
-							}else{
-								newCallback.apply(this, arguments);
-							}
-						},
-						error:function(reponse, error, errorMessage){
-							console.warn("unable to load file/class '", name, "' at:", path);
-							console.error(error, errorMessage);
-							newCallback.apply(this, arguments);
-						}
+						success: me._requireSuccessCallback(l, name, successResponses, newCallback),
+						error: me._requireErrorCallback(name, path, newCallback)
 					});
 				}
 					
 				return names;
 			},
+			
+			/**
+			 * @private
+			 * @method _requireSuccessCallback
+			 * @param total {Integer} total number of requests
+			 * @param name {String} name of file being requested
+			 * @param successResponses {Object} reference to map of successful responses so far
+			 * @param newCallback {Function} to be called after all requests have completed
+			 * @return {Function}
+			 */
+			_requireSuccessCallback: function(total, name, successResponses, newCallback){
+				return function(){
+					if(total > 1){
+						//record responses from multiple requests into an object
+						successResponses[name] = arguments;
+						//fire callback
+						newCallback.call(this, successResponses);
+					}else{
+						//one request, simply return these arguments
+						newCallback.apply(this, arguments);
+					}
+				};
+			},
+			
+			/**
+			 * @private
+			 * @method _requireErrorCallback
+			 * @param name {String} name of file requested
+			 * @param path {String} file path
+			 * @param newCallback {Function} callback at the end of the request - important when executing multiple requests at once, to make sure
+			 * that the callback is still fired even if the last request fails
+			 * @return {Function}
+			 */
+			_requireErrorCallback:function(name, path, newCallback){ 
+				return function(reponse, error, errorMessage){
+					console.warn("unable to load file/class '", name, "' at:", path);
+					console.error(error, errorMessage);
+					newCallback.apply(this, arguments);
+				};
+			},
+			
 			/**
 			* Converts a name like "MyApp.controller.MyController" to a path MyApp/controller/MyController
 			* @private
@@ -1023,7 +1086,7 @@
 					ext = ext || "js";
 				
 				//check whether user has added the trailing / to the path
-				if(homePath.charAt(homePath.length-1) == "/"){
+				if(homePath.charAt(homePath.length-1) === "/"){
 					//remove the last "/" from path as it is added later on by name.replace
 					homePath = homePath.substr(0, homePath.length-1);
 				}
@@ -1106,7 +1169,7 @@
 			 */
 			init:function(lang){
 				var me = this;
-				if($.type(lang) == "string"){
+				if(typeof lang === "string"){
 					Firebrick.createStore({
 						url:lang,
 						autoLoad:false,
@@ -1211,7 +1274,7 @@
 				var me = this;
 				
 				if($.isPlainObject(eventName)){
-					return me.addListener_internal(eventName);
+					return me._addListener(eventName);
 				}
 				
 				if(!callback.conf){
@@ -1235,7 +1298,7 @@
 			/**
 			* Use Firebrick.events:addListeners
 			* @private
-			* @method addListener_internal
+			* @method _addListener
 			* @example
 			* 	 addListeners_internal({
 					"myEvent": function(){},
@@ -1244,7 +1307,7 @@
 				})
 			* @param {Object} object
 			*/
-			addListener_internal: function(object){
+			_addListener: function(object){
 				var me = this, 
 					scope = object.scope,
 					eventName;
@@ -1272,7 +1335,7 @@
 					if(funct.conf.callbackId || funct.conf.callbackId === 0){
 						for(var i = 0, l = reg.length; i<l; i++){
 							//compare callbackId's
-							if(reg[i].conf.callbackId == funct.conf.callbackId){
+							if(reg[i].conf.callbackId === funct.conf.callbackId){
 								//function found so remove from array of listeners
 								reg.splice(i, 1);
 								if(reg.length === 0){
@@ -1361,10 +1424,10 @@
 				var me = this;
 				//if the eventName is an object
 				if($.isPlainObject(eventName)){
-					return me.on_internal(eventName);
+					return me._on(eventName);
 				}
 				//register single event
-				return me.register_on_event(eventName, selector, callback, scope);
+				return me._registerOnEvent(eventName, selector, callback, scope);
 			},
 			/**
 			* Makes use of the jQuery .off() function
@@ -1381,18 +1444,18 @@
 			/**
 			* use Firebrick.events:on
 			* @example 
-			* 		on_internal({
+			* 		_on({
 							"a.link":{
 								click:function(){},
 								mouseover:function(){}
 							},
 							scope:this
 						}
-			* @method on_internal
+			* @method _on
 			* @param {Object} object
 			* @private
 			*/
-			on_internal: function(object){
+			_on: function(object){
 				var me = this, 
 					scope = object.scope, 
 					selector, 
@@ -1406,7 +1469,7 @@
 						events = object[selector];
 						for(eventName in events){
 							if(events.hasOwnProperty(eventName)){
-								me.register_on_event(eventName, selector, events[eventName], scope);
+								me._registerOnEvent(eventName, selector, events[eventName], scope);
 							}
 						}
 					}
@@ -1415,10 +1478,10 @@
 			},
 			/**
 			* use Firebrick.events:on
-			* @method register_on_event
+			* @method _registerOnEvent
 			* @private
 			*/
-			register_on_event: function(eventName, selector, callback, scope){
+			_registerOnEvent: function(eventName, selector, callback, scope){
 				$(document).on(eventName, selector, function(){
 					//add scope as last argument, just in case the scope of the function is changed
 					var args = Array.slice(arguments);
@@ -1459,14 +1522,14 @@
 					var me = this; 
 					
 					//name is a string - hence the user is looking to create an actual defined store
-					if($.type(name) == "string"){
+					if(typeof name === "string"){
 						//return the created class
 						var clazz = Firebrick.get(name);
 						if(clazz){
 							clazz = Firebrick.classes.extend(config, clazz);
 							clazz.init();
 						}else{
-							config = me.basicStoreConfigurations(config);
+							config = me._basicStoreConfigurations(config);
 							clazz = Firebrick.create(name, config);
 						}
 						return clazz;
@@ -1481,11 +1544,11 @@
 				/**
 				* Basic view configurations when defining/creating a view
 				* @private
-				* @method basicStoreConfigurations
+				* @method _basicStoreConfigurations
 				* @param config {Object} (optional)
 				* @return {Object}
 				*/
-				basicStoreConfigurations: function(config){
+				_basicStoreConfigurations: function(config){
 					config = config || {};
 					if(!config.extend){
 						config.extend = "Firebrick.store.Base";
@@ -1495,7 +1558,7 @@
 				/**
 				* Used by Firebrick.store.Base:load
 				* @private
-				* @method loadStore
+				* @method _loadStore
 				* @param store {Object} Firebrick.store.Base object
 				* @param {Object} options 
 				* @param {Boolean} options.async [default=store.async] 
@@ -1503,12 +1566,12 @@
 				* @param {Object} options.scope
 				* @return {Object} store
 				*/
-				loadStore: function(store, options){
+				_loadStore: function(store, options){
 					options = options || {};
 					var url = store.url,       
 						async = options.async;
 					
-					if($.type(async) != "boolean"){
+					if(typeof async !== "boolean"){
 						async = store.async;
 					}
 						
@@ -1540,12 +1603,12 @@
 				/**
 				* Submit the given store with its data to the specified url
 				* @private
-				* @method submit
+				* @method _submit
 				* @param store {Object} //Firebricks.store.Base class
 				* @param callback {Function} (optional) function to call on store submission success
 				* @return {Object} store
 				*/
-				submit: function(store, callback){
+				_submit: function(store, callback){
 					var data;
 					
 					if(store && store.url && store.url.submit){
@@ -1649,10 +1712,10 @@
 			*/
 			is: function(pattern){
 				if(pattern.indexOf("#") !== -1){
-					return window.location.hash == pattern;
+					return window.location.hash === pattern;
 				}
 				
-				return window.location.href.replace(window.location.origin) == pattern;
+				return window.location.href.replace(window.location.origin) === pattern;
 			}
 		
 		}
@@ -1866,7 +1929,7 @@
 				
 				for(var i = 0, l = me.localEventRegistry[eventName].length; i<l ; i++){
 					func = me.localEventRegistry[eventName][i];
-					if(func.id == callback.id){
+					if(func.id === callback.id){
 						//delete listeners from array
 						me.localEventRegistry[eventName].splice(i, 1);
 						break;
@@ -1889,7 +1952,6 @@
 				args = arguments, 
 				eventName = arguments[0];	//get first argument - i.e. the event name
 			if(events && events[eventName]){
-				
 				var func, eObj = events[eventName];
 				for(var i = 0, l = eObj.length; i < l; i++){
 					func = eObj[i];
@@ -1987,13 +2049,21 @@
 		 */
 		showLoading: true,
 		/**
-		* State the view is current in. "initial", "rendered"
+		* State the view is current in. "initial", "rendered", "unbound", "destroyed"
 		* @property _state
 		* @type {String}
 		* @private
 		* @default "initial"
 		*/
 		_state:"initial",
+		/**
+		 * if set to true, the content of the view will receive its own div container where the data is bound to.
+		 * This means content is rendered to the specified .target but bound within its own constraints
+		 * @property enclosedBind
+		 * @type {Boolean}
+		 * @default false
+		 */
+		enclosedBind:false,
 		/**
 		 * define subviews to load after creation of this view
 		 * @example 
@@ -2031,11 +2101,33 @@
 		async:true,
 		/**
 		 * whether to append or overwrite the content of the target
-		 * @property appendContent
+		 * @property appendTarget
 		 * @type {Boolean}
 		 * @default false
 		 */
-		appendContent:false,
+		appendTarget:false,
+		/**
+		 * custom attribute to add to the element to mark as bound
+		 * @property bindAttribute
+		 * @type {String}
+		 * @default "fb-view-bind"
+		 */
+		bindAttribute: "fb-view-bind",
+		/**
+		 * id when enclosedBind = true
+		 * @property enclosedBindIdPrefix
+		 * @type {String}
+		 * @default "fb-view-enclosed-bind"
+		 */
+		enclosedBindIdPrefix: "fb-view-enclosed-bind",
+		/**
+		 * @method getEnclosedBindId
+		 * @return {String}
+		 */
+		getEnclosedBindId: function(){
+			var me = this;
+			return me.enclosedBindIdPrefix + "-" + me.getClassId();
+		},
 		/**
 		 * @private
 		 * @method _init
@@ -2101,7 +2193,9 @@
 		* @return {Object}
 		*/
 		getData: function(){
-			return this.getStore().getData();
+			var me = this,
+				store = me.getStore();
+			return store ? store.getData() : {};
 		},
 		/**
 		* Construct the view with template and data binding
@@ -2127,23 +2221,94 @@
 		},
 		/**
 		 * @method getTarget
-		* @return {Object} jquery object
+		* @return {Object|Null} jquery object
 		*/
 		getTarget: function(){
 			return Firebrick.views.getTarget(this.target);
 		},
+		
 		/**
-		 * Called by view.Base:render()
+		 * @method isBound
+		 * @param target {Object} jQuery object
+		 * @return {Boolean}
+		 */
+		isBound: function(target){
+			
+			if(target && target.length && target.attr("fb-view.bind")){
+				return true;
+			}
+			
+			return false;
+		},
+		
+		/**
+		 * @method getBindTarget
+		 * @return {Object|Null} jQuery object
+		 */
+		getBindTarget: function(){
+			var me = this,
+				t;
+			
+			if(me.enclosedBind){
+				t = $("#" + me.getEnclosedBindId());
+				t = t.length ? t : null;
+			}else{
+				t = me.getTarget();
+			}
+			
+			return t;
+		},
+		
+		/**
+		 * unbind and remove from DOM
+		 * @method detroy
+		 * @return {Object} self
+		 */
+		destroy: function(){
+			var me = this;
+			me.unbind().remove();
+			me._state = "destroyed";
+			return me;
+		},
+		
+		/**
+		 * remove from dom
+		 * @method remove
+		 * @return self {Object}
+		 */
+		remove: function(){
+			var me = this, 
+				t = me.getBindTarget();
+			
+			if(t){
+				//jquery remove dom
+				if(me.enclosedBind){
+					t.remove();
+				}else{
+					t.empty();	
+				}
+				
+			}
+			
+			return me;
+		},
+		
+		/**
+		 * unbind the data from this view
 		 * @method unbind
+		 * @return self {Object}
 		 */
 		unbind:function(){
 			var me = this,
-				target = me.getTarget();
-			if(target && target.attr("fb-view-bind")){
-				var el = target[0];
+				target = me.getBindTarget(),
+				el;
+			
+			if(me.isBound(target)){
+				el = target[0];
 				ko.cleanNode(el);
-				target.removeAttr("fb-view-bind");
+				target.removeAttr(me.bindAttribute);
 			}
+			return me;
 		},
 		/**
 		 * Called by view.Base:render()
@@ -2151,22 +2316,39 @@
 		 */
 		bind: function(){
 			var me = this,
-			target = me.getTarget();
-			if(target && !target.attr("fb-view-bind")){
-				var el = target[0];
-				Firebrick.views.renderTo(target, me.html, me.appendContent);
+				target = me.getTarget(),
+				bindTarget = me.getBindTarget(),
+				el,
+				data,
+				html = me.html,
+				enclosedWrapper;
+
+			if(me.enclosedBind && !bindTarget){
+				if(target){
+					enclosedWrapper = "<div id='" + me.getEnclosedBindId() + "'></div>";
+					Firebrick.views.renderTo(target, enclosedWrapper, me.appendTarget);
+					bindTarget = me.getBindTarget(); //look again
+				}
+			}
+			
+			if(target && bindTarget && !me.isBound(bindTarget)){
+				el = bindTarget[0];
+				Firebrick.views.renderTo(bindTarget, html, me.appendTarget);
 				me.hide();
 				me._state = "rendered";
-				var data = me.getData();
-				if(data && !$.isEmptyObject(data)){
-					target.attr("fb-view-bind", me.getClassId());
+				data = me.getData();
+				//if(data && !$.isEmptyObject(data)){
+					bindTarget.attr(me.bindAttribute, me.getClassId());
 					ko.applyBindings(data, el);
 					me.setDisposeCallback(el);	
-				}
+				//}
 				me.stopLoader();
 				me.show();
 				me.fireEvent("rendered", me);
+			}else{
+				console.info("target or bindTarget where not found, unable to render and bind the data", target, bindTarget);
 			}
+			
 		},
 		
 		/**
@@ -2199,8 +2381,9 @@
 		 * @param el {HTMLElement}
 		 */
 		setDisposeCallback: function(el){
+			var me = this;
 			ko.utils.domNodeDisposal.addDisposeCallback(el, function(el){
-				var view = Firebrick.getById($(el).attr("fb-view-bind"));
+				var view = Firebrick.getById( $(el).attr( me.bindAttribute ) );
 				view.unbound();
 			});
 		},
@@ -2378,9 +2561,11 @@
 			}
 			if(me.autoDestroy){
 				me.on("unbound", function(){
-					me.data = null;
-					me.status = "destroyed";
-					Firebrick.classes.removeClass(me);
+					if(me.autoDestroy){
+						me.data = null;
+						me.status = "destroyed";
+						Firebrick.classes.removeClass(me);	
+					}
 				});
 			}
 			return this.callParent(arguments);
@@ -2460,8 +2645,8 @@
 		 */
 		autoLoad:false,
 		/**
+		 * 
 		 * data store - use setData()
-		 * @private
 		 * @property data
 		 * @type {Object}
 		 * @default null
@@ -2490,6 +2675,7 @@
 		 */
 		root: null,
 		/**
+		 * if false, the store won't delete when a view/component it is linked to is unbound/removed from the UI
 		 * @property autoDestroy
 		 * @type {Boolean}
 		 * @default true
@@ -2507,7 +2693,7 @@
 		* @return {Object} self
 		*/
 		load: function(options){
-			return Firebrick.data.store.loadStore(this, options);
+			return Firebrick.data.store._loadStore(this, options);
 		},
 		/**
 		* Returns the store data attribute
@@ -2548,14 +2734,14 @@
 			var me = this;
 			
 			if(!me.dataInitialised){
-				if(!data.__ko_mapping__){
+				if(!data.__ko_mapping__){ 				// jshint ignore:line
 					me._initialData = data;
 					data = ko.mapping.fromJS(data);
 				}
 				me.data = data;
 				me.dataInitialised = true;
 			}else{
-				if(!data.__ko_mapping__){
+				if(!data.__ko_mapping__){				// jshint ignore:line
 					me._initialData = data;
 					ko.mapping.fromJS(data, me.data);
 				}else{
@@ -2572,7 +2758,7 @@
 		* @return {Object} self
 		*/
 		submit: function(){
-			return Firebrick.data.store.submit(this);
+			return Firebrick.data.store._submit(this);
 		},
 		/**
 		* convert store data to a plain object
@@ -2581,7 +2767,18 @@
 		*/
 		toPlainObject: function(){
 			var me = this;
-			return $.isFunction(me.data) ? ko.toJS(me.data) : me.data;
+			
+			//check if knockout data, if so, convert back to simple js object
+			if($.isFunction(me.data)){
+				return ko.toJs(me.data);
+			}else if($.isPlainObject(me.data)){
+				if(me.data.__ko_mapping__){					// jshint ignore:line
+					return ko.mapping.toJS(me.data);
+				}
+			}
+			
+			
+			return me.data;
 		},
 		/**
 		* Convert store data to json string

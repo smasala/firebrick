@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.35</em>
+            <em>API Docs for: 0.8.47</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -128,7 +128,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l1175"><code>src\firebrick.js:1175</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l1238"><code>src\firebrick.js:1238</code></a>
         </div>
     
 
@@ -173,6 +173,27 @@
 
                     <ul class="index-list methods">
                         
+                            <li class="index-item method private">
+                                <a href="#method__addListener">_addListener</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__on">_on</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__registerOnEvent">_registerOnEvent</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method">
                                 <a href="#method_addListener">addListener</a>
 
@@ -180,8 +201,8 @@
                                 
                             </li>
                         
-                            <li class="index-item method private">
-                                <a href="#method_addListener_internal">addListener_internal</a>
+                            <li class="index-item method">
+                                <a href="#method_"></a>
 
                                 
                                 
@@ -189,13 +210,6 @@
                         
                             <li class="index-item method private">
                                 <a href="#method_createEventData">createEventData</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_"></a>
 
                                 
                                 
@@ -217,20 +231,6 @@
                         
                             <li class="index-item method">
                                 <a href="#method_on">on</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method_on_internal">on_internal</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method_register_on_event">register_on_event</a>
 
                                 
                                 
@@ -281,6 +281,271 @@
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__addListener" class="method item private">
+    <h3 class="name"><code>_addListener</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>object</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1298"><code>src\firebrick.js:1298</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Use Firebrick.events:addListeners</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">object</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code> addListeners_internal({
+                &quot;myEvent&quot;: function(){},
+                &quot;mySecondEvent&quot;: function(){},
+                scope: this
+            })</code></pre>
+
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method__on" class="method item private">
+    <h3 class="name"><code>_on</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>object</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1444"><code>src\firebrick.js:1444</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>use Firebrick.events:on</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">object</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>    _on({
+                        &quot;a.link&quot;:{
+                            click:function(){},
+                            mouseover:function(){}
+                        },
+                        scope:this
+                    }</code></pre>
+
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method__registerOnEvent" class="method item private">
+    <h3 class="name"><code>_registerOnEvent</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1479"><code>src\firebrick.js:1479</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>use Firebrick.events:on</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="method_addListener" class="method item">
@@ -341,7 +606,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1194"><code>src\firebrick.js:1194</code></a>
+        <a href="../files/src_firebrick.js.html#l1257"><code>src\firebrick.js:1257</code></a>
         
         </p>
 
@@ -446,217 +711,6 @@
 </div>
 
                 
-                    <div id="method_addListener_internal" class="method item private">
-    <h3 class="name"><code>addListener_internal</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>object</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l1235"><code>src\firebrick.js:1235</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Use Firebrick.events:addListeners</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">object</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code> addListeners_internal({
-                &quot;myEvent&quot;: function(){},
-                &quot;mySecondEvent&quot;: function(){},
-                scope: this
-            })</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-                
-                    <div id="method_createEventData" class="method item private">
-    <h3 class="name"><code>createEventData</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>eventName</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l1318"><code>src\firebrick.js:1318</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>creates the event object to be passed as argument when event is fired</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">eventName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>event object</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
                     <div id="method_" class="method item">
     <h3 class="name"><code></code></h3>
 
@@ -711,7 +765,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1369"><code>src\firebrick.js:1369</code></a>
+        <a href="../files/src_firebrick.js.html#l1432"><code>src\firebrick.js:1432</code></a>
         
         </p>
 
@@ -797,6 +851,114 @@
 </div>
 
                 
+                    <div id="method_createEventData" class="method item private">
+    <h3 class="name"><code>createEventData</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>eventName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1381"><code>src\firebrick.js:1381</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>creates the event object to be passed as argument when event is fired</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>event object</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_eventCounter" class="method item private">
     <h3 class="name"><code>eventCounter</code></h3>
 
@@ -831,7 +993,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1187"><code>src\firebrick.js:1187</code></a>
+        <a href="../files/src_firebrick.js.html#l1250"><code>src\firebrick.js:1250</code></a>
         
         </p>
 
@@ -902,7 +1064,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1290"><code>src\firebrick.js:1290</code></a>
+        <a href="../files/src_firebrick.js.html#l1353"><code>src\firebrick.js:1353</code></a>
         
         </p>
 
@@ -1033,7 +1195,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1342"><code>src\firebrick.js:1342</code></a>
+        <a href="../files/src_firebrick.js.html#l1405"><code>src\firebrick.js:1405</code></a>
         
         </p>
 
@@ -1144,168 +1306,6 @@
 </div>
 
                 
-                    <div id="method_on_internal" class="method item private">
-    <h3 class="name"><code>on_internal</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>object</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l1381"><code>src\firebrick.js:1381</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>use Firebrick.events:on</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">object</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>    on_internal({
-                        &quot;a.link&quot;:{
-                            click:function(){},
-                            mouseover:function(){}
-                        },
-                        scope:this
-                    }</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-                
-                    <div id="method_register_on_event" class="method item private">
-    <h3 class="name"><code>register_on_event</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l1416"><code>src\firebrick.js:1416</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>use Firebrick.events:on</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="method_removeListener" class="method item">
     <h3 class="name"><code>removeListener</code></h3>
 
@@ -1354,7 +1354,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1261"><code>src\firebrick.js:1261</code></a>
+        <a href="../files/src_firebrick.js.html#l1324"><code>src\firebrick.js:1324</code></a>
         
         </p>
 
@@ -1459,7 +1459,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1329"><code>src\firebrick.js:1329</code></a>
+        <a href="../files/src_firebrick.js.html#l1392"><code>src\firebrick.js:1392</code></a>
         
         </p>
 
@@ -1523,7 +1523,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1180"><code>src\firebrick.js:1180</code></a>
+        <a href="../files/src_firebrick.js.html#l1243"><code>src\firebrick.js:1243</code></a>
         
         </p>
 

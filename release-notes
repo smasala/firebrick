@@ -1,3 +1,14 @@
+v0.8.47
+----------------------------
+* copy only own properties in a mixin
+* remove "evil twins" http://archive.oreilly.com/pub/a/javascript/excerpts/javascript-good-parts/bad-parts.html
+* $.type to typeof
+* remove function creation inside loop - ajax request
+* change view property "appendContent" to "appendTarget"
+* bug fix when another function with "callParent" abilities within a "callParent" call
+* view now has a "enclosedBind" property to bind the data to the element but not the target the element is rendered to - wraps element/view with its own div
+* fix submit function on stores
+
 v0.8.35
 ----------------------------
 * add Firebrick.classes.overwrite to overwrite defined classes

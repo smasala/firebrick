@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.35</em>
+            <em>API Docs for: 0.8.47</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -128,7 +128,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l715"><code>src\firebrick.js:715</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l747"><code>src\firebrick.js:747</code></a>
         </div>
     
 
@@ -173,6 +173,27 @@
 
                     <ul class="index-list methods">
                         
+                            <li class="index-item method private">
+                                <a href="#method__applyInterval">_applyInterval</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__requireErrorCallback">_requireErrorCallback</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__requireSuccessCallback">_requireSuccessCallback</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method">
                                 <a href="#method_clearInterval">clearInterval</a>
 
@@ -203,13 +224,6 @@
                         
                             <li class="index-item method private">
                                 <a href="#method_initSplash">initSplash</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method_int_applyInterval">int_applyInterval</a>
 
                                 
                                 
@@ -323,6 +337,501 @@
                 <h2 class="off-left">Methods</h2>
 
                 
+                    <div id="method__applyInterval" class="method item private">
+    <h3 class="name"><code>_applyInterval</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>id</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>interval</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>scope</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l907"><code>src\firebrick.js:907</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>use Firebrick.utils:setInterval()</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">id</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>(optional)</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">interval</code>
+                        <span class="type">Interger</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">scope</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                    <p>id</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__requireErrorCallback" class="method item private">
+    <h3 class="name"><code>_requireErrorCallback</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>path</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>newCallback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1057"><code>src\firebrick.js:1057</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>name of file requested</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">path</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>file path</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">newCallback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>callback at the end of the request - important when executing multiple requests at once, to make sure
+that the callback is still fired even if the last request fails</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__requireSuccessCallback" class="method item private">
+    <h3 class="name"><code>_requireSuccessCallback</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>total</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>successResponses</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>newCallback</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1034"><code>src\firebrick.js:1034</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">total</code>
+                        <span class="type">Integer</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>total number of requests</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>name of file being requested</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">successResponses</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>reference to map of successful responses so far</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">newCallback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>to be called after all requests have completed</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_clearInterval" class="method item">
     <h3 class="name"><code>clearInterval</code></h3>
 
@@ -365,7 +874,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l839"><code>src\firebrick.js:839</code></a>
+        <a href="../files/src_firebrick.js.html#l870"><code>src\firebrick.js:870</code></a>
         
         </p>
 
@@ -445,7 +954,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l760"><code>src\firebrick.js:760</code></a>
+        <a href="../files/src_firebrick.js.html#l792"><code>src\firebrick.js:792</code></a>
         
         </p>
 
@@ -528,7 +1037,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l824"><code>src\firebrick.js:824</code></a>
+        <a href="../files/src_firebrick.js.html#l855"><code>src\firebrick.js:855</code></a>
         
         </p>
 
@@ -685,7 +1194,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1011"><code>src\firebrick.js:1011</code></a>
+        <a href="../files/src_firebrick.js.html#l1074"><code>src\firebrick.js:1074</code></a>
         
         </p>
 
@@ -803,7 +1312,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l741"><code>src\firebrick.js:741</code></a>
+        <a href="../files/src_firebrick.js.html#l773"><code>src\firebrick.js:773</code></a>
         
         </p>
 
@@ -861,178 +1370,6 @@ used by Firebrick:ready</p>
 </div>
 
                 
-                    <div id="method_int_applyInterval" class="method item private">
-    <h3 class="name"><code>int_applyInterval</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>id</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>interval</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>scope</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">String</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l876"><code>src\firebrick.js:876</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>use Firebrick.utils:setInterval()</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">id</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>(optional)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">interval</code>
-                        <span class="type">Interger</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">scope</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    <p>id</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
                     <div id="method_isIntervalRunning" class="method item">
     <h3 class="name"><code>isIntervalRunning</code></h3>
 
@@ -1079,7 +1416,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l903"><code>src\firebrick.js:903</code></a>
+        <a href="../files/src_firebrick.js.html#l934"><code>src\firebrick.js:934</code></a>
         
         </p>
 
@@ -1181,7 +1518,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1064"><code>src\firebrick.js:1064</code></a>
+        <a href="../files/src_firebrick.js.html#l1127"><code>src\firebrick.js:1127</code></a>
         
         </p>
 
@@ -1287,7 +1624,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l788"><code>src\firebrick.js:788</code></a>
+        <a href="../files/src_firebrick.js.html#l819"><code>src\firebrick.js:819</code></a>
         
         </p>
 
@@ -1442,7 +1779,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l769"><code>src\firebrick.js:769</code></a>
+        <a href="../files/src_firebrick.js.html#l801"><code>src\firebrick.js:801</code></a>
         
         </p>
 
@@ -1544,7 +1881,7 @@ used by Firebrick:ready</p>
             
                 <li class="arg">
                     
-                        <code>data_type</code>
+                        <code>dataType</code>
                     
                 </li>
             
@@ -1587,7 +1924,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l939"><code>src\firebrick.js:939</code></a>
+        <a href="../files/src_firebrick.js.html#l970"><code>src\firebrick.js:970</code></a>
         
         </p>
 
@@ -1658,7 +1995,7 @@ used by Firebrick:ready</p>
             
                 <li class="param">
                     
-                        <code class="param-name">data_type</code>
+                        <code class="param-name">dataType</code>
                         <span class="type">String</span>
                     
 
@@ -1781,7 +2118,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l852"><code>src\firebrick.js:852</code></a>
+        <a href="../files/src_firebrick.js.html#l883"><code>src\firebrick.js:883</code></a>
         
         </p>
 
@@ -1921,7 +2258,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l913"><code>src\firebrick.js:913</code></a>
+        <a href="../files/src_firebrick.js.html#l944"><code>src\firebrick.js:944</code></a>
         
         </p>
 
@@ -1975,6 +2312,23 @@ used by Firebrick:ready</p>
     
 
     
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>     var a = function(){
+         //arguments are [[&quot;a&quot;]]
+         return stripArguments(arguments) //return [&quot;a&quot;]
+     }
+     var b = function(){
+         return a(arguments); //note not called with apply
+     }
+    b(&quot;a&quot;)</code></pre>
+<p> used to strip the an arguments &quot;array&quot; inside an wrapper &quot;array&quot; - <a href="http://jsfiddle.net/smasala/ppdtLmag/">http://jsfiddle.net/smasala/ppdtLmag/</a></p>
+
+            </div>
+        </div>
+    
 </div>
 
                 
@@ -2014,7 +2368,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1051"><code>src\firebrick.js:1051</code></a>
+        <a href="../files/src_firebrick.js.html#l1114"><code>src\firebrick.js:1114</code></a>
         
         </p>
 
@@ -2084,7 +2438,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1046"><code>src\firebrick.js:1046</code></a>
+        <a href="../files/src_firebrick.js.html#l1109"><code>src\firebrick.js:1109</code></a>
         
         </p>
 
@@ -2130,7 +2484,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l727"><code>src\firebrick.js:727</code></a>
+        <a href="../files/src_firebrick.js.html#l759"><code>src\firebrick.js:759</code></a>
         
         </p>
 
@@ -2177,7 +2531,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l720"><code>src\firebrick.js:720</code></a>
+        <a href="../files/src_firebrick.js.html#l752"><code>src\firebrick.js:752</code></a>
         
         </p>
 
@@ -2224,7 +2578,7 @@ used by Firebrick:ready</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l734"><code>src\firebrick.js:734</code></a>
+        <a href="../files/src_firebrick.js.html#l766"><code>src\firebrick.js:766</code></a>
         
         </p>
 
