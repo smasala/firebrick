@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.47</em>
+            <em>API Docs for: 0.8.48</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -164,7 +164,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: &quot;0.8.47&quot;,
+		version: &quot;0.8.48&quot;,
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -411,7 +411,7 @@
 				for(k in me.classRegistry){
 					if(me.classRegistry.hasOwnProperty(k)){
 						v = me.classRegistry[k];
-						if (v.getClassId &amp;&amp; v.getClassId() === id) {
+						if (v.getId &amp;&amp; v.getId() === id) {
 							clazz = v;
 							//found class, stop iteration
 							break;
@@ -1947,12 +1947,12 @@
 		 */
 		_idPrefix: &quot;fb-&quot;,
 		/**
-		 * use Firebrick.class.Base:getClassId
+		 * use Firebrick.class.Base:getId
 		 * @private 
-		 * @property _classId
+		 * @property id
 		 * @type {String}
 		 */
-		_classId:null,
+		id:null,
 		/**
 		 * event registry
 		 * @private
@@ -1960,19 +1960,22 @@
 		 * @type {Object} map
 		 */
 		localEventRegistry: null,
+		
 		/**
-		 * get the id for the current class
-		 * @method getClassId
-		 * @return {String}
+		 * @method getId 
+		 * @return {String} uniqueId
 		 */
-		getClassId: function(){
-			var me = this;
-			if(!me._classId){
+		getId: function(){
+			var me = this,
+				id = me.id;
+			if(!id){
 				//generate an id if it doesnt have one already
-				me._classId = me._idPrefix + Firebrick.utils.uniqId();
+				id = me._idPrefix + Firebrick.utils.uniqId();
+				me.id = id;
 			}
-			return me._classId;
+			return id;
 		},
+		
 		/**
 		 * shorthand for defining class listeners so you don&#x27;t have to create the init function and use this.on()
 		 * @example
@@ -2252,7 +2255,7 @@
 		 */
 		getEnclosedBindId: function(){
 			var me = this;
-			return me.enclosedBindIdPrefix + &quot;-&quot; + me.getClassId();
+			return me.enclosedBindIdPrefix + &quot;-&quot; + me.getId();
 		},
 		/**
 		 * @private
@@ -2464,7 +2467,7 @@
 				me._state = &quot;rendered&quot;;
 				data = me.getData();
 				//if(data &amp;&amp; !$.isEmptyObject(data)){
-					bindTarget.attr(me.bindAttribute, me.getClassId());
+					bindTarget.attr(me.bindAttribute, me.getId());
 					ko.applyBindings(data, el);
 					me.setDisposeCallback(el);	
 				//}
@@ -2600,7 +2603,7 @@
 					//if still loading...
 					if(me.loading){
 						me.hide();
-						t.before(&quot;&lt;div id=&#x27;fb-loader-&quot; + me.getClassId() + &quot;&#x27;&gt;&quot; + me.loadingTpl + &quot;&lt;/div&gt;&quot;);
+						t.before(&quot;&lt;div id=&#x27;fb-loader-&quot; + me.getId() + &quot;&#x27;&gt;&quot; + me.loadingTpl + &quot;&lt;/div&gt;&quot;);
 					}
 				}, 1);
 				
@@ -2613,7 +2616,7 @@
 		stopLoader: function(){
 			var me = this;
 			if(me.loading){
-				$(&quot;#fb-loader-&quot; + me.getClassId()).remove();
+				$(&quot;#fb-loader-&quot; + me.getId()).remove();
 				me.show();
 				me.loading = false;
 			}
