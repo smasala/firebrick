@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.47</em>
+            <em>API Docs for: 0.8.48</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -132,7 +132,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l2497"><code>src\firebrick.js:2497</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l2500"><code>src\firebrick.js:2500</code></a>
         </div>
     
 
@@ -200,7 +200,7 @@
                             </li>
                         
                             <li class="index-item method inherited">
-                                <a href="#method_getClassId">getClassId</a>
+                                <a href="#method_getId">getId</a>
 
                                 
                                 
@@ -259,13 +259,6 @@
                     <ul class="index-list properties extends">
                         
                             <li class="index-item property private inherited">
-                                <a href="#property__classId">_classId</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property private inherited">
                                 <a href="#property__idPrefix">_idPrefix</a>
 
                                 
@@ -274,6 +267,13 @@
                         
                             <li class="index-item property">
                                 <a href="#property_app">app</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private inherited">
+                                <a href="#property_id">id</a>
 
                                 
                                 
@@ -586,7 +586,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1942"><code>src\firebrick.js:1942</code></a>
+        <a href="../files/src_firebrick.js.html#l1945"><code>src\firebrick.js:1945</code></a>
         
         </p>
 
@@ -663,8 +663,8 @@
 </div>
 
                 
-                    <div id="method_getClassId" class="method item inherited">
-    <h3 class="name"><code>getClassId</code></h3>
+                    <div id="method_getId" class="method item inherited">
+    <h3 class="name"><code>getId</code></h3>
 
     
         <span class="paren">()</span>
@@ -692,11 +692,11 @@
         
             
                 <p>Inherited from
-                <a href="../classes/class.Base.html#method_getClassId">class.Base</a>:
+                <a href="../classes/class.Base.html#method_getId">class.Base</a>:
             
         
         
-        <a href="../files/src_firebrick.js.html#l1837"><code>src\firebrick.js:1837</code></a>
+        <a href="../files/src_firebrick.js.html#l1838"><code>src\firebrick.js:1838</code></a>
         
         </p>
 
@@ -707,8 +707,7 @@
     </div>
 
     <div class="description">
-        <p>get the id for the current class</p>
-
+        
     </div>
 
     
@@ -722,6 +721,8 @@
                     
                         <span class="type">String</span>:
                     
+                    <p>uniqueId</p>
+
                 
             </div>
         </div>
@@ -863,7 +864,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2504"><code>src\firebrick.js:2504</code></a>
+        <a href="../files/src_firebrick.js.html#l2507"><code>src\firebrick.js:2507</code></a>
         
         </p>
 
@@ -1037,7 +1038,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1918"><code>src\firebrick.js:1918</code></a>
+        <a href="../files/src_firebrick.js.html#l1921"><code>src\firebrick.js:1921</code></a>
         
         </p>
 
@@ -1166,7 +1167,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1861"><code>src\firebrick.js:1861</code></a>
+        <a href="../files/src_firebrick.js.html#l1864"><code>src\firebrick.js:1864</code></a>
         
         </p>
 
@@ -1313,7 +1314,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1964"><code>src\firebrick.js:1964</code></a>
+        <a href="../files/src_firebrick.js.html#l1967"><code>src\firebrick.js:1967</code></a>
         
         </p>
 
@@ -1394,50 +1395,6 @@
                 <h2 class="off-left">Properties</h2>
 
                 
-                    <div id="property__classId" class="property item private inherited">
-    <h3 class="name"><code>_classId</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property__classId">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l1823"><code>src\firebrick.js:1823</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>use Firebrick.class.Base:getClassId</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="property__idPrefix" class="property item private inherited">
     <h3 class="name"><code>_idPrefix</code></h3>
     <span class="type">String</span>
@@ -1504,7 +1461,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2511"><code>src\firebrick.js:2511</code></a>
+        <a href="../files/src_firebrick.js.html#l2514"><code>src\firebrick.js:2514</code></a>
         
         </p>
 
@@ -1535,6 +1492,50 @@
 </div>
 
                 
+                    <div id="property_id" class="property item private inherited">
+    <h3 class="name"><code>id</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/class.Base.html#property_id">class.Base</a>:
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1823"><code>src\firebrick.js:1823</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>use Firebrick.class.Base:getId</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="property_listeners" class="property item">
     <h3 class="name"><code>listeners</code></h3>
     <span class="type">Function</span>
@@ -1558,7 +1559,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2529"><code>src\firebrick.js:2529</code></a>
+        <a href="../files/src_firebrick.js.html#l2532"><code>src\firebrick.js:2532</code></a>
         
         </p>
 
@@ -1737,7 +1738,7 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2520"><code>src\firebrick.js:2520</code></a>
+        <a href="../files/src_firebrick.js.html#l2523"><code>src\firebrick.js:2523</code></a>
         
         </p>
 

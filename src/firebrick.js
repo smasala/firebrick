@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.8.47",
+		version: "0.8.48",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -285,7 +285,7 @@
 				for(k in me.classRegistry){
 					if(me.classRegistry.hasOwnProperty(k)){
 						v = me.classRegistry[k];
-						if (v.getClassId && v.getClassId() === id) {
+						if (v.getId && v.getId() === id) {
 							clazz = v;
 							//found class, stop iteration
 							break;
@@ -1821,12 +1821,12 @@
 		 */
 		_idPrefix: "fb-",
 		/**
-		 * use Firebrick.class.Base:getClassId
+		 * use Firebrick.class.Base:getId
 		 * @private 
-		 * @property _classId
+		 * @property id
 		 * @type {String}
 		 */
-		_classId:null,
+		id:null,
 		/**
 		 * event registry
 		 * @private
@@ -1834,19 +1834,22 @@
 		 * @type {Object} map
 		 */
 		localEventRegistry: null,
+		
 		/**
-		 * get the id for the current class
-		 * @method getClassId
-		 * @return {String}
+		 * @method getId 
+		 * @return {String} uniqueId
 		 */
-		getClassId: function(){
-			var me = this;
-			if(!me._classId){
+		getId: function(){
+			var me = this,
+				id = me.id;
+			if(!id){
 				//generate an id if it doesnt have one already
-				me._classId = me._idPrefix + Firebrick.utils.uniqId();
+				id = me._idPrefix + Firebrick.utils.uniqId();
+				me.id = id;
 			}
-			return me._classId;
+			return id;
 		},
+		
 		/**
 		 * shorthand for defining class listeners so you don't have to create the init function and use this.on()
 		 * @example
@@ -2126,7 +2129,7 @@
 		 */
 		getEnclosedBindId: function(){
 			var me = this;
-			return me.enclosedBindIdPrefix + "-" + me.getClassId();
+			return me.enclosedBindIdPrefix + "-" + me.getId();
 		},
 		/**
 		 * @private
@@ -2338,7 +2341,7 @@
 				me._state = "rendered";
 				data = me.getData();
 				//if(data && !$.isEmptyObject(data)){
-					bindTarget.attr(me.bindAttribute, me.getClassId());
+					bindTarget.attr(me.bindAttribute, me.getId());
 					ko.applyBindings(data, el);
 					me.setDisposeCallback(el);	
 				//}
@@ -2474,7 +2477,7 @@
 					//if still loading...
 					if(me.loading){
 						me.hide();
-						t.before("<div id='fb-loader-" + me.getClassId() + "'>" + me.loadingTpl + "</div>");
+						t.before("<div id='fb-loader-" + me.getId() + "'>" + me.loadingTpl + "</div>");
 					}
 				}, 1);
 				
@@ -2487,7 +2490,7 @@
 		stopLoader: function(){
 			var me = this;
 			if(me.loading){
-				$("#fb-loader-" + me.getClassId()).remove();
+				$("#fb-loader-" + me.getId()).remove();
 				me.show();
 				me.loading = false;
 			}
