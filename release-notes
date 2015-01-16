@@ -1,3 +1,15 @@
+v0.9.0
+----------------------------
+* map from json string aswell (stores)
+* dataType store fix and camelcase
+* ajax store fix - get on load, post on submit - loadProtocol and submitProtocol for configuration
+* stringifyData property for store - creates one parameter e.g: {data: "JSON STRING"}
+* Array.slice fix for chrome
+* store.load takes function as single argument as well... instead of {callback:function(){}}
+* mixin bug fix
+* improve how ko mapped object is checked when setting data by using function ko.mapping.isMapped
+* fix recursive listener clone during init
+
 v0.8.48
 ----------------------------
 * classes: change getClassId to getId and _classId to id

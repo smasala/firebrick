@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.8.48",
+		version: "0.9.0",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -349,6 +349,7 @@
 				var me = this,
 					objTemp = {},
                     p;
+
 				//iterate over all obj parameters
 				for (p in obj) {
 					if (obj.hasOwnProperty(p)) {
@@ -380,9 +381,9 @@
 			    if(me.classRegistry[name]){
 			    	clazz = me.classRegistry[name];
 			    	//check if there are any config options
-			    		clazz = me.extend(config, clazz);	
+		    		clazz = me.extend(config, clazz);	
 			    }else{
-			        clazz = me.define(name, config);
+			        clazz = me.define(name, config || {});
 			    }
 			    
 			    if(clazz.init){
@@ -399,14 +400,17 @@
 			 * @param mix {Object} optional used by recursive
 			 * @return {Object} clazz
 			 */
-			_initMixins: function(clazz){
-				if(clazz.mixins){
+			_initMixins: function(clazz, name){
+				var me = this;
+				//all mixins are mixed in when the class is defined - so only look if the object has the property itself (not parent)
+				//so that mixins are not mixed twice or more
+				if(clazz.hasOwnProperty("mixins")){
 					
+					//mixit check to make sure that the mixin hasn't been mixed in already
 					var mixit = function(obj, mix){
 						if($.isPlainObject(mix)){
 							if(!mix._mixedIn){
-								mix._mixedIn = true;
-								Firebrick.utils.overwrite(obj, mix);
+								me._doMix(obj, mix);
 							}
 						}else if(typeof mix === "string"){
 							if(!obj.hasMixin(mix)){
@@ -415,7 +419,7 @@
 								if(!mix){
 									new Error("unable to find mixin", obj.mixins);
 								}
-								Firebrick.utils.overwrite(obj, mix);
+								me._doMix(obj, mix);
 							}
 						}
 						return mix;
@@ -433,6 +437,17 @@
 			},
 			
 			/**
+			 * @private
+			 * @method _doMix
+			 * @param obj {Object} core class
+			 * @param mix {Object} mixin to mix into the core class (obj}
+			 */
+			_doMix: function(obj, mix){
+				mix._mixedIn = true;	//mark as mixed in - extra safety measure
+				return Firebrick.utils.overwrite(obj, mix);
+			},
+			
+			/**
 			* define a firebrick class
 			* @method define
 			* @param name {String}
@@ -441,15 +456,17 @@
 			*/
 			define: function(name, config){
 				var me = this,
-					clazz;
+					clazz,
+					_super;
 			    
 			    if(config.extend){
-			        var _super = me.classRegistry[config.extend];
+			        _super = me.classRegistry[config.extend];
 			        clazz = me.extend(config, _super);
-			        clazz = me._initMixins(clazz);
 			    }else{
 			        clazz = Object.create(config);
 			    }
+			    
+			    clazz = me._initMixins(clazz, name);
 			    
 			    if(name){
 			    	me.classRegistry[name] = clazz;
@@ -810,6 +827,23 @@
 				var k;
 				for(k in obj2){
 					if(obj2.hasOwnProperty(k)){
+						obj1[k] = obj2[k];
+					}
+				}
+				
+				return obj1;
+			},
+			/**
+			 * @method copyover
+			 * @param obj1 {Object}
+			 * @param obj2 {Object}
+			 * @return {Object} obj2 mixed in missing property into obj1
+			 */
+			copyover: function(obj1, obj2){
+				//iterate over all properties in obj2
+				var k;
+				for(k in obj2){
+					if(obj2.hasOwnProperty(k) && !obj1[k]){
 						obj1[k] = obj2[k];
 					}
 				}
@@ -1362,7 +1396,7 @@
 				var me = this, reg = me.eventRegistry[eventName];
 				if(reg){
 					//get the argument from this function call
-					var args = Array.slice(arguments),
+					var args = Array.prototype.slice.call(arguments),
 						ev = me.createEventData(eventName);	//create an event object to pass to the function argument
 
 					for(var i = 0, l = reg.length; i<l; i++){
@@ -1484,7 +1518,7 @@
 			_registerOnEvent: function(eventName, selector, callback, scope){
 				$(document).on(eventName, selector, function(){
 					//add scope as last argument, just in case the scope of the function is changed
-					var args = Array.slice(arguments);
+					var args = Array.prototype.slice.call(arguments);
 					args.push(this);
 					callback.apply(scope || this, args);
 				});
@@ -1567,9 +1601,19 @@
 				* @return {Object} store
 				*/
 				_loadStore: function(store, options){
-					options = options || {};
 					var url = store.url,       
-						async = options.async;
+						async,
+						ajaxData;
+					
+					options = options || {};
+					async = options.async;
+					
+					if($.isFunction(options)){
+						//a single argument was passed and that was a function (callback)
+						options = {
+							callback: options
+						};
+					}
 					
 					if(typeof async !== "boolean"){
 						async = store.async;
@@ -1580,11 +1624,13 @@
 					}					
 					
 					store.status = "preload";
-
+					ajaxData = store.toPlainObject();
 					$.ajax({
-						datatype: store.datatype,
+						dataType: store.datatype,
+						type: store.loadProtocol,
 						async: async,
-						url: store.url,
+						url: store.getUrl(),
+						data: store.stringifyData ? { data: JSON.stringify(ajaxData) } : ajaxData,
 						success:function(jsonObject, status, response){
 							store.setData(jsonObject);
 							store.status = status;
@@ -1592,9 +1638,9 @@
 								options.callback.apply(options.scope || store, [store, jsonObject, status, response]);
 							}
 						},
-						error:function(reponse, error, errorMessage){
+						error:function(response, error, errorMessage){
 							console.warn("unable to load store '", store.classname, "' with path:", store.url);
-							console.error(error, errorMessage);
+							console.error(response, error, errorMessage);
 						}
 					});
 					
@@ -1609,19 +1655,19 @@
 				* @return {Object} store
 				*/
 				_submit: function(store, callback){
-					var data;
+					var ajaxData;
 					
 					if(store && store.url && store.url.submit){
 						
 						store.status = "presubmit";
 					
-						data = store.toJson();
+						ajaxData = store.toPlainObject();
 						$.ajax({
-							url: store.url.submit,
-							data: {data: store.toJson()},
-							type: store.protocol,
+							url: store.getUrl("submit"),
+							data: store.stringifyData ? { data: JSON.stringify(ajaxData) } : ajaxData,
+							type: store.submitProtocol,
 							beforeSend: function(){
-								return store.fireEvent("beforeSubmit", store, data);
+								return store.fireEvent("beforeSubmit", store, ajaxData);
 							},
 							success: function(data, status){
 								store.status = status;
@@ -1629,8 +1675,9 @@
 									callback.apply(store, arguments);
 								}
 							},
-							error: function(){
+							error: function(response, error, errorMessage){
 								console.error("error submitting data for store to url", store.url.submit, store);
+								console.error(response, error, errorMessage);
 							}
 						});
 					}else{
@@ -1749,8 +1796,7 @@
 		 */
 		_cloneListener: function(func){
 			return function(){
-				var r = func.apply(this, arguments);
-				return r;
+				return func.apply(this, arguments);
 			};
 		},
 		/**
@@ -1760,7 +1806,7 @@
 		init:function(){
 			//inits of all inits :)
 			var me = this,
-				k,v;
+				k,v, a = {};
 			if(me.listeners){
 				Firebrick.utils.merge("listeners", me);
 				for(k in me.listeners){
@@ -1768,10 +1814,11 @@
 						v = me.listeners[k];
 						if($.isFunction(v)){
 							//create a copy of the function - otherwise the all mixins point to the same function
-							me.listeners[k] = me._cloneListener(v);
+							a[k] = me._cloneListener(v, k);
 						}
 					}
 				}
+				me.listeners = a;
 				me.on(me.listeners);
 			}
 			me.fireEvent(me.overrideReadyEvent || "ready");
@@ -2580,7 +2627,7 @@
 		* @type {String}
 		* @default "json"
 		*/
-		datatype: "json",
+		dataType: "json",
 		/**
 		* URL Config:
 		* @property url
@@ -2608,12 +2655,25 @@
 			submit:null //strings 
 		},
 		/**
+		 * @property stringifyData
+		 * @type {Boolean}
+		 * @default true
+		 */
+		stringifyData: true,
+		/**
+		* set the connection protocol, POST or GET for load
+		* @property loadProtocol
+		* @type {String}
+		* @default "GET"
+		*/
+		loadProtocol: "GET",
+		/**
 		* set the connection protocol, POST or GET for submit
-		* @property protocol
+		* @property submitProtocol
 		* @type {String}
 		* @default "POST"
 		*/
-		protocol: "POST",
+		submitProtocol: "POST",
 		/**
 		* Store status
 		* 1. initial :: store has just been created
@@ -2685,6 +2745,23 @@
 		 */
 		autoDestroy:true,
 		/**
+		 * return the correct url when getting or submitting the store
+		 * @method getUrl
+		 * @param type {String} optional - "get", "submit"
+		 * @return {String}
+		 */
+		getUrl: function(type){
+			var me = this;
+			if(!type){
+				if($.isPlainObject(me.url)){
+					return me.url.get;
+				}
+				return me.url;
+			}else{
+				return me.url[type];
+			}
+		},
+		/**
 		* Load the store - see data.store:loadStore
 		* @example 
 		* 		load({
@@ -2737,14 +2814,18 @@
 			var me = this;
 			
 			if(!me.dataInitialised){
-				if(!data.__ko_mapping__){ 				// jshint ignore:line
+				if(!ko.mapping.isMapped(data)){
 					me._initialData = data;
-					data = ko.mapping.fromJS(data);
+					if(typeof data === "string"){
+						data = ko.mapping.fromJSON(data);
+					}else{
+						data = ko.mapping.fromJS(data);
+					}
 				}
 				me.data = data;
 				me.dataInitialised = true;
 			}else{
-				if(!data.__ko_mapping__){				// jshint ignore:line
+				if(!ko.mapping.isMapped(data)){
 					me._initialData = data;
 					ko.mapping.fromJS(data, me.data);
 				}else{
