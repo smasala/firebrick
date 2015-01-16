@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.8.48</em>
+            <em>API Docs for: 0.9.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -132,7 +132,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l2543"><code>src\firebrick.js:2543</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l2590"><code>src\firebrick.js:2590</code></a>
         </div>
     
 
@@ -215,6 +215,13 @@
                         
                             <li class="index-item method">
                                 <a href="#method_getRawData">getRawData</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getUrl">getUrl</a>
 
                                 
                                 
@@ -391,6 +398,13 @@
                                 
                             </li>
                         
+                            <li class="index-item property">
+                                <a href="#property_loadProtocol">loadProtocol</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item property private inherited">
                                 <a href="#property_localEventRegistry">localEventRegistry</a>
 
@@ -413,13 +427,6 @@
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_protocol">protocol</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
                                 <a href="#property_root">root</a>
 
                                 
@@ -434,7 +441,21 @@
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_stringifyData">stringifyData</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_submit">submit</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_submitProtocol">submitProtocol</a>
 
                                 
                                 
@@ -506,7 +527,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1743"><code>src\firebrick.js:1743</code></a>
+        <a href="../files/src_firebrick.js.html#l1790"><code>src\firebrick.js:1790</code></a>
         
         </p>
 
@@ -607,7 +628,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1730"><code>src\firebrick.js:1730</code></a>
+        <a href="../files/src_firebrick.js.html#l1777"><code>src\firebrick.js:1777</code></a>
         
         </p>
 
@@ -719,7 +740,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1945"><code>src\firebrick.js:1945</code></a>
+        <a href="../files/src_firebrick.js.html#l1992"><code>src\firebrick.js:1992</code></a>
         
         </p>
 
@@ -832,7 +853,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2701"><code>src\firebrick.js:2701</code></a>
+        <a href="../files/src_firebrick.js.html#l2778"><code>src\firebrick.js:2778</code></a>
         
         </p>
 
@@ -902,7 +923,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1838"><code>src\firebrick.js:1838</code></a>
+        <a href="../files/src_firebrick.js.html#l1885"><code>src\firebrick.js:1885</code></a>
         
         </p>
 
@@ -984,7 +1005,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2715"><code>src\firebrick.js:2715</code></a>
+        <a href="../files/src_firebrick.js.html#l2792"><code>src\firebrick.js:2792</code></a>
         
         </p>
 
@@ -1043,6 +1064,111 @@
 </div>
 
                 
+                    <div id="method_getUrl" class="method item">
+    <h3 class="name"><code>getUrl</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>type</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2747"><code>src\firebrick.js:2747</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>return the correct url when getting or submitting the store</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">type</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>optional - &quot;get&quot;, &quot;submit&quot;</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_hasMixin" class="method item inherited">
     <h3 class="name"><code>hasMixin</code></h3>
 
@@ -1086,7 +1212,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1808"><code>src\firebrick.js:1808</code></a>
+        <a href="../files/src_firebrick.js.html#l1855"><code>src\firebrick.js:1855</code></a>
         
         </p>
 
@@ -1175,7 +1301,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2550"><code>src\firebrick.js:2550</code></a>
+        <a href="../files/src_firebrick.js.html#l2597"><code>src\firebrick.js:2597</code></a>
         
         </p>
 
@@ -1244,7 +1370,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2687"><code>src\firebrick.js:2687</code></a>
+        <a href="../files/src_firebrick.js.html#l2764"><code>src\firebrick.js:2764</code></a>
         
         </p>
 
@@ -1359,7 +1485,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1795"><code>src\firebrick.js:1795</code></a>
+        <a href="../files/src_firebrick.js.html#l1842"><code>src\firebrick.js:1842</code></a>
         
         </p>
 
@@ -1467,7 +1593,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1921"><code>src\firebrick.js:1921</code></a>
+        <a href="../files/src_firebrick.js.html#l1968"><code>src\firebrick.js:1968</code></a>
         
         </p>
 
@@ -1596,7 +1722,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1864"><code>src\firebrick.js:1864</code></a>
+        <a href="../files/src_firebrick.js.html#l1911"><code>src\firebrick.js:1911</code></a>
         
         </p>
 
@@ -1743,7 +1869,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1967"><code>src\firebrick.js:1967</code></a>
+        <a href="../files/src_firebrick.js.html#l2014"><code>src\firebrick.js:2014</code></a>
         
         </p>
 
@@ -1862,7 +1988,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2730"><code>src\firebrick.js:2730</code></a>
+        <a href="../files/src_firebrick.js.html#l2807"><code>src\firebrick.js:2807</code></a>
         
         </p>
 
@@ -1958,7 +2084,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2757"><code>src\firebrick.js:2757</code></a>
+        <a href="../files/src_firebrick.js.html#l2838"><code>src\firebrick.js:2838</code></a>
         
         </p>
 
@@ -2032,7 +2158,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2786"><code>src\firebrick.js:2786</code></a>
+        <a href="../files/src_firebrick.js.html#l2867"><code>src\firebrick.js:2867</code></a>
         
         </p>
 
@@ -2105,7 +2231,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2766"><code>src\firebrick.js:2766</code></a>
+        <a href="../files/src_firebrick.js.html#l2847"><code>src\firebrick.js:2847</code></a>
         
         </p>
 
@@ -2170,7 +2296,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1817"><code>src\firebrick.js:1817</code></a>
+        <a href="../files/src_firebrick.js.html#l1864"><code>src\firebrick.js:1864</code></a>
         
         </p>
 
@@ -2216,7 +2342,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2658"><code>src\firebrick.js:2658</code></a>
+        <a href="../files/src_firebrick.js.html#l2718"><code>src\firebrick.js:2718</code></a>
         
         </p>
 
@@ -2263,7 +2389,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2666"><code>src\firebrick.js:2666</code></a>
+        <a href="../files/src_firebrick.js.html#l2726"><code>src\firebrick.js:2726</code></a>
         
         </p>
 
@@ -2310,7 +2436,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2680"><code>src\firebrick.js:2680</code></a>
+        <a href="../files/src_firebrick.js.html#l2740"><code>src\firebrick.js:2740</code></a>
         
         </p>
 
@@ -2357,7 +2483,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2643"><code>src\firebrick.js:2643</code></a>
+        <a href="../files/src_firebrick.js.html#l2703"><code>src\firebrick.js:2703</code></a>
         
         </p>
 
@@ -2404,7 +2530,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2650"><code>src\firebrick.js:2650</code></a>
+        <a href="../files/src_firebrick.js.html#l2710"><code>src\firebrick.js:2710</code></a>
         
         </p>
 
@@ -2453,7 +2579,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2635"><code>src\firebrick.js:2635</code></a>
+        <a href="../files/src_firebrick.js.html#l2695"><code>src\firebrick.js:2695</code></a>
         
         </p>
 
@@ -2500,7 +2626,7 @@ see data.store:submit</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2576"><code>src\firebrick.js:2576</code></a>
+        <a href="../files/src_firebrick.js.html#l2623"><code>src\firebrick.js:2623</code></a>
         
         </p>
 
@@ -2548,7 +2674,7 @@ any types that jQuery allows in $.ajax()</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2597"><code>src\firebrick.js:2597</code></a>
+        <a href="../files/src_firebrick.js.html#l2644"><code>src\firebrick.js:2644</code></a>
         
         </p>
 
@@ -2593,7 +2719,7 @@ any types that jQuery allows in $.ajax()</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1823"><code>src\firebrick.js:1823</code></a>
+        <a href="../files/src_firebrick.js.html#l1870"><code>src\firebrick.js:1870</code></a>
         
         </p>
 
@@ -2640,7 +2766,7 @@ any types that jQuery allows in $.ajax()</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2627"><code>src\firebrick.js:2627</code></a>
+        <a href="../files/src_firebrick.js.html#l2687"><code>src\firebrick.js:2687</code></a>
         
         </p>
 
@@ -2684,7 +2810,7 @@ any types that jQuery allows in $.ajax()</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1853"><code>src\firebrick.js:1853</code></a>
+        <a href="../files/src_firebrick.js.html#l1900"><code>src\firebrick.js:1900</code></a>
         
         </p>
 
@@ -2718,6 +2844,53 @@ any types that jQuery allows in $.ajax()</p>
 </div>
 
                 
+                    <div id="property_loadProtocol" class="property item">
+    <h3 class="name"><code>loadProtocol</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2663"><code>src\firebrick.js:2663</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>set the connection protocol, POST or GET for load</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> &quot;GET&quot;</p>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="property_localEventRegistry" class="property item private inherited">
     <h3 class="name"><code>localEventRegistry</code></h3>
     <span class="type">Object map</span>
@@ -2740,7 +2913,7 @@ any types that jQuery allows in $.ajax()</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1830"><code>src\firebrick.js:1830</code></a>
+        <a href="../files/src_firebrick.js.html#l1877"><code>src\firebrick.js:1877</code></a>
         
         </p>
 
@@ -2784,7 +2957,7 @@ any types that jQuery allows in $.ajax()</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1786"><code>src\firebrick.js:1786</code></a>
+        <a href="../files/src_firebrick.js.html#l1833"><code>src\firebrick.js:1833</code></a>
         
         </p>
 
@@ -2829,7 +3002,7 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1780"><code>src\firebrick.js:1780</code></a>
+        <a href="../files/src_firebrick.js.html#l1827"><code>src\firebrick.js:1827</code></a>
         
         </p>
 
@@ -2844,53 +3017,6 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
 
     
         <p><strong>Default:</strong> null</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_protocol" class="property item">
-    <h3 class="name"><code>protocol</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2610"><code>src\firebrick.js:2610</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>set the connection protocol, POST or GET for submit</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> &quot;POST&quot;</p>
     
 
     
@@ -2922,7 +3048,7 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2673"><code>src\firebrick.js:2673</code></a>
+        <a href="../files/src_firebrick.js.html#l2733"><code>src\firebrick.js:2733</code></a>
         
         </p>
 
@@ -2971,7 +3097,7 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2617"><code>src\firebrick.js:2617</code></a>
+        <a href="../files/src_firebrick.js.html#l2677"><code>src\firebrick.js:2677</code></a>
         
         </p>
 
@@ -2990,6 +3116,52 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
 
     </div>
 
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_stringifyData" class="property item">
+    <h3 class="name"><code>stringifyData</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2657"><code>src\firebrick.js:2657</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> true</p>
     
 
     
@@ -3021,7 +3193,7 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2603"><code>src\firebrick.js:2603</code></a>
+        <a href="../files/src_firebrick.js.html#l2650"><code>src\firebrick.js:2650</code></a>
         
         </p>
 
@@ -3036,6 +3208,53 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
 
     
         <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_submitProtocol" class="property item">
+    <h3 class="name"><code>submitProtocol</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2670"><code>src\firebrick.js:2670</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>set the connection protocol, POST or GET for submit</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> &quot;POST&quot;</p>
     
 
     
@@ -3067,7 +3286,7 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2584"><code>src\firebrick.js:2584</code></a>
+        <a href="../files/src_firebrick.js.html#l2631"><code>src\firebrick.js:2631</code></a>
         
         </p>
 
