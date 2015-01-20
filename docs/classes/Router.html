@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.0</em>
+            <em>API Docs for: 0.9.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -128,7 +128,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l1692"><code>src\firebrick.js:1692</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l1703"><code>src\firebrick.js:1703</code></a>
         </div>
     
 
@@ -157,6 +157,8 @@
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
         
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
         
         
     </ul>
@@ -170,6 +172,48 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods">
+                        
+                            <li class="index-item method private">
+                                <a href="#method__createRouterFunction">_createRouterFunction</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__defaultRouteActions">_defaultRouteActions</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__iterateRouterConfigs">_iterateRouterConfigs</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getRoute">getRoute</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getUrlParam">getUrlParam</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_init">init</a>
+
+                                
+                                
+                            </li>
                         
                             <li class="index-item method">
                                 <a href="#method_is">is</a>
@@ -197,6 +241,21 @@
             
 
             
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property private">
+                                <a href="#property__cache">_cache</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
 
             
 
@@ -206,6 +265,498 @@
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__createRouterFunction" class="method item private">
+    <h3 class="name"><code>_createRouterFunction</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>config</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Function</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1753"><code>src\firebrick.js:1753</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">config</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Function</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__defaultRouteActions" class="method item private">
+    <h3 class="name"><code>_defaultRouteActions</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1846"><code>src\firebrick.js:1846</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>this function analyses the url and check if any default actions are needed
+for example: scrollTo in the url - causes a scroll to anchor</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__iterateRouterConfigs" class="method item private">
+    <h3 class="name"><code>_iterateRouterConfigs</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>patternConfig</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1796"><code>src\firebrick.js:1796</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>check if configuration pattern match (url) and applies it.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">patternConfig</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getRoute" class="method item">
+    <h3 class="name"><code>getRoute</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1904"><code>src\firebrick.js:1904</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>{
+                        href: &quot;<a href="http://localhost/#/mypath/dayone?user=1">http://localhost/#/mypath/dayone?user=1</a>&quot;,
+                        origin: &quot;<a href="http://localhost">http://localhost</a>&quot;
+                        path: &quot;/#/mypath/dayone?user=1&quot;,    // (href - origin)
+                        hash: &quot;#/mypath/dayone?user=1&quot;,        //window.location.hash
+                        cleanHash: &quot;#/mypath/dayone&quot;
+                        parameters:{}        //url parameter as object
+                    }</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getUrlParam" class="method item">
+    <h3 class="name"><code>getUrlParam</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>url</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1931"><code>src\firebrick.js:1931</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>adapted from <a href="http://stackoverflow.com/a/1099670/425226">http://stackoverflow.com/a/1099670/425226</a></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">url</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>/#/mypath/dayone?user=1&amp;name=fred</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1952"><code>src\firebrick.js:1952</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>call this after setting router.set({}) if you wish to do an immediate evaulation of url</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="method_is" class="method item">
@@ -254,7 +805,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1752"><code>src\firebrick.js:1752</code></a>
+        <a href="../files/src_firebrick.js.html#l1883"><code>src\firebrick.js:1883</code></a>
         
         </p>
 
@@ -265,7 +816,7 @@
     </div>
 
     <div class="description">
-        <p>Check whether the pattern or hash is present</p>
+        <p>Check whether the url matches a pattern - removes any parameters in the url to check for a match</p>
 
     </div>
 
@@ -313,7 +864,8 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>Firebrick.router.is(&quot;#/completed&quot;) // returns true or false</code></pre>
+                <pre class="code prettyprint"><code>    Firebrick.router.is(&quot;#/completed&quot;) // returns true or false</code></pre>
+<pre class="code prettyprint"><code>    Firebrick.router.is(&quot;/completed&quot;) // returns true or false</code></pre>
 
             </div>
         </div>
@@ -369,7 +921,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1735"><code>src\firebrick.js:1735</code></a>
+        <a href="../files/src_firebrick.js.html#l1866"><code>src\firebrick.js:1866</code></a>
         
         </p>
 
@@ -483,7 +1035,7 @@ use Firebrick.route:set</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1697"><code>src\firebrick.js:1697</code></a>
+        <a href="../files/src_firebrick.js.html#l1718"><code>src\firebrick.js:1718</code></a>
         
         </p>
 
@@ -531,8 +1083,12 @@ use Firebrick.route:set</p>
 
             <div class="example-content">
                 <pre class="code prettyprint"><code>    Firebrick.router.set({
-        &quot;users/abc&quot;: function(){},
+        &quot;users/abc&quot;: {
+            require:[&quot;file1&quot;, &quot;file2&quot;],
+            callback: function(){}
+        },
         &quot;contact&quot;: function(){}
+        defaults: function(){}        //defaults pattern - fallback
     })</code></pre>
 <pre class="code prettyprint"><code>    Firebrick.router.set(function(){}) //call function regardless of route</code></pre>
 
@@ -545,6 +1101,61 @@ use Firebrick.route:set</p>
             </div>
         
 
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__cache" class="property item private">
+    <h3 class="name"><code>_cache</code></h3>
+    <span class="type">Array of Functions map</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1709"><code>src\firebrick.js:1709</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>router cache, primarly used by init() function</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> []</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
         
 
         
