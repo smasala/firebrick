@@ -1,3 +1,15 @@
+v0.9.9
+----------------------------
+* router bug fix hasOwnProperty typo
+* call router init function to do an immediate check after settings the router with Firebrick.router.set()
+* {defaults:function(){}} a fallback on router.set() if no url patterns are found 
+* router hash pattern   http://{url}/#/{pattern}
+* unbind firebrick bug fix causing: ko multiple bindings error
+* add require js configurations file
+* router improved. Firebrick.router.getRoute() provides you with a breakdown of the url including its parameters and value as an Object (key|value}
+* as single page FB requires hash - "#/mypage" - add paramter scrollTo=ItemId to mimic anchor jumps - use property "Firebrick.scrollTopOffset" (integer or function) if you need to add offset the scroll due to a fix header or the likes 
+* when using Firebrick.router.set() - define pattern value as object if you wish to require files before the callback {"#/pattern1", {require:["file1", "file2"], callback:function(){}}}
+
 v0.9.0
 ----------------------------
 * map from json string aswell (stores)

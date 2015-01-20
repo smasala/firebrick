@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.0</em>
+            <em>API Docs for: 0.9.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -164,7 +164,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: &quot;0.9.0&quot;,
+		version: &quot;0.9.9&quot;,
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -373,6 +373,17 @@
 		text: function () {
 			return this.shortcut(this.languages, &quot;getByKey&quot;, arguments);
 		},
+		
+		/**
+		 * this is used in conjunction with &quot;scrollTo&quot; url parameter.
+		 * This is needed if you have a fixed header for example and the browser
+		 * scroll the anchor to position 0 which is behind the header - effectively cutting off content
+		 * @property scrollTopOffset
+		 * @type {Integer|Function}
+		 * @default 0
+		 */
+		scrollTopOffset: 0,
+		
 		/**
 		 * @for Firebrick
 		 * @class Classes
@@ -1820,12 +1831,26 @@
 		 * @class Router
 		 */
 		router:{
+			
+			/**
+			 * router cache, primarly used by init() function
+			 * @private
+			 * @property _cache
+			 * @type {Array of Functions} map
+			 * @default []
+			 */
+			_cache:[],
+			
 			/**
 			 * set route definitions
 			 * @example
 			 * 		Firebrick.router.set({
-			 * 			&quot;users/abc&quot;: function(){},
+			 * 			&quot;users/abc&quot;: {
+			 * 				require:[&quot;file1&quot;, &quot;file2&quot;],
+			 * 				callback: function(){}
+			 * 			},
 			 * 			&quot;contact&quot;: function(){}
+			 * 			defaults: function(){}		//defaults pattern - fallback
 			 * 		})
 			 * @example
 			 * 		Firebrick.router.set(function(){}) //call function regardless of route
@@ -1841,23 +1866,129 @@
 					route = config;
 				}else{
 					if($.isPlainObject(config)){
-						route = function(){
-							var hash;
-							for(hash in config){
-								if(config.hasOwnPropery(hash)){
-									if(Firebrick.router.is(&quot;#&quot; + hash)){
-										config[hash].apply(this, arguments);
-										break;
-									}
-								}
-							}
-						};
+						route = me._createRouterFunction(config);
 					}
 				}
-					
-					
+				
+				me._cache.push(route);
+				
+				//set onhash change routing
 				return me.onHashChange(route);
 			},
+			
+			/**
+			 * @method _createRouterFunction
+			 * @private
+			 * @param {Object} config
+			 * @return {Function}
+			 */
+			_createRouterFunction: function(config){
+				var me = this;
+				
+				return function(){
+					var hash, 
+						found = false;
+					
+					//iterate through configs
+					for(hash in config){
+						if(config.hasOwnProperty(hash)){
+							if(hash !== &quot;defaults&quot;){	//ignore defaults if found - this is called later
+								
+								//does the url resemble the pattern
+								if(Firebrick.router.is(hash)){
+									
+									me._applyRoute( config[hash] );
+									
+									//mark as a route that has been used
+									found = true;
+									break;
+								}
+								
+							}
+						}
+					}
+					
+					//check if a route had been found (above)
+					if(!found){
+						//run default route if possible
+						if(config.defaults){
+							me._applyRoute(config.defaults);
+						}
+					}
+
+				};
+			},
+			
+			/**
+			 * check if configuration pattern match (url) and applies it.
+			 * @method _iterateRouterConfigs
+			 * @private 
+			 * @param {Object} patternConfig
+			 * @return {Boolean}
+			 */
+			_applyRoute: function(patternConfig){
+				var me = this,
+					deps, callback;
+				
+				//are dependencies required to run this pattern
+				if($.isPlainObject(patternConfig) &amp;&amp; patternConfig.require){
+					deps = patternConfig.require;
+					
+					if(!$.isArray(deps)){
+						deps = [deps];	//convert to array if needed
+					}
+					
+					require(deps, function(){
+						//check if pattern has a callback and fire
+						if(patternConfig.callback){
+							patternConfig.callback.apply(this, arguments);
+						}
+						
+						//check paramters for any default actions that are required
+						//example: ?scrollTo=MyAnchorId
+						me._defaultRouteActions();
+						
+					});
+				}else{
+					//no dependencies - just fire the callback if it has once
+					
+					//if object configuration
+					if($.isPlainObject(patternConfig)){
+						callback = patternConfig.callback;
+					}else{
+						//not object just a function defined
+						callback = patternConfig;
+					}
+					
+					callback.apply(this, arguments);
+					
+					//check paramters for any default actions that are required
+					//example: ?scrollTo=MyAnchorId
+					me._defaultRouteActions();
+				}
+			},
+			
+			
+			/**
+			 * this function analyses the url and check if any default actions are needed
+			 * for example: scrollTo in the url - causes a scroll to anchor
+			 * @method _defaultRouteActions
+			 * @private
+			 */
+			_defaultRouteActions: function(){
+				var me = this,
+					route = me.getRoute(),
+					offset = Firebrick.scrollTopOffset;
+				
+				if($.isFunction(offset)){
+					offset = offset();
+				}
+				
+				if(route.parameters.scrollTo){
+					$(&quot;html, body&quot;).animate({ scrollTop: $(&quot;#&quot;+route.parameters.scrollTo).offset().top - offset }, 1000);
+				}
+			},
+			
 			/**
 			* Call a function when the hash changes on the site
 			* use Firebrick.route:set
@@ -1876,19 +2007,83 @@
 				});
 			},
 			/**
-			* Check whether the pattern or hash is present
+			* Check whether the url matches a pattern - removes any parameters in the url to check for a match
 			* @example
-			* 	Firebrick.router.is(&quot;#/completed&quot;) // returns true or false
+			*		Firebrick.router.is(&quot;#/completed&quot;) // returns true or false
+			* @example
+			* 		Firebrick.router.is(&quot;/completed&quot;) // returns true or false
 			* @method is
 			* @param pattern {String}
 			* @return {Boolean}
 			*/
 			is: function(pattern){
-				if(pattern.indexOf(&quot;#&quot;) !== -1){
-					return window.location.hash === pattern;
+				var me = this,
+					route = me.getRoute(),
+					path = route.cleanHash;	//without parameters
+				if(path){
+					return path === pattern;
 				}
 				
-				return window.location.href.replace(window.location.origin) === pattern;
+				return route.path === pattern;
+			},
+			
+			/**
+			 * @method getRoute
+			 * @return {Object} {
+			 * 						href: &quot;http://localhost/#/mypath/dayone?user=1&quot;,
+			 * 						origin: &quot;http://localhost&quot;
+			 * 						path: &quot;/#/mypath/dayone?user=1&quot;,	// (href - origin)
+			 * 						hash: &quot;#/mypath/dayone?user=1&quot;,		//window.location.hash
+			 * 						cleanHash: &quot;#/mypath/dayone&quot;
+			 * 						parameters:{}		//url parameter as object
+			 * 					}
+			 */
+			getRoute: function(){
+				var me = this,
+					location = window.location,
+					path = location.href.replace(location.origin, &quot;&quot;),
+					hash = location.hash,
+					pPos = hash.indexOf(&quot;?&quot;);	//paramter position
+				return {
+					href: location.href,
+					origin: location.origin,
+					path: path,
+					hash: location.hash,
+					cleanHash: pPos !== -1 ? hash.substr(0, pPos) : hash,
+					parameters:me.getUrlParam(path)
+				}
+			},
+			
+			/**
+			 * adapted from http://stackoverflow.com/a/1099670/425226
+			 * @method getUrlParam
+			 * @param url {String} /#/mypath/dayone?user=1&amp;name=fred
+			 */
+			getUrlParam: function(url){
+				var qs = url,
+					params = {}, tokens,
+			        re = /[?&amp;]?([^=]+)=([^&amp;]*)/g;
+				
+				qs = qs.substr(qs.indexOf(&quot;?&quot;)+1, qs.length);
+				
+				qs = qs.split(&quot;+&quot;).join(&quot; &quot;);
+
+			    while (tokens = re.exec(qs)) {
+			        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+			    }
+
+			    return params;
+			},
+			
+			/**
+			 * call this after setting router.set({}) if you wish to do an immediate evaulation of url
+			 * @method init
+			 */
+			init: function(){
+				var me = this;
+				for(var i = 0, l = me._cache.length; i&lt;l; i++){
+					me._cache[i]();
+				}
 			}
 		
 		}
@@ -2410,7 +2605,7 @@
 		 */
 		isBound: function(target){
 			
-			if(target &amp;&amp; target.length &amp;&amp; target.attr(&quot;fb-view.bind&quot;)){
+			if(target &amp;&amp; target.length &amp;&amp; target.attr(&quot;fb-view-bind&quot;)){
 				return true;
 			}
 			
