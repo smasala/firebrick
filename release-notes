@@ -1,3 +1,8 @@
+v0.9.11
+----------------------------
+* add autoDestroy property to base class so that all classes inherit it. - set autoDestroy:false to a view/component if you want to store to remain intact when the view is unbound
+* changed property enclosedBind to applyBindingsToDescendants - after KO (view)
+
 v0.9.9
 ----------------------------
 * router bug fix hasOwnProperty typo
