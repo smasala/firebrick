@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.9</em>
+            <em>API Docs for: 0.9.11</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -164,7 +164,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: &quot;0.9.9&quot;,
+		version: &quot;0.9.11&quot;,
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -399,6 +399,12 @@
 			classRegistry: {},
 			
 			/**
+			 * @property _createdClasses
+			 * @private
+			 * @type {Object} map of all classes
+			 */
+			_createdClasses:{},
+			/**
 			* returns a firebrick class by name from the registry
 			* @method get
 			* @param name {String}
@@ -412,25 +418,16 @@
 			 * get a class by property: classId
 			 * @method getById
 			 * @param {String} id
-			 * @return {Object}
+			 * @return {Object|null}
 			 */
 			getById: function (id) {
-				var me = this,
-					clazz,
-					k,v;
+				var me = this;
 				
-				for(k in me.classRegistry){
-					if(me.classRegistry.hasOwnProperty(k)){
-						v = me.classRegistry[k];
-						if (v.getId &amp;&amp; v.getId() === id) {
-							clazz = v;
-							//found class, stop iteration
-							break;
-						}
-					}
+				if(id){
+					return me._createdClasses[id];
 				}
 				
-				return clazz;
+				return null;
 			},
 			
 			/**
@@ -525,6 +522,11 @@
 			    
 			    if(clazz.init){
 			    	clazz.init();
+			    }
+			    
+			    if(clazz.getId){
+			    	//filter mixins
+			    	me._createdClasses[clazz.getId()] = clazz;
 			    }
 			    
 			    return clazz;
@@ -1941,7 +1943,7 @@
 					require(deps, function(){
 						//check if pattern has a callback and fire
 						if(patternConfig.callback){
-							patternConfig.callback.apply(this, arguments);
+							patternConfig.callback.apply(me, arguments);
 						}
 						
 						//check paramters for any default actions that are required
@@ -1960,7 +1962,7 @@
 						callback = patternConfig;
 					}
 					
-					callback.apply(this, arguments);
+					callback.apply(me, arguments);
 					
 					//check paramters for any default actions that are required
 					//example: ?scrollTo=MyAnchorId
@@ -2145,6 +2147,13 @@
 			me.fireEvent(me.overrideReadyEvent || &quot;ready&quot;);
 			return me;
 		},
+		/**
+		 * controls which data will be destoryed
+		 * @property autoDestroy
+		 * @type {Boolean}
+		 * @default true
+		 */
+		autoDestroy:true,
 		/**
 		 * @property mixins
 		 * @type {String|Object|[String]}
@@ -2428,13 +2437,12 @@
 		*/
 		_state:&quot;initial&quot;,
 		/**
-		 * if set to true, the content of the view will receive its own div container where the data is bound to.
-		 * This means content is rendered to the specified .target but bound within its own constraints
-		 * @property enclosedBind
+		 * bindings are applied to its decendants, not on the target itself
+		 * @property applyBindingsToDescendants
 		 * @type {Boolean}
 		 * @default false
 		 */
-		enclosedBind:false,
+		applyBindingsToDescendants:false,
 		/**
 		 * define subviews to load after creation of this view
 		 * @example 
@@ -2484,21 +2492,6 @@
 		 * @default &quot;fb-view-bind&quot;
 		 */
 		bindAttribute: &quot;fb-view-bind&quot;,
-		/**
-		 * id when enclosedBind = true
-		 * @property enclosedBindIdPrefix
-		 * @type {String}
-		 * @default &quot;fb-view-enclosed-bind&quot;
-		 */
-		enclosedBindIdPrefix: &quot;fb-view-enclosed-bind&quot;,
-		/**
-		 * @method getEnclosedBindId
-		 * @return {String}
-		 */
-		getEnclosedBindId: function(){
-			var me = this;
-			return me.enclosedBindIdPrefix + &quot;-&quot; + me.getId();
-		},
 		/**
 		 * @private
 		 * @method _init
@@ -2613,24 +2606,6 @@
 		},
 		
 		/**
-		 * @method getBindTarget
-		 * @return {Object|Null} jQuery object
-		 */
-		getBindTarget: function(){
-			var me = this,
-				t;
-			
-			if(me.enclosedBind){
-				t = $(&quot;#&quot; + me.getEnclosedBindId());
-				t = t.length ? t : null;
-			}else{
-				t = me.getTarget();
-			}
-			
-			return t;
-		},
-		
-		/**
 		 * unbind and remove from DOM
 		 * @method detroy
 		 * @return {Object} self
@@ -2649,15 +2624,17 @@
 		 */
 		remove: function(){
 			var me = this, 
-				t = me.getBindTarget();
+				t = me.getTarget();
 			
 			if(t){
 				//jquery remove dom
-				if(me.enclosedBind){
-					t.remove();
+				if(me.applyBindingsToDescendants){
+					t.remove();	//removes itself
 				}else{
-					t.empty();	
+					t.empty();	//empties content
 				}
+				
+				//more info on remove vs empty - http://stackoverflow.com/questions/3090662/jquery-empty-vs-remove
 				
 			}
 			
@@ -2671,7 +2648,7 @@
 		 */
 		unbind:function(){
 			var me = this,
-				target = me.getBindTarget(),
+				target = me.getTarget(),
 				el;
 			
 			if(me.isBound(target)){
@@ -2688,36 +2665,30 @@
 		bind: function(){
 			var me = this,
 				target = me.getTarget(),
-				bindTarget = me.getBindTarget(),
 				el,
 				data,
-				html = me.html,
-				enclosedWrapper;
+				html = me.html;
 
-			if(me.enclosedBind &amp;&amp; !bindTarget){
-				if(target){
-					enclosedWrapper = &quot;&lt;div id=&#x27;&quot; + me.getEnclosedBindId() + &quot;&#x27;&gt;&lt;/div&gt;&quot;;
-					Firebrick.views.renderTo(target, enclosedWrapper, me.appendTarget);
-					bindTarget = me.getBindTarget(); //look again
-				}
-			}
-			
-			if(target &amp;&amp; bindTarget &amp;&amp; !me.isBound(bindTarget)){
-				el = bindTarget[0];
-				Firebrick.views.renderTo(bindTarget, html, me.appendTarget);
+			if(target &amp;&amp; !me.isBound(target)){
+				el = target[0];
+				Firebrick.views.renderTo(target, html, me.appendTarget);
 				me.hide();
 				me._state = &quot;rendered&quot;;
 				data = me.getData();
 				//if(data &amp;&amp; !$.isEmptyObject(data)){
-					bindTarget.attr(me.bindAttribute, me.getId());
-					ko.applyBindings(data, el);
+					target.attr(me.bindAttribute, me.getId());
+					if(me.applyBindingsToDescendants){
+						ko.applyBindingsToDescendants(data, el);
+					}else{
+						ko.applyBindings(data, el);
+					}
 					me.setDisposeCallback(el);	
 				//}
 				me.stopLoader();
 				me.show();
 				me.fireEvent(&quot;rendered&quot;, me);
 			}else{
-				console.info(&quot;target or bindTarget where not found, unable to render and bind the data&quot;, target, bindTarget);
+				console.info(&quot;target or bindTarget where not found, unable to render and bind the data&quot;, target);
 			}
 			
 		},
@@ -2766,10 +2737,12 @@
 		unbound:function(){
 			var me = this,
 				store = me.getStore();
-			me._state = &quot;unbound&quot;;
-			if(store){
-				store.fireEvent(&quot;unbound&quot;, me);
-				me.store = null;
+				me._state = &quot;unbound&quot;;
+			if(me.autoDestroy){
+				if(store){
+					store.fireEvent(&quot;unbound&quot;, me);
+					me.store = null;
+				}
 			}
 			me.fireEvent(&quot;unbound&quot;, me);
 		},
@@ -3058,13 +3031,7 @@
 		 * @default null
 		 */
 		root: null,
-		/**
-		 * if false, the store won&#x27;t delete when a view/component it is linked to is unbound/removed from the UI
-		 * @property autoDestroy
-		 * @type {Boolean}
-		 * @default true
-		 */
-		autoDestroy:true,
+		
 		/**
 		 * return the correct url when getting or submitting the store
 		 * @method getUrl
