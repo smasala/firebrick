@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.9.11",
+		version: "0.9.12",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -305,12 +305,18 @@
 			},
 			
 			/**
-			 * remove a class from the registry 
+			 * remove a class from the created classes registry 
 			 * @method removeClass
 			 * @param clazz {Object|String} clazz object or classname
 			 */
 			removeClass: function(clazz){
-				delete Firebrick.classes.classRegistry[ (typeof clazz === "string" ? clazz : clazz._classname) ];	
+				var obj = typeof clazz === "string" ? Firebrick.get(clazz) : clazz;
+				if(obj){
+					delete Firebrick.classes._createdClasses[clazz.getId()];	//delete the tmp created obj
+					if(!clazz.fbTmpClass){
+						delete Firebrick.classes._classRegistry[clazz._classname];	//delete class itself	
+					}
+				}
 			},
 			
 			/**
@@ -386,6 +392,7 @@
 			create: function(name, config){
 				var me = this,
 					clazz;
+				
 			    if(me.classRegistry[name]){
 			    	clazz = me.classRegistry[name];
 			    	//check if there are any config options
@@ -481,7 +488,7 @@
 			    
 			    clazz = me._initMixins(clazz, name);
 			    
-			    if(name){
+			    if(name && !clazz.fbTmpClass){
 			    	me.classRegistry[name] = clazz;
 			    }
 			    
@@ -517,6 +524,10 @@
 			 */
 			createController: function(name, config){
 				config = config || {};
+				if(typeof name != "string"){
+					name = "tmp" + Firebrick.utils.uniqId();
+					config.fbTmpClass = true;
+				}
 				config.extend = "Firebrick.controller.Base";
 				return Firebrick.create(name, config);
 			}
@@ -582,7 +593,8 @@
 						// ...
 						//})
 						config = name;
-						name = null;
+						name = "tmp-" + Firebrick.utils.uniqId();
+						config.fbTmpClass = true;
 					}else{
 						//createView("MyView")
 						config = {};
@@ -1583,9 +1595,11 @@
 					}else{
 						//only 1 parameter in this case, name is then config.
 						config = name || {};
-						var _super = Firebrick.get("Firebrick.store.Base");
+						config = me._basicStoreConfigurations(config);
+						name = "tmp-" + Firebrick.utils.uniqId();
+						config.fbTmpClass = true;
 						//return a new object based on the Base class
-						return Firebrick.classes.extend(config, _super).init();
+						return Firebrick.create(name, config);
 					}
 				},
 				/**

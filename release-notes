@@ -1,3 +1,7 @@
+v0.9.12
+----------------------------
+* fix when removal of classes when stores are created without shorthand function createStore, createController, createView
+
 v0.9.11
 ----------------------------
 * add autoDestroy property to base class so that all classes inherit it. - set autoDestroy:false to a view/component if you want to store to remain intact when the view is unbound
