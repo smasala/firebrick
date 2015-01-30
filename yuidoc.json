@@ -1,9 +1,9 @@
 {
     "name": "Firebrick JS API",
     "description": "Firebrick JS API: A lightweight JavaScript MVC Framework powered with jQuery, Bootstrap, Knockout JS and Require JS",
-    "version": "0.9.12",
+    "version": "0.9.15",
     "url": "https://github.com/smasala",
-    "logo": "../fb_small.png",
+    "logo": "fb_small.png",
     "options": {
         "outdir": "./docs",
         "paths": "./src/*"

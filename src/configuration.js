@@ -5,12 +5,13 @@
 
 define(function(){
 	"use strict";
+	var bowerPath = window._fbBowerPath || "../bower_components";
 	return require.config({
 		paths:{
-			"jquery": "../bower_components/jquery/dist/jquery",
-			"knockout": "../bower_components/knockoutjs/dist/knockout.debug",
-			"knockout-mapping": "../bower_components/knockout-mapping/knockout.mapping",
-			"firebrick": "../bower_components/firebrick/src/firebrick"
+			"jquery": bowerPath + "/jquery/dist/jquery",
+			"knockout": bowerPath + "/knockoutjs/dist/knockout.debug",
+			"knockout-mapping": bowerPath + "/knockout-mapping/knockout.mapping",
+			"firebrick": bowerPath + "/firebrick/src/firebrick"
 		},
 		shim:{
 			"knockout-mapping": ["knockout"]

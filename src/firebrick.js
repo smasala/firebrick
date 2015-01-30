@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.9.12",
+		version: "0.9.15",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -429,18 +429,18 @@
 					//mixit check to make sure that the mixin hasn't been mixed in already
 					var mixit = function(obj, mix){
 						if($.isPlainObject(mix)){
-							if(!mix._mixedIn){
+//							if(!mix._mixedIn){
 								me._doMix(obj, mix);
-							}
+//							}
 						}else if(typeof mix === "string"){
-							if(!obj.hasMixin(mix)){
+//							if(!obj.hasMixin(mix)){
 								obj.mixinAdded(mix);
 								mix = Object.getPrototypeOf(Object.getPrototypeOf(Firebrick.create(mix)));
 								if(!mix){
 									new Error("unable to find mixin", obj.mixins);
 								}
 								me._doMix(obj, mix);
-							}
+//							}
 						}
 						return mix;
 					};
@@ -463,7 +463,7 @@
 			 * @param mix {Object} mixin to mix into the core class (obj}
 			 */
 			_doMix: function(obj, mix){
-				mix._mixedIn = true;	//mark as mixed in - extra safety measure
+				//mix._mixedIn = true;	//mark as mixed in - extra safety measure
 				return Firebrick.utils.overwrite(obj, mix);
 			},
 			
@@ -1624,6 +1624,7 @@
 				* @param {Object} options 
 				* @param {Boolean} options.async [default=store.async] 
 				* @param {Function} options.callback [store, jsonObject, status, response]
+				* @param {Function} options.error [response, error, errorMessage]
 				* @param {Object} options.scope
 				* @return {Object} store
 				*/
@@ -1662,12 +1663,16 @@
 							store.setData(jsonObject);
 							store.status = status;
 							if($.isFunction(options.callback)){
-								options.callback.apply(options.scope || store, [store, jsonObject, status, response]);
+								options.callback.call(options.scope || store, store, jsonObject, status, response);
 							}
 						},
 						error:function(response, error, errorMessage){
-							console.warn("unable to load store '", store.classname, "' with path:", store.url);
-							console.error(response, error, errorMessage);
+							if($.isFunction(options.error)){
+								options.error.call(options.scope || store, response, error, errorMessage);
+							}else{
+								console.warn("unable to load store '", store._classname, "' with path:", store.url);
+								console.error(response, error, errorMessage);
+							}
 						}
 					});
 					
@@ -2332,6 +2337,13 @@
 		 */
 		applyBindingsToDescendants:false,
 		/**
+		 * wrap the view inside its own div which gets bound separatly to its context
+		 * @property enclosedBind
+		 * @type {Boolean}
+		 * @default false
+		 */
+		enclosedBind: false,
+		/**
 		 * define subviews to load after creation of this view
 		 * @example 
 		 * 		subViews: MyApp.view.MyView
@@ -2380,6 +2392,12 @@
 		 * @default "fb-view-bind"
 		 */
 		bindAttribute: "fb-view-bind",
+		/**
+		 * @property enclosedBindIdPrefix
+		 * @type {String}
+		 * @default "fb-enclosed-bind-"
+		 */
+		enclosedBindIdPrefix: "fb-enclosed-bind-",
 		/**
 		 * @private
 		 * @method _init
@@ -2472,7 +2490,7 @@
 			return Firebrick.views.initSubViews(this);
 		},
 		/**
-		 * @method getTarget
+		* @method getTarget
 		* @return {Object|Null} jquery object
 		*/
 		getTarget: function(){
@@ -2480,12 +2498,14 @@
 		},
 		
 		/**
+		 * has the data been bound
 		 * @method isBound
-		 * @param target {Object} jQuery object
 		 * @return {Boolean}
 		 */
-		isBound: function(target){
-			
+		isBound: function(){
+			var me = this,
+				target = me.enclosedBind ? me.getEnclosedTarget() : me.getTarget();
+
 			if(target && target.length && target.attr("fb-view-bind")){
 				return true;
 			}
@@ -2503,6 +2523,15 @@
 			me.unbind().remove();
 			me._state = "destroyed";
 			return me;
+		},
+		
+		/**
+		 * @method getEnclosedBindId
+		 * @return {String}
+		 */
+		getEnclosedBindId: function(){
+			var me = this;
+			return me.enclosedBindIdPrefix + me.getId();
 		},
 		
 		/**
@@ -2536,48 +2565,136 @@
 		 */
 		unbind:function(){
 			var me = this,
-				target = me.getTarget(),
+				target = me.enclosedBind ? Firebrick.views.getTarget("#"+me.getEnclosedBindId()) : me.getTarget(),
 				el;
 			
-			if(me.isBound(target)){
+			if(me.isBound()){
 				el = target[0];
 				ko.cleanNode(el);
 				target.removeAttr(me.bindAttribute);
 			}
 			return me;
 		},
+		
+		/**
+		 * @method getEnclosedTarget
+		 * @return {jQuery Object|Null}
+		 */
+		getEnclosedTarget: function(){
+			return Firebrick.views.getTarget("#" + this.getEnclosedBindId());
+		},
+		
+		/**
+		 * prepare the HTML for rendering
+		 * @method prepHtml
+		 * @return {String} html
+		 */
+		prepHtml: function(){
+			var me	= this,
+				enclosedTarget,
+				html = me.html;
+			
+			//does the html content need to be wrapped?
+			if(me.enclosedBind){
+				enclosedTarget = me.getEnclosedTarget();
+				//has this already been done before?
+				if(!enclosedTarget){
+					//if there is no enclosing wrapper - then create one
+					//create a div template and insert the html into that div
+					html = $('<div id="' + me.getEnclosedBindId() + '"></div>').html(html);
+				}
+			}
+			
+			return html;
+		},
+		
+		/**
+		 * @method _renderHTML
+		 * @private 
+		 * @param {String} html
+		 * @return {Object} self
+		 */
+		_renderHTML: function(){
+			var me = this,
+				target = me.getTarget(),
+				html,
+				enclosedTarget;
+			
+			//prepare the HTML for rendering
+			html = me.prepHtml();
+			
+			//should content be enclosed in its own binding context
+			if(me.enclosedBind){
+				enclosedTarget = me.getEnclosedTarget();
+				//check if a enclosedTarget already exists
+				if(!enclosedTarget){
+					//if not render and append the html to the target
+					Firebrick.views.renderTo(target, html, me.appendTarget);
+				}else{
+					//enclosedTarget has already been rendered before - just update its content (don't append)
+					Firebrick.views.renderTo(enclosedTarget, html, false);
+				}
+			}else{
+				//standard render - no enclosedBinding!
+				Firebrick.views.renderTo(target, html, me.appendTarget);
+			}
+			
+			return me;
+		},
+		
+		bindContent: function(){
+			var me = this,
+				data = me.getData(),
+				target = me.getTarget(),
+				el = target[0];
+			
+			if(me.enclosedBind){
+				//enclosed bind is needed so update variables with correct values
+				target = me.getEnclosedTarget();
+				el = target[0];
+			}
+
+			//add FB related bind attribute to mark it as bound
+			target.attr(me.bindAttribute, me.getId());
+			
+			//apply data bindings
+			if(me.applyBindingsToDescendants){
+				ko.applyBindingsToDescendants(data, el);
+			}else{
+				ko.applyBindings(data, el);
+			}
+			
+			//set dispose callback (destory|unbind)
+			me.setDisposeCallback(el);	
+		},
+		
 		/**
 		 * Called by view.Base:render()
 		 * @method bind
 		 */
 		bind: function(){
 			var me = this,
-				target = me.getTarget(),
-				el,
-				data,
-				html = me.html;
-
-			if(target && !me.isBound(target)){
-				el = target[0];
-				Firebrick.views.renderTo(target, html, me.appendTarget);
+				target = me.getTarget();
+			
+			if(!me.isBound()){
+				
 				me.hide();
+				me._renderHTML();
+				
+				//set view state
 				me._state = "rendered";
-				data = me.getData();
-				//if(data && !$.isEmptyObject(data)){
-					target.attr(me.bindAttribute, me.getId());
-					if(me.applyBindingsToDescendants){
-						ko.applyBindingsToDescendants(data, el);
-					}else{
-						ko.applyBindings(data, el);
-					}
-					me.setDisposeCallback(el);	
-				//}
+				
+				me.bindContent();
+				
 				me.stopLoader();
 				me.show();
+				
 				me.fireEvent("rendered", me);
+				
 			}else{
 				console.info("target or bindTarget where not found, unable to render and bind the data", target);
 			}
+				
 			
 		},
 		

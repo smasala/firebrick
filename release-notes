@@ -1,3 +1,9 @@
+v0.9.15
+----------------------------
+* re-introduction for enclosed binding - property enclosedBind:true
+* refactorise bind function in views
+* improve store error message on ajax error
+
 v0.9.12
 ----------------------------
 * fix when removal of classes when stores are created without shorthand function createStore, createController, createView

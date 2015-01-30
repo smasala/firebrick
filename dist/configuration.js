@@ -3,17 +3,4 @@
  * @author Steven Masala [me@smasala.com]
 **/
 
-define(function(){
-	"use strict";
-	return require.config({
-		paths:{
-			"jquery": "../bower_components/jquery/dist/jquery",
-			"knockout": "../bower_components/knockoutjs/dist/knockout.debug",
-			"knockout-mapping": "../bower_components/knockout-mapping/knockout.mapping",
-			"firebrick": "../bower_components/firebrick/dist/firebrick"
-		},
-		shim:{
-			"knockout-mapping": ["knockout"]
-		}
-	});	
-});
+define("configuration",[],function(){var e=window._fbBowerPath||"../bower_components";return require.config({paths:{jquery:e+"/jquery/dist/jquery",knockout:e+"/knockoutjs/dist/knockout.debug","knockout-mapping":e+"/knockout-mapping/knockout.mapping",firebrick:e+"/firebrick/dist/firebrick"},shim:{"knockout-mapping":["knockout"]}})});
