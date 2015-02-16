@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.9.15",
+		version: "0.9.17",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -400,6 +400,8 @@
 			    }else{
 			        clazz = me.define(name, config || {});
 			    }
+			    
+			    clazz.initialConfig = config;
 			    
 			    if(clazz.init){
 			    	clazz.init();
@@ -1991,6 +1993,15 @@
 	 */
 	Firebrick.define("Firebrick.class.Base", {
 		/**
+		 * when calling Firebrick.create("xxx", {});
+		 * the second parameter {} (config) is stored in this property as a reference
+		 * - in case one needs to know with what paramters the object was intialised with
+		 * @property initialConfig
+		 * @type {Object}
+		 * @default null
+		 */
+		initialConfig: null,
+		/**
 		 * unlike init, this is called when defining a class
 		 * @method constructor
 		 * @param {String} name - class name
@@ -2638,6 +2649,8 @@
 				//standard render - no enclosedBinding!
 				Firebrick.views.renderTo(target, html, me.appendTarget);
 			}
+			
+			me.fireEvent("htmlRendered");
 			
 			return me;
 		},
