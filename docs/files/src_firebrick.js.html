@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.15</em>
+            <em>API Docs for: 0.9.17</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -164,7 +164,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: &quot;0.9.15&quot;,
+		version: &quot;0.9.17&quot;,
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -526,6 +526,8 @@
 			    }else{
 			        clazz = me.define(name, config || {});
 			    }
+			    
+			    clazz.initialConfig = config;
 			    
 			    if(clazz.init){
 			    	clazz.init();
@@ -2117,6 +2119,15 @@
 	 */
 	Firebrick.define(&quot;Firebrick.class.Base&quot;, {
 		/**
+		 * when calling Firebrick.create(&quot;xxx&quot;, {});
+		 * the second parameter {} (config) is stored in this property as a reference
+		 * - in case one needs to know with what paramters the object was intialised with
+		 * @property initialConfig
+		 * @type {Object}
+		 * @default null
+		 */
+		initialConfig: null,
+		/**
 		 * unlike init, this is called when defining a class
 		 * @method constructor
 		 * @param {String} name - class name
@@ -2764,6 +2775,8 @@
 				//standard render - no enclosedBinding!
 				Firebrick.views.renderTo(target, html, me.appendTarget);
 			}
+			
+			me.fireEvent(&quot;htmlRendered&quot;);
 			
 			return me;
 		},
