@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.9.17</em>
+            <em>API Docs for: 0.9.22</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -164,7 +164,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: &quot;0.9.17&quot;,
+		version: &quot;0.9.22&quot;,
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -383,6 +383,13 @@
 		 * @default 0
 		 */
 		scrollTopOffset: 0,
+		
+		/**
+		 * @property scrollContainerSelector
+		 * @type {String}
+		 * @default &quot;body, html&quot;
+		 */
+		scrollContainerSelector: &quot;body, html&quot;,
 		
 		/**
 		 * @for Firebrick
@@ -976,8 +983,8 @@
 			* @return {Object} obj1 mixed in with obj2
 			*/
 			overwrite: function(obj1, obj2){
-				//iterate over all properties in obj2
 				var k;
+				//iterate over all properties in obj2
 				for(k in obj2){
 					if(obj2.hasOwnProperty(k)){
 						obj1[k] = obj2[k];
@@ -987,6 +994,7 @@
 				return obj1;
 			},
 			/**
+			 * unlike overwrite it does not overwrite any properties that are already in obj1
 			 * @method copyover
 			 * @param obj1 {Object}
 			 * @param obj2 {Object}
@@ -2001,14 +2009,15 @@
 			_defaultRouteActions: function(){
 				var me = this,
 					route = me.getRoute(),
-					offset = Firebrick.scrollTopOffset;
+					offset = Firebrick.scrollTopOffset,
+					scrollContainer = $(Firebrick.scrollContainerSelector);
 				
 				if($.isFunction(offset)){
-					offset = offset();
+					offset = offset(route);
 				}
 				
 				if(route.parameters.scrollTo){
-					$(&quot;html, body&quot;).animate({ scrollTop: $(&quot;#&quot;+route.parameters.scrollTo).offset().top - offset }, 1000);
+					scrollContainer.animate({ scrollTop: $(&quot;#&quot;+route.parameters.scrollTo).offset().top - offset + scrollContainer.scrollTop() }, 1000);
 				}
 			},
 			
@@ -2174,9 +2183,16 @@
 				me.listeners = a;
 				me.on(me.listeners);
 			}
-			me.fireEvent(me.overrideReadyEvent || &quot;ready&quot;);
+			me.fireEvent(&quot;preReady&quot;);
+			me.fireEvent(me.classReadyEvent);
 			return me;
 		},
+		/**
+		 * @property classReadyEvent
+		 * @type {String}
+		 * @default &quot;ready&quot;
+		 */
+		classReadyEvent: &quot;ready&quot;,
 		/**
 		 * controls which data will be destoryed
 		 * @property autoDestroy
@@ -2572,16 +2588,20 @@
 		* @method init
 		*/
 		init: function(){
-			var me = this;
-			me.overrideReadyEvent = &quot;base&quot;;
-			me.on(me.overrideReadyEvent, function(){
+			var me = this,
+				classReadyEvent = me.classReadyEvent;
+			//overwrite the original event
+			me.classReadyEvent = &quot;base&quot;;
+			
+			me.on(me.classReadyEvent, function(){
 				me._init(function(){
 					//check the data of the view is in the correct format
 					me.initStore();
 					//parse html with data
 					me.initView();
 
-					me.fireEvent(&quot;ready&quot;);
+					//fire original event
+					me.fireEvent(classReadyEvent);
 				});
 			});
 			
@@ -2611,7 +2631,7 @@
 		*/
 		initView: function(){
 			var me = this;
-			me.html = me.tpl;
+			me._html = me.tpl;
 			
 			if(me.autoRender &amp;&amp; me.getTarget()){
 				me.render();
@@ -2635,18 +2655,50 @@
 		},
 		
 		/**
-		 * has the data been bound
-		 * @method isBound
+		 * has data been bound to the target by THIS view
+		 * @method isTargetBound
 		 * @return {Boolean}
 		 */
 		isBound: function(){
+			return this._isBound(true);
+		},
+		
+		/**
+		 * has data been bound to the target by A|ANY view
+		 * @method isTargetBound
+		 * @return {Boolean}
+		 */
+		isTargetBound: function(){
+			return this._isBound();
+		},
+		
+		/**
+		 * has the data been bound
+		 * @method _isBound
+		 * @private
+		 * @param idMatch {Boolean} [default=false] optional - if true it will also check that the target it bound with the current view and not just generally bound to 
+		 * @return {Boolean}
+		 */
+		_isBound: function(idMatch){
 			var me = this,
-				target = me.enclosedBind ? me.getEnclosedTarget() : me.getTarget();
+			target = me.enclosedBind ? me.getEnclosedTarget() : me.getTarget();
 
 			if(target &amp;&amp; target.length &amp;&amp; target.attr(&quot;fb-view-bind&quot;)){
+				if(idMatch === true){
+					if(target.attr(&quot;id&quot;) === me.getId()){
+						//target is bound and with this view
+						return true;
+					}else{
+						//target is bound and NOT with this view
+						return false;
+					}
+				}
+				
+				//target is bound
 				return true;
 			}
 			
+			//target is not bound
 			return false;
 		},
 		
@@ -2705,7 +2757,7 @@
 				target = me.enclosedBind ? Firebrick.views.getTarget(&quot;#&quot;+me.getEnclosedBindId()) : me.getTarget(),
 				el;
 			
-			if(me.isBound()){
+			if(me.isTargetBound()){
 				el = target[0];
 				ko.cleanNode(el);
 				target.removeAttr(me.bindAttribute);
@@ -2729,7 +2781,7 @@
 		prepHtml: function(){
 			var me	= this,
 				enclosedTarget,
-				html = me.html;
+				html = me._html;
 			
 			//does the html content need to be wrapped?
 			if(me.enclosedBind){
@@ -2815,7 +2867,7 @@
 			var me = this,
 				target = me.getTarget();
 			
-			if(!me.isBound()){
+			if(!me.isTargetBound()){
 				
 				me.hide();
 				me._renderHTML();

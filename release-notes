@@ -1,3 +1,11 @@
+v0.9.22
+----------------------------
+* view property change from "html" to "_html"
+* preReady event for classes
+* view method isBound return true|false if the target is bound with data of the current view
+* view new method isTargetBound returns true|false if the target is generally bound with data
+* new configurable property "scrollContainerSelector"
+
 v.0.9.17
 ----------------------------
 * htmlRendered event added when component html is rendered (before data binding)
