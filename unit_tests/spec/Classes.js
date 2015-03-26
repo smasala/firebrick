@@ -1,3 +1,7 @@
+/*!
+* Firebrick JS - Unit Tests
+* @author Steven Masala [me@smasala.com]
+*/
 define(["jquery", "firebrick", "Test/class/Class1"], function($, Firebrick){
 	"use strict";
 	describe("Classes: ", function() {

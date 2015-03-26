@@ -1,3 +1,7 @@
+/*!
+* Firebrick JS - Unit Tests
+* @author Steven Masala [me@smasala.com]
+*/
 define(function(){
 	"use strict";
 	return {
