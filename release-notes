@@ -1,3 +1,16 @@
+v0.10.0
+----------------------------
+* change the bower location by setting require.config({config:{configuration: {bowerPath: "..." }}});
+* lang keys Firebrick.text(...)  are CaseSensitive
+* fix mixin bugs
+* fix remove class bugs
+* Firebrick.define attempts to asynchronously load any file a class extends from
+* app path is define with RequireJs config - app name must be the same key used 
+* interval callback scope get function this.stop to clear interval
+* remove listener bug fix
+* Firebrick.events.on callback has property this.destroy() - call inside callback inorder to remove the listener
+
+
 v0.9.22
 ----------------------------
 * view property change from "html" to "_html"
