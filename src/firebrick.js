@@ -356,7 +356,7 @@
 				if(obj){
 					if(obj.id){
 						delete Firebrick.classes._createdClasses[obj.id];	//delete the tmp created obj
-						delete Firebrick.classes._classRegistry[obj._classname];
+						//delete Firebrick.classes._classRegistry[obj._classname];
 					}
 //					if(!clazz.fbTmpClass){
 //						delete Firebrick.classes._classRegistry[obj._classname];	//delete class itself	
