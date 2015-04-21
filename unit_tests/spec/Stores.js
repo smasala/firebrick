@@ -21,7 +21,7 @@ define(["jquery", "firebrick"], function($, Firebrick){
 		
 		afterEach(function(){
 			store.destroy();
-			expect(Firebrick.get(storeName)).not.toBeDefined(null);
+			expect(Firebrick.get(storeName).status).toBe("destroyed");
 		});
 		
 		it("Create store", function(){

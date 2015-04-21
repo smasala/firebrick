@@ -2175,9 +2175,12 @@
 		/**
 		 * remove class from registry
 		 * @method destroy
+		 * @event destroy
 		 */
 		destroy: function(){
-			Firebrick.classes.removeClass(this);
+			var me = this;
+			me.fireEvent("destroy");
+			Firebrick.classes.removeClass(me);
 		},
 		
 		/**
@@ -3181,7 +3184,7 @@
 			
 			me.data = null;
 			me.status = "destroyed";
-			Firebrick.classes.removeClass(me);	
+			me.dataInitialised = false;
 			
 			return me.callParent(arguments);
 		},

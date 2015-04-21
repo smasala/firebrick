@@ -13,7 +13,7 @@ define(["jquery", "firebrick", "Test/class/Class1"], function($, Firebrick){
 			
 			expect( Firebrick.get(name) ).toBeDefined();
 			Firebrick.classes.removeClass(name);
-			expect( Firebrick.get(name) ).not.toBeDefined();
+			expect( Firebrick.classes._createdClasses[name] ).not.toBeDefined();
 		});
 		
 		it("Inheritance", function(){
