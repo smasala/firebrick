@@ -35,6 +35,8 @@ define(["jquery", "firebrick", "Test/class/Class1"], function($, Firebrick){
 			expect( proto ).toBeDefined();
 			expect( proto.a ).toBe(1);
 			
+			expect(superClass.b).not.toBeDefined();
+			
 		});
 		
 		it("Overwriting class properties", function(){

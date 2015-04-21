@@ -1,3 +1,10 @@
+v0.10.4
+----------------------------
+* class creaton id fix
+* sName property for all classes, sName is short name for extending classes or getting them with Firebrick.get(sName)
+* fix how classes are destroyed
+* fix getElement when enclosedBind = true
+
 v0.10.0
 ----------------------------
 * change the bower location by setting require.config({config:{configuration: {bowerPath: "..." }}});

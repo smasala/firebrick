@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.10.0",
+		version: "0.10.4",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -285,6 +285,14 @@
 			 * @type {Object} map of all classes
 			 */
 			_createdClasses:{},
+			
+			/**
+			 * @property _sNames
+			 * @private
+			 * @type {Object} map
+			 */
+			_sNames: {},
+			
 			/**
 			* returns a firebrick class by name from the registry
 			* @method get
@@ -292,7 +300,25 @@
 			* @return {Object}
 			*/
 			get: function (name) {
-				return this._classRegistry[name];
+				var me = this;
+				return me._classRegistry[name];
+			},
+			
+			/**
+			 * @example
+			 *     addSNames({
+			 *     		"mynamespace.MyClass":{
+			 *     			path:"MyApp.class.MyClass"
+			 *     		}
+			 *     });
+			 * @method addSNames
+			 * @param obj {Object}
+			 * @return {Object} all sName object (with new entries)
+			 */
+			addSNames: function(obj){	
+				var me = this;
+				me._sNames = Firebrick.utils.overwrite(me._sNames, obj);
+				return me._sNames;
 			},
 			
 			/**
@@ -312,6 +338,15 @@
 			},
 			
 			/**
+			 * @method getSNameConfig
+			 * @param name {String} components unique shortname "fields.input"
+			 * @return {Object|null}
+			 */
+			getSNameConfig: function(name){
+				return this._sNames[name.toLowerCase()];
+			},
+			
+			/**
 			 * remove a class from the created classes registry 
 			 * @method removeClass
 			 * @param clazz {Object|String} clazz object or classname
@@ -321,10 +356,11 @@
 				if(obj){
 					if(obj.id){
 						delete Firebrick.classes._createdClasses[obj.id];	//delete the tmp created obj
+						delete Firebrick.classes._classRegistry[obj._classname];
 					}
-					if(!clazz.fbTmpClass){
-						delete Firebrick.classes._classRegistry[obj._classname];	//delete class itself	
-					}
+//					if(!clazz.fbTmpClass){
+//						delete Firebrick.classes._classRegistry[obj._classname];	//delete class itself	
+//					}
 				}
 			},
 			
@@ -400,11 +436,9 @@
 			*/
 			create: function(name, config){
 				var me = this,
-					clazz,
-					creationIdentifier;
+					clazz = me.get(name);
 				
-			    if(me._classRegistry[name]){
-			    	clazz = me._classRegistry[name];
+				if(clazz){
 			    	//check if there are any config options
 		    		clazz = me.extend(config, clazz);	
 			    }else{
@@ -417,11 +451,11 @@
 			    	clazz.id = clazz.getId ? clazz.getId() : Firebrick.utils.uniqId();
 			    }
 			    
-			    if(clazz.init){
+		    	me._createdClasses[clazz.id] = clazz;
+		    	
+		    	if(clazz.init){
 			    	clazz.init();
 			    }
-			    
-		    	me._createdClasses[clazz.id] = clazz;
 			    
 			    return clazz;
 			},
@@ -514,21 +548,22 @@
 				var me = this,
 					_super, 
 					url,
-					ext = config.extend;
+					ext = config.extend,
+					args = arguments;
 			    
 			    if(ext){
-			        _super = me._classRegistry[ext];
+			        _super = me.get(ext);
 			        if(!_super){
-			        	url = require.toUrl(Firebrick.utils.getPathFromName(ext));
+			        	url = me.getSNameConfig(ext).path || require.toUrl(Firebrick.utils.getPathFromName(ext));
 			        	console.warn(url, "is being loaded on demand, try preloading it before hand for better performance:", ext);
-			        	require(url, function(){
-			        		me._define.apply(me, arguments);
+			        	require([url], function(){
+			        		me._define.apply(me, args);
 			        	});
 			        }else{
-			        	return me._define.apply(me, arguments);
+			        	return me._define.apply(me, args);
 			        }
 			    }else{
-			    	return me._define.apply(me, arguments);
+			    	return me._define.apply(me, args);
 			    }
 			},
 			
@@ -545,9 +580,9 @@
 					clazz,
 					_super,
 					ext = config.extend;
-			    
-			    if(ext){
-			        _super = me._classRegistry[ext];
+
+				if(ext){
+					_super = me.get(ext);
 			        if(!_super){
 			        	console.error("unable load super class", ext, "for class", name);
 			        }
@@ -558,12 +593,16 @@
 			    
 			    clazz = me._initMixins(clazz, name);
 			    
-			    if(name && !clazz.fbTmpClass){
-			    	me._classRegistry[name] = clazz;
-			    }
-			    
 			    if(name){
 					clazz._classname = name;
+					//check if not a temporary class: Firebrick.create({...})
+					if(!clazz.fbTmpClass){
+						me._classRegistry[name] = clazz;
+				    	if(clazz.hasOwnProperty("sName") && clazz.sName){
+				    		//also sName
+				    		me._classRegistry[clazz.sName] = clazz;
+				    	}
+					}
 				}
 			    
 			    if(clazz.constructor){
@@ -598,7 +637,7 @@
 			 */
 			createController: function(name, config){
 				config = config || {};
-				if(typeof name != "string"){
+				if(typeof name !== "string"){
 					name = "tmp" + Firebrick.utils.uniqId();
 					config.fbTmpClass = true;
 				}
@@ -969,6 +1008,8 @@
 					}
 					
 					//mixin deeper (recursive)
+					me.merge(propName, object, proto);
+				}else if(Object.getPrototypeOf(proto)){
 					me.merge(propName, object, proto);
 				}
 				
@@ -1847,6 +1888,7 @@
 					}
 					
 					require(deps, function(){
+						
 						//check if pattern has a callback and fire
 						if(patternConfig.callback){
 							requireArgs.push(Firebrick.utils.stripArguments(args));
@@ -1896,7 +1938,6 @@
 				}
 				
 				if(route.parameters.scrollTo){
-					console.info(route.parameters.scrollTo)
 					scrollContainer.animate({ scrollTop: $("#"+route.parameters.scrollTo).offset().top - offset + scrollContainer.scrollTop() }, {
 						duration: 1000,
 						complete: function(){
@@ -2033,6 +2074,14 @@
 				return func.apply(this, arguments);
 			};
 		},
+		/**
+		 * use this give the class a shortname to reference
+		 * Firebrick.get(sname) is also possible if this property is defined
+		 * @property sName
+		 * @type {String}
+		 * @default null
+		 */
+		sName: null,
 		/**
 		 * @method init
 		 * @return self
@@ -2501,7 +2550,8 @@
 		* @return {Object|Null} jquery object
 		*/
 		getTarget: function(){
-			return Firebrick.views.getTarget(this.target);
+			var me = this;
+			return Firebrick.views.getTarget(me.target);
 		},
 		
 		/**
@@ -2580,11 +2630,11 @@
 		 */
 		remove: function(){
 			var me = this, 
-				t = me.getTarget();
+				t = me.enclosedBind ? Firebrick.views.getTarget("#" + me.getEnclosedBindId()) : me.getTarget();
 			
 			if(t){
 				//jquery remove dom
-				if(me.applyBindingsToDescendants){
+				if(me.applyBindingsToDescendants || me.enclosedBind){
 					t.remove();	//removes itself
 				}else{
 					t.empty();	//empties content
@@ -3158,7 +3208,6 @@
 		*/
 		setData: function(data){
 			var me = this;
-			
 			if(!me.dataInitialised){
 				if(!ko.mapping.isMapped(data)){
 					me._initialData = data;

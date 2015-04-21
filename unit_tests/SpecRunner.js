@@ -3,7 +3,6 @@ Called by SpecRunner.html
 **/
 require.config({
 	baseUrl: "",
-	urlArgs: 'cb=' + Math.random(),
 	paths: {
 		"jquery": 'bower_components/jquery/dist/jquery.min',
 		"Test": "helpers",
