@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.10.4",
+		version: "0.11.0",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -1455,7 +1455,8 @@
 				var me = this, 
 					reg = me._eventRegistry[eventName],
 					args,
-					ev;
+					ev,
+					eventObject = me._initEventObject(eventName);
 				
 				if(reg){
 					//get the argument from this function call
@@ -1471,10 +1472,29 @@
 						ev.funct = f;
 						//place the event object as the first item in arguments list
 						args.unshift(ev);
+						//add event object to stop
+						f.event = eventObject;
 						//call the event with the new arguments
 						f.apply(f.conf.scope || window, args);
 					}
 				}
+				
+				return eventObject;
+			},
+			
+			/**
+			 * this object is passed to all fireEvent listeners
+			 * @method _initEventObject
+			 * @private
+			 * @param name {String} event name
+			 * @return {Object}
+			 */
+			_initEventObject: function(name){
+				return {
+					eventName: name,
+					preventDefault: false,
+					data: null
+				};
 			},
 			
 			/**
@@ -1773,6 +1793,7 @@
 				
 			}
 		},
+		
 		/**
 		 * @for Firebrick
 		 * @class Router
@@ -1780,190 +1801,366 @@
 		router:{
 			
 			/**
-			 * router cache, primarly used by init() function
-			 * @private
-			 * @property _cache
-			 * @type {Array of Functions} map
-			 * @default []
+			 * @for Router
+			 * @namespace Router
+			 * @class Common
 			 */
-			_cache:[],
-			
-			/**
-			 * set route definitions
-			 * @example
-			 * 		Firebrick.router.set({
-			 * 			"users/abc": {
-			 * 				require:["file1", "file2"],
-			 * 				callback: function(){}
-			 * 			},
-			 * 			"contact": function(){}
-			 * 			defaults: function(){}		//defaults pattern - fallback
-			 * 		})
-			 * @example
-			 * 		Firebrick.router.set(function(){}) //call function regardless of route
-			 * @method set
-			 * @param config {Object|Function} - if function then the function is called regardless of route
-			 * @return onhashChange()
-			 */
-			set: function(config){
-				var me = this,
-					route;  
+			common: {
+				/**
+				 * check if configuration pattern match (url) and applies it.
+				 * @method _iterateRouterConfigs
+				 * @private 
+				 * @param {Object} patternConfig
+				 * @param {Arguments} args
+				 * @param {Function} ready - called when all dependencies etc are fetched and loaded
+				 * @return {Boolean}
+				 */
+				_applyRoute: function(patternConfig, args, ready){
+					var me = this,
+						deps, callback,
+						requireArgs = [];
+					
+					//are dependencies required to run this pattern
+					if($.isPlainObject(patternConfig) && patternConfig.require){
+						deps = patternConfig.require;
+						
+						if(!$.isArray(deps)){
+							deps = [deps];	//convert to array if needed
+						}
+						
+						require(deps, function(){
+							
+							//check if pattern has a callback and fire
+							if(patternConfig.callback){
+								requireArgs.push(Firebrick.utils.stripArguments(args));
+								requireArgs.push(Firebrick.utils.stripArguments(arguments));
+								patternConfig.callback.apply(me, requireArgs);
+							}
+							
+							if(ready){
+								ready();	
+							}
+						});
+					}else{
+						//no dependencies - just fire the callback if it has once
+						
+						//if object configuration
+						if($.isPlainObject(patternConfig)){
+							callback = patternConfig.callback;
+						}else{
+							//not object just a function defined
+							callback = patternConfig;
+						}
+						
+						callback.apply(me, args);
+						if(ready){
+							ready();	
+						}
+					}
+				},
 				
-				if($.isFunction(config)){
-					//one argument given, simple callback regardless of hash change
-					route = config;
-				}else{
-					if($.isPlainObject(config)){
-						route = me._createRouterFunction(config);
+				
+				/**
+				 * @method scrollTo
+				 * @param target {String} jquery selector
+				 */
+				scrollTo: function(target){
+					var me = this,
+						offset = Firebrick.scrollTopOffset,
+						scrollContainer = $(Firebrick.scrollContainerSelector);
+					
+					if($.isFunction(offset)){
+						offset = offset(target);
+					}
+					
+					if(target){
+						scrollContainer.animate({ scrollTop: $(target).offset().top - offset + scrollContainer.scrollTop() }, {
+							duration: 1000,
+							complete: function(){
+								//finished
+							}
+						});
 					}
 				}
-				
-				me._cache.push(route);
-				
-				//set onhash change routing
-				return me.onHashChange(route);
 			},
 			
 			/**
-			 * @method _createRouterFunction
-			 * @private
-			 * @param {Object} config
-			 * @return {Function}
+			 * @for Router
+			 * @namespace Router
+			 * @class History
 			 */
-			_createRouterFunction: function(config){
-				var me = this;
+			history: {
 				
-				return function(){
-					var hash, 
-						found = false;
-
-					//iterate through configs
-					for(hash in config){
-						if(config.hasOwnProperty(hash)){
-							if(hash !== "defaults"){	//ignore defaults if found - this is called later
-								
-								//does the url resemble the pattern
-								if(Firebrick.router.is(hash)){
-									
-									me._applyRoute( config[hash], arguments );
-									
-									//mark as a route that has been used
-									found = true;
-									break;
+				/**
+				 * used to see whether document events for the history API have already been set
+				 * @property _initialised
+				 * @type {Boolean}
+				 * @default false
+				 */
+				_initialised: false,
+				/**
+				 * @property _routes
+				 * @private
+				 * @type {Array}
+				 * @default []
+				 */
+				_routes:[],
+				/**
+				 * set route definitions
+				 * @example
+				 * 		Firebrick.router.set({
+				 * 			"users/abc": {
+				 * 				require:["file1", "file2"],
+				 * 				callback: function(){}
+				 * 			},
+				 * 			"contact": function(){}
+				 * 			defaults: function(){}		//defaults pattern - fallback
+				 * 		})
+				 * @example
+				 * 		Firebrick.router.set(function(){}) //call function regardless of route
+				 * @method set
+				 * @param routes {Object|Function} - if function then the function is called regardless of route
+				 * @return routes function
+				 */
+				set: function(routes){
+					var me = this;
+				
+					if(!me._initialised){
+						me._registerLinkEvent();
+						me._registerPopEvent();
+						//mark as set
+						me._initialised = true;
+					}
+					
+					if(!$.isFunction(routes) && $.isPlainObject(routes)){
+						//create a route function
+						routes = me._createRouterFunction(routes);
+					}else if(!$.isFunction(routes) && !$.isPlainObject(routes)){
+						console.error("incorrect routes", routes);
+						return;
+					}
+					
+					me._routes.push(routes);
+					
+					return routes;
+				},
+				
+				/**
+				 * @method _createRouterFunction
+				 * @private
+				 * @param {Object} config
+				 * @return {Function}
+				 */
+				_createRouterFunction: function(config){
+					return function(){
+						var url = Firebrick.router.getRoute(),
+							route = url.cleanPath;
+						if(route && config[route]){
+							Firebrick.router.common._applyRoute(config[route], arguments, function(){
+								if(url.hash){
+									Firebrick.router.common.scrollTo( url.hash );
 								}
-								
+							});
+						}else{
+							if(config["404"]){
+								Firebrick.router.common._applyRoute(config["404"], arguments);							
 							}
 						}
-					}
+					};
+				},
+				
+				/**
+				 * used by init
+				 * @method _registerLinkEvent
+				 * @private
+				 */
+				_registerLinkEvent: function(){
+					var me = this,
+						origin = Firebrick.router.getRoute().origin;
 					
-					//check if a route had been found (above)
-					if(!found){
-						//run default route if possible
-						if(config.defaults){
-							me._applyRoute(config.defaults, arguments);
-						}
-					}
+					$(document).on("click", "a:not([fb-ignore-router]):not([target])", function(event){
+						var $this = $(this),
+							href = $this.attr("href"),
+							hash = href.indexOf("#") === 0 ? true : false,
+							external = href.indexOf("http") === 0 && href.indexOf(origin) === -1 ? true : false,	//whether the link is external or internal 
+							eventObj;
+						
+							if(!external){
+								event.preventDefault();
+								
+								eventObj = Firebrick.fireEvent("router.pre.pushState", href);
+								
+								if(eventObj.preventDefault !== true){
+									history.pushState(href, "", href);
+									if(hash){
+										Firebrick.router.common.scrollTo( href );
+									}else{
+										for(var i = 0, l = me._routes.length; i<l; i++){
+											me._routes[i]();
+										}
+									}
+									Firebrick.fireEvent("router.post.pushState", href);
+								}	
+							}
+						
+					});
+				},
 
-				};
+				/**
+				 * @method _registerPopEvent
+				 * @private
+				 */
+				_registerPopEvent: function(){
+					var me = this;
+					window.addEventListener('popstate', function(popState){
+						var eObj = Firebrick.fireEvent("router.pre.popState", popState);
+						if(eObj.preventDefault !== true){
+							for(var i = 0, l = me._routes.length; i<l; i++){
+								me._routes[i]();
+							}
+							Firebrick.fireEvent("router.post.popState", popState);
+						}
+					});
+				},
+				
+				/**
+				 * @method init
+				 */
+				init: function(){
+					var me = this,
+						routes = me._routes;
+					
+					for(var i = 0, l = routes.length; i<l; i++){
+						routes[i]();
+					}
+					
+				}
+				
 			},
 			
 			/**
-			 * check if configuration pattern match (url) and applies it.
-			 * @method _iterateRouterConfigs
-			 * @private 
-			 * @param {Object} patternConfig
-			 * @return {Boolean}
+			 * @for Router
+			 * @namespace Router
+			 * @class Hashbang
 			 */
-			_applyRoute: function(patternConfig, args){
-				var me = this,
-					deps, callback,
-					requireArgs = [];
+			hashbang: {
 				
-				//are dependencies required to run this pattern
-				if($.isPlainObject(patternConfig) && patternConfig.require){
-					deps = patternConfig.require;
+				/**
+				 * router cache, primarly used by init() function
+				 * @private
+				 * @property _cache
+				 * @type {Array of Functions} map
+				 * @default []
+				 */
+				_cache:[],
+				
+				/**
+				 * set route definitions
+				 * @example
+				 * 		Firebrick.router.set({
+				 * 			"users/abc": {
+				 * 				require:["file1", "file2"],
+				 * 				callback: function(){}
+				 * 			},
+				 * 			"contact": function(){}
+				 * 			defaults: function(){}		//defaults pattern - fallback
+				 * 		})
+				 * @example
+				 * 		Firebrick.router.set(function(){}) //call function regardless of route
+				 * @method set
+				 * @param config {Object|Function} - if function then the function is called regardless of route
+				 * @return onhashChange()
+				 */
+				set: function(config){
+					var me = this,
+						route;  
 					
-					if(!$.isArray(deps)){
-						deps = [deps];	//convert to array if needed
-					}
-					
-					require(deps, function(){
-						
-						//check if pattern has a callback and fire
-						if(patternConfig.callback){
-							requireArgs.push(Firebrick.utils.stripArguments(args));
-							requireArgs.push(Firebrick.utils.stripArguments(arguments));
-							patternConfig.callback.apply(me, requireArgs);
-						}
-						
-						//check paramters for any default actions that are required
-						//example: ?scrollTo=MyAnchorId
-						me._defaultRouteActions();
-						
-					});
-				}else{
-					//no dependencies - just fire the callback if it has once
-					
-					//if object configuration
-					if($.isPlainObject(patternConfig)){
-						callback = patternConfig.callback;
+					if($.isFunction(config)){
+						//one argument given, simple callback regardless of hash change
+						route = config;
 					}else{
-						//not object just a function defined
-						callback = patternConfig;
+						if($.isPlainObject(config)){
+							route = me._createRouterFunction(config);
+						}
 					}
 					
-					callback.apply(me, args);
+					me._cache.push(route);
 					
-					//check paramters for any default actions that are required
-					//example: ?scrollTo=MyAnchorId
-					me._defaultRouteActions();
-				}
-			},
-			
-			
-			/**
-			 * this function analyses the url and check if any default actions are needed
-			 * for example: scrollTo in the url - causes a scroll to anchor
-			 * @method _defaultRouteActions
-			 * @private
-			 */
-			_defaultRouteActions: function(){
-				var me = this,
-					route = me.getRoute(),
-					offset = Firebrick.scrollTopOffset,
-					scrollContainer = $(Firebrick.scrollContainerSelector);
+					//set onhash change routing
+					return me.onHashChange(route, config);
+				},
 				
-				if($.isFunction(offset)){
-					offset = offset(route);
-				}
+				/**
+				 * @method _createRouterFunction
+				 * @private
+				 * @param {Object} config
+				 * @return {Function}
+				 */
+				_createRouterFunction: function(config){
+					
+					return function(){
+						var route = Firebrick.router.getRoute(),
+							hash = route.cleanHash;
+						
+						if(hash){
+							
+							if(hash === "/#"){
+								hash = "/";
+							}
+							
+							if(config[hash]){
+								Firebrick.router.common._applyRoute( config[hash], arguments );
+							}else{
+								//page not found
+								if(config["404"]){
+									Firebrick.router.common._applyRoute(config["404"], arguments);
+								}
+							}	
+						}else{
+							if(config["/"]){
+								Firebrick.router.common._applyRoute(config["/"], arguments);
+							}
+						}
+						
+					};
+				},
 				
-				if(route.parameters.scrollTo){
-					scrollContainer.animate({ scrollTop: $("#"+route.parameters.scrollTo).offset().top - offset + scrollContainer.scrollTop() }, {
-						duration: 1000,
-						complete: function(){
-							//finished
+				/**
+				* Call a function when the hash changes on the site
+				* use Firebrick.route:set
+				* @example
+						Firebrick.router.onHashChange(function(){
+							//something happens
+						})
+				* @private
+				* @method onHashChange
+				* @param callback {Function}
+				* @param config {Object} config that was used for this callback - optional
+				* @return {Object} jQuery object
+				*/
+				onHashChange: function(callback, config){
+					return $(window).on("hashchange", function(){
+						var eObj = Firebrick.fireEvent("router.pre.hashchang", config, arguments);
+						if(eObj.preventDefault !== true){
+							callback.apply(this, arguments);
+							Firebrick.fireEvent("router.post.hashchang", config, arguments);
 						}
 					});
+				},
+				
+				/**
+				 * call this after setting router.set({}) if you wish to do an immediate evaulation of url
+				 * @method init
+				 */
+				init: function(){
+					var me = this;
+					for(var i = 0, l = me._cache.length; i<l; i++){
+						me._cache[i]();
+					}
 				}
+				
 			},
 			
-			/**
-			* Call a function when the hash changes on the site
-			* use Firebrick.route:set
-			* @example
-					Firebrick.router.onHashChange(function(){
-						//something happens
-					})
-			* @private
-			* @method onHashChange
-			* @param callback {Function}
-			* @return {Object} jQuery object
-			*/
-			onHashChange: function(callback){
-				return $(window).on("hashchange", function(){
-					callback.apply(this, arguments);
-				});
-			},
 			/**
 			* Check whether the url matches a pattern - removes any parameters in the url to check for a match
 			* @example
@@ -1991,6 +2188,7 @@
 			 * 						href: "http://localhost/#/mypath/dayone?user=1",
 			 * 						origin: "http://localhost"
 			 * 						path: "/#/mypath/dayone?user=1",	// (href - origin)
+			 * 						cleanPath: "/mypath/dayone",	//non hash routes
 			 * 						hash: "#/mypath/dayone?user=1",		//window.location.hash
 			 * 						cleanHash: "#/mypath/dayone"
 			 * 						parameters:{}		//url parameter as object
@@ -2001,14 +2199,25 @@
 					location = window.location,
 					path = location.href.replace(location.origin, ""),
 					hash = location.hash,
-					pPos = hash.indexOf("?");	//paramter position
+					pPos = hash.indexOf("?"),
+					pPos1 = path.indexOf("?"), 	//paramter position
+					cleanPath = path;
+				
+				if(hash){
+					cleanPath = path.replace(hash, "");
+				}
+				if(pPos1 !== -1){
+					cleanPath = path.substr(0, pPos1);
+				}
+				
 				return {
 					href: location.href,
 					origin: location.origin,
 					path: path,
+					cleanPath: cleanPath,
 					hash: hash,
 					cleanHash: pPos !== -1 ? hash.substr(0, pPos) : hash,
-					parameters:me.getUrlParam(path)
+					parameters: me.getUrlParam(path)
 				}
 			},
 			
@@ -2031,17 +2240,6 @@
 			    }
 
 			    return params;
-			},
-			
-			/**
-			 * call this after setting router.set({}) if you wish to do an immediate evaulation of url
-			 * @method init
-			 */
-			init: function(){
-				var me = this;
-				for(var i = 0, l = me._cache.length; i<l; i++){
-					me._cache[i]();
-				}
 			}
 		
 		}
@@ -2280,23 +2478,29 @@
 		* @method fireEvent
 		* @param eventName {String} name of the event to fire
 		* @param args {Any...} (optional)
-		* @return {Object} self
+		* @return {Object} eventObject
 		*/
 		fireEvent: function(){
 			var me = this,
 				events = me.localEventRegistry,
 				args = arguments, 
-				eventName = arguments[0];	//get first argument - i.e. the event name
+				eventName = arguments[0],	//get first argument - i.e. the event name
+				func, eObj, 
+				eventObject = Firebrick.events._initEventObject(eventName);
+			
 			if(events && events[eventName]){
-				var func, eObj = events[eventName];
+				eObj = events[eventName];
 				for(var i = 0, l = eObj.length; i < l; i++){
 					func = eObj[i];
+					func.event = eventObject;
 					func.apply(func.scope || func, args);
 				}
 				
 			}
-			return me;
+			
+			return eventObject;
 		},
+		
 		/**
 		 * pass an event to another object - fire the same event on the second object with all the arguments of the first
 		 * @method passEvent

@@ -2,7 +2,7 @@
     "project": {
         "name": "Firebrick JS API",
         "description": "Firebrick JS API: A lightweight JavaScript MVC Framework powered with jQuery, Bootstrap, Knockout JS and Require JS",
-        "version": "0.10.4",
+        "version": "0.11.0",
         "url": "https://github.com/smasala",
         "logo": "fb_small.png"
     },
@@ -27,7 +27,10 @@
                 "Data": 1,
                 "Data.Store": 1,
                 "Router": 1,
-                "class.Base": 1,
+                "Router.Common": 1,
+                "Router.History": 1,
+                "Router.Hashbang": 1,
+                "Router.class.Base": 1,
                 "view.Base": 1,
                 "controller.Base": 1,
                 "store.Base": 1,
@@ -35,10 +38,14 @@
             },
             "fors": {
                 "Firebrick": 1,
-                "Data": 1
+                "Data": 1,
+                "Router": 1,
+                "Router.Router": 1,
+                "Router.Router.Router": 1
             },
             "namespaces": {
-                "Data": 1
+                "Data": 1,
+                "Router": 1
             }
         }
     },
@@ -58,25 +65,34 @@
                 "Events": 1,
                 "Data": 1,
                 "Data.Store": 1,
-                "Router": 1
+                "Router": 1,
+                "Router.Common": 1,
+                "Router.Router": 1,
+                "Router.History": 1,
+                "Router.Router.Router": 1,
+                "Router.Hashbang": 1
             },
             "fors": {
                 "Firebrick": 1,
-                "Data": 1
+                "Data": 1,
+                "Router": 1,
+                "Router.Router": 1,
+                "Router.Router.Router": 1
             },
             "namespaces": {
-                "Data": 1
+                "Data": 1,
+                "Router": 1
             },
             "tag": "module",
             "file": "src\\firebrick.js",
-            "line": 1776,
+            "line": 2041,
             "description": "A lightweight JavaScript MVC Framework powered with jQuery, Knockout JS and Require JS"
         },
         "Firebrick.class": {
             "name": "Firebrick.class",
             "submodules": {},
             "classes": {
-                "class.Base": 1,
+                "Router.class.Base": 1,
                 "view.Base": 1,
                 "controller.Base": 1,
                 "store.Base": 1
@@ -85,7 +101,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src\\firebrick.js",
-            "line": 2984
+            "line": 3188
         },
         "Global": {
             "name": "Global",
@@ -97,7 +113,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "src\\firebrick.js",
-            "line": 3275
+            "line": 3479
         }
     },
     "classes": {
@@ -230,7 +246,7 @@
             "module": "Firebrick",
             "namespace": "Data",
             "file": "src\\firebrick.js",
-            "line": 1603
+            "line": 1623
         },
         "Data.Store": {
             "name": "Data.Store",
@@ -243,7 +259,7 @@
             "module": "Firebrick",
             "namespace": "Data",
             "file": "src\\firebrick.js",
-            "line": 1608
+            "line": 1628
         },
         "Router": {
             "name": "Router",
@@ -254,12 +270,73 @@
             "plugin_for": [],
             "extension_for": [],
             "module": "Firebrick",
-            "namespace": "",
+            "namespace": "Router",
             "file": "src\\firebrick.js",
-            "line": 1776
+            "line": 1797
         },
-        "class.Base": {
-            "name": "class.Base",
+        "Router.Common": {
+            "name": "Router.Common",
+            "shortname": "Router.Common",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Firebrick",
+            "namespace": "Router",
+            "file": "src\\firebrick.js",
+            "line": 1803
+        },
+        "Router.Router": {
+            "name": "Router.Router",
+            "shortname": "Router.Router",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        "Router.History": {
+            "name": "Router.History",
+            "shortname": "Router.History",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Firebrick",
+            "namespace": "Router",
+            "file": "src\\firebrick.js",
+            "line": 1887
+        },
+        "Router.Router.Router": {
+            "name": "Router.Router.Router",
+            "shortname": "Router.Router.Router",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        "Router.Hashbang": {
+            "name": "Router.Hashbang",
+            "shortname": "Router.Hashbang",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Firebrick",
+            "namespace": "Router",
+            "file": "src\\firebrick.js",
+            "line": 2041
+        },
+        "Router.class.Base": {
+            "name": "Router.class.Base",
             "shortname": "class.Base",
             "classitems": [],
             "plugins": [],
@@ -267,9 +344,9 @@
             "plugin_for": [],
             "extension_for": [],
             "module": "Firebrick.class",
-            "namespace": "",
+            "namespace": "Router",
             "file": "src\\firebrick.js",
-            "line": 2051
+            "line": 2249
         },
         "view.Base": {
             "name": "view.Base",
@@ -282,7 +359,7 @@
             "module": "Firebrick.class",
             "namespace": "",
             "file": "src\\firebrick.js",
-            "line": 2316,
+            "line": 2520,
             "description": "Extends {{#crossLink Firebrick.class.Base}}{{/crossLink}}",
             "extends": "class.Base"
         },
@@ -297,7 +374,7 @@
             "module": "Firebrick.class",
             "namespace": "",
             "file": "src\\firebrick.js",
-            "line": 2941,
+            "line": 3145,
             "description": "Extends {{#crossLink Firebrick.class.Base}}{{/crossLink}}",
             "extends": "class.Base"
         },
@@ -312,7 +389,7 @@
             "module": "Firebrick.class",
             "namespace": "",
             "file": "src\\firebrick.js",
-            "line": 2984,
+            "line": 3188,
             "description": "Extends {{#crossLink Firebrick.class.Base}}{{/crossLink}}",
             "extends": "class.Base"
         },
@@ -327,7 +404,7 @@
             "module": "Global",
             "namespace": "",
             "file": "src\\firebrick.js",
-            "line": 3275
+            "line": 3479
         }
     },
     "classitems": [
@@ -1967,7 +2044,29 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1480,
+            "line": 1485,
+            "description": "this object is passed to all fireEvent listeners",
+            "itemtype": "method",
+            "name": "_initEventObject",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "event name",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Events",
+            "module": "Firebrick"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 1500,
             "description": "creates the event object to be passed as argument when event is fired",
             "itemtype": "method",
             "name": "createEventData",
@@ -1989,7 +2088,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1491,
+            "line": 1511,
             "description": "removes the listener it called from within",
             "example": [
                 ""
@@ -2001,7 +2100,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1504,
+            "line": 1524,
             "description": "Define events and their callbacks, similar to $(selector).on(eventname, callback)",
             "example": [
                 "\n\t\ton(\"click\", \"a.mylink\", function(){}, newScope)",
@@ -2036,7 +2135,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1531,
+            "line": 1551,
             "description": "Makes use of the jQuery .off() function",
             "example": [
                 "\n\t\toff( \"click\", \"#theone\", function(){} )"
@@ -2065,7 +2164,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1545,
+            "line": 1565,
             "description": "use Firebrick.events:on",
             "example": [
                 " \n\t\t_on({\n\t\t\t\t\t\t\t\"a.link\":{\n\t\t\t\t\t\t\t\tclick:function(){},\n\t\t\t\t\t\t\t\tmouseover:function(){}\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\tscope:this\n\t\t\t\t\t\t}"
@@ -2086,7 +2185,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1580,
+            "line": 1600,
             "description": "use Firebrick.events:on",
             "itemtype": "method",
             "name": "_registerOnEvent",
@@ -2097,7 +2196,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1614,
+            "line": 1634,
             "description": "creates a new Firebrick.store.Base store to be used OR if a name and config are supplied, then Firebrick.create() is called",
             "example": [
                 "\n\t\t//creates a new class Firebrick.store.Base to be used\n\t\tcreateStore({\n\t\t\t\t\t\t\tdata:{name:\"bob\"}\n\t\t\t\t\t\t}); ",
@@ -2128,7 +2227,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1655,
+            "line": 1675,
             "description": "Basic view configurations when defining/creating a view",
             "access": "private",
             "tagname": "",
@@ -2151,7 +2250,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1669,
+            "line": 1689,
             "description": "Used by Firebrick.store.Base:load\nGET",
             "access": "private",
             "tagname": "",
@@ -2201,7 +2300,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1732,
+            "line": 1752,
             "description": "Submit the given store with its data to the specified url\nPOST",
             "access": "private",
             "tagname": "",
@@ -2229,7 +2328,159 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1782,
+            "line": 1809,
+            "description": "check if configuration pattern match (url) and applies it.",
+            "itemtype": "method",
+            "name": "_iterateRouterConfigs",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "patternConfig",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "args",
+                    "description": "",
+                    "type": "Arguments"
+                },
+                {
+                    "name": "ready",
+                    "description": "- called when all dependencies etc are fetched and loaded",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "Router.Common",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 1863,
+            "itemtype": "method",
+            "name": "scrollTo",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "jquery selector",
+                    "type": "String"
+                }
+            ],
+            "class": "Router.Common",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 1894,
+            "description": "used to see whether document events for the history API have already been set",
+            "itemtype": "property",
+            "name": "_initialised",
+            "type": "{Boolean}",
+            "default": "false",
+            "class": "Router.History",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 1901,
+            "itemtype": "property",
+            "name": "_routes",
+            "access": "private",
+            "tagname": "",
+            "type": "{Array}",
+            "default": "[]",
+            "class": "Router.History",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 1908,
+            "description": "set route definitions",
+            "example": [
+                "\n\t\tFirebrick.router.set({\n\t\t\t\"users/abc\": {\n\t\t\t\trequire:[\"file1\", \"file2\"],\n\t\t\t\tcallback: function(){}\n\t\t\t},\n\t\t\t\"contact\": function(){}\n\t\t\tdefaults: function(){}\t\t//defaults pattern - fallback\n\t\t})",
+                "\n\t\tFirebrick.router.set(function(){}) //call function regardless of route"
+            ],
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "routes",
+                    "description": "- if function then the function is called regardless of route",
+                    "type": "Object|Function"
+                }
+            ],
+            "return": {
+                "description": "routes function"
+            },
+            "class": "Router.History",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 1948,
+            "itemtype": "method",
+            "name": "_createRouterFunction",
+            "access": "private",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "Router.History",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 1972,
+            "description": "used by init",
+            "itemtype": "method",
+            "name": "_registerLinkEvent",
+            "access": "private",
+            "tagname": "",
+            "class": "Router.History",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 2009,
+            "itemtype": "method",
+            "name": "_registerPopEvent",
+            "access": "private",
+            "tagname": "",
+            "class": "Router.History",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 2026,
+            "itemtype": "method",
+            "name": "init",
+            "class": "Router.History",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 2048,
             "description": "router cache, primarly used by init() function",
             "access": "private",
             "tagname": "",
@@ -2237,12 +2488,13 @@
             "name": "_cache",
             "type": "{Array of Functions} map",
             "default": "[]",
-            "class": "Router",
-            "module": "Firebrick"
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1791,
+            "line": 2057,
             "description": "set route definitions",
             "example": [
                 "\n\t\tFirebrick.router.set({\n\t\t\t\"users/abc\": {\n\t\t\t\trequire:[\"file1\", \"file2\"],\n\t\t\t\tcallback: function(){}\n\t\t\t},\n\t\t\t\"contact\": function(){}\n\t\t\tdefaults: function(){}\t\t//defaults pattern - fallback\n\t\t})",
@@ -2260,12 +2512,13 @@
             "return": {
                 "description": "onhashChange()"
             },
-            "class": "Router",
-            "module": "Firebrick"
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1827,
+            "line": 2093,
             "itemtype": "method",
             "name": "_createRouterFunction",
             "access": "private",
@@ -2281,48 +2534,16 @@
                 "description": "",
                 "type": "Function"
             },
-            "class": "Router",
-            "module": "Firebrick"
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1870,
-            "description": "check if configuration pattern match (url) and applies it.",
-            "itemtype": "method",
-            "name": "_iterateRouterConfigs",
-            "access": "private",
-            "tagname": "",
-            "params": [
-                {
-                    "name": "patternConfig",
-                    "description": "",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "",
-                "type": "Boolean"
-            },
-            "class": "Router",
-            "module": "Firebrick"
-        },
-        {
-            "file": "src\\firebrick.js",
-            "line": 1924,
-            "description": "this function analyses the url and check if any default actions are needed\nfor example: scrollTo in the url - causes a scroll to anchor",
-            "itemtype": "method",
-            "name": "_defaultRouteActions",
-            "access": "private",
-            "tagname": "",
-            "class": "Router",
-            "module": "Firebrick"
-        },
-        {
-            "file": "src\\firebrick.js",
-            "line": 1950,
+            "line": 2128,
             "description": "Call a function when the hash changes on the site\nuse Firebrick.route:set",
             "example": [
-                "\n\t\t\t\t\tFirebrick.router.onHashChange(function(){\n\t\t\t\t\t\t//something happens\n\t\t\t\t\t})"
+                "\n\t\t\t\t\t\tFirebrick.router.onHashChange(function(){\n\t\t\t\t\t\t\t//something happens\n\t\t\t\t\t\t})"
             ],
             "access": "private",
             "tagname": "",
@@ -2333,18 +2554,34 @@
                     "name": "callback",
                     "description": "",
                     "type": "Function"
+                },
+                {
+                    "name": "config",
+                    "description": "config that was used for this callback - optional",
+                    "type": "Object"
                 }
             ],
             "return": {
                 "description": "jQuery object",
                 "type": "Object"
             },
-            "class": "Router",
-            "module": "Firebrick"
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1967,
+            "line": 2151,
+            "description": "call this after setting router.set({}) if you wish to do an immediate evaulation of url",
+            "itemtype": "method",
+            "name": "init",
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
+        },
+        {
+            "file": "src\\firebrick.js",
+            "line": 2164,
             "description": "Check whether the url matches a pattern - removes any parameters in the url to check for a match",
             "example": [
                 "\n\t\tFirebrick.router.is(\"#/completed\") // returns true or false",
@@ -2363,24 +2600,26 @@
                 "description": "",
                 "type": "Boolean"
             },
-            "class": "Router",
-            "module": "Firebrick"
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 1988,
+            "line": 2185,
             "itemtype": "method",
             "name": "getRoute",
             "return": {
-                "description": "{\n\t\t\t\t\t\thref: \"http://localhost/#/mypath/dayone?user=1\",\n\t\t\t\t\t\torigin: \"http://localhost\"\n\t\t\t\t\t\tpath: \"/#/mypath/dayone?user=1\",\t// (href - origin)\n\t\t\t\t\t\thash: \"#/mypath/dayone?user=1\",\t\t//window.location.hash\n\t\t\t\t\t\tcleanHash: \"#/mypath/dayone\"\n\t\t\t\t\t\tparameters:{}\t\t//url parameter as object\n\t\t\t\t\t}",
+                "description": "{\n\t\t\t\t\t\thref: \"http://localhost/#/mypath/dayone?user=1\",\n\t\t\t\t\t\torigin: \"http://localhost\"\n\t\t\t\t\t\tpath: \"/#/mypath/dayone?user=1\",\t// (href - origin)\n\t\t\t\t\t\tcleanPath: \"/mypath/dayone\",\t//non hash routes\n\t\t\t\t\t\thash: \"#/mypath/dayone?user=1\",\t\t//window.location.hash\n\t\t\t\t\t\tcleanHash: \"#/mypath/dayone\"\n\t\t\t\t\t\tparameters:{}\t\t//url parameter as object\n\t\t\t\t\t}",
                 "type": "Object"
             },
-            "class": "Router",
-            "module": "Firebrick"
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2015,
+            "line": 2224,
             "description": "adapted from http://stackoverflow.com/a/1099670/425226",
             "itemtype": "method",
             "name": "getUrlParam",
@@ -2391,32 +2630,24 @@
                     "type": "String"
                 }
             ],
-            "class": "Router",
-            "module": "Firebrick"
+            "class": "Router.Hashbang",
+            "module": "Firebrick",
+            "namespace": "Router"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2036,
-            "description": "call this after setting router.set({}) if you wish to do an immediate evaulation of url",
-            "itemtype": "method",
-            "name": "init",
-            "class": "Router",
-            "module": "Firebrick"
-        },
-        {
-            "file": "src\\firebrick.js",
-            "line": 2056,
+            "line": 2254,
             "description": "when calling Firebrick.create(\"xxx\", {});\nthe second parameter {} (config) is stored in this property as a reference\n- in case one needs to know with what paramters the object was intialised with",
             "itemtype": "property",
             "name": "initialConfig",
             "type": "{Object}",
             "default": "null",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2065,
+            "line": 2263,
             "description": "create a copy of the listener for each class",
             "access": "private",
             "tagname": "",
@@ -2433,65 +2664,65 @@
                 "description": "",
                 "type": "Function"
             },
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2077,
+            "line": 2275,
             "description": "use this give the class a shortname to reference\nFirebrick.get(sname) is also possible if this property is defined",
             "itemtype": "property",
             "name": "sName",
             "type": "{String}",
             "default": "null",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2085,
+            "line": 2283,
             "itemtype": "method",
             "name": "init",
             "return": {
                 "description": "self"
             },
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2111,
+            "line": 2309,
             "itemtype": "property",
             "name": "classReadyEvent",
             "type": "{String}",
             "default": "\"ready\"",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2117,
+            "line": 2315,
             "description": "controls which data will be destoryed",
             "itemtype": "property",
             "name": "autoDestroy",
             "type": "{Boolean}",
             "default": "true",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2124,
+            "line": 2322,
             "itemtype": "property",
             "name": "mixins",
             "type": "{String|Object|[String]}",
             "default": "null",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2130,
+            "line": 2328,
             "description": "reference for mixins that have been mixed in.\nworks only if \"mixins\" is a String or array or strings",
             "itemtype": "property",
             "name": "mixedIn",
@@ -2499,68 +2730,68 @@
             "tagname": "",
             "type": "{Object}",
             "default": ": null",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2139,
+            "line": 2337,
             "access": "private",
             "tagname": "",
             "itemtype": "property",
             "name": "_idPrefix",
             "type": "{String}",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2145,
+            "line": 2343,
             "description": "use Firebrick.class.Base:getId",
             "access": "private",
             "tagname": "",
             "itemtype": "property",
             "name": "id",
             "type": "{String}",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2152,
+            "line": 2350,
             "description": "event registry",
             "access": "private",
             "tagname": "",
             "itemtype": "property",
             "name": "localEventRegistry",
             "type": "{Object} map",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2160,
+            "line": 2358,
             "itemtype": "method",
             "name": "getId",
             "return": {
                 "description": "uniqueId",
                 "type": "String"
             },
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2175,
+            "line": 2373,
             "description": "remove class from registry",
             "itemtype": "event",
             "name": "destroy",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2186,
+            "line": 2384,
             "description": "shorthand for defining class listeners so you don't have to create the init function and use this.on()",
             "example": [
                 "\n\t\t listeners:{\n\t\t\t\t\"ready\": function(){},\n\t\t\t\tscope:this\n\t\t\t}"
@@ -2568,12 +2799,12 @@
             "itemtype": "property",
             "name": "listeners",
             "type": "{Object} map",
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2197,
+            "line": 2395,
             "description": "register a listener to this object, when the object fires a specific event",
             "example": [
                 " \n\ton(\"someEvent\", callback)",
@@ -2602,12 +2833,12 @@
                 "description": "self",
                 "type": "Object"
             },
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2254,
+            "line": 2452,
             "description": "remove a listener that was registered with .on()",
             "itemtype": "method",
             "name": "off",
@@ -2627,12 +2858,12 @@
                 "description": "",
                 "type": "Object"
             },
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2278,
+            "line": 2476,
             "description": "Fire an event on this object",
             "itemtype": "method",
             "name": "fireEvent",
@@ -2649,15 +2880,15 @@
                 }
             ],
             "return": {
-                "description": "self",
+                "description": "eventObject",
                 "type": "Object"
             },
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2300,
+            "line": 2504,
             "description": "pass an event to another object - fire the same event on the second object with all the arguments of the first",
             "itemtype": "method",
             "name": "passEvent",
@@ -2674,12 +2905,12 @@
                 "description": "value from fireEvent",
                 "type": "Any"
             },
-            "class": "class.Base",
+            "class": "Router.class.Base",
             "module": "Firebrick.class"
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2323,
+            "line": 2527,
             "description": "set when the view is loaded by the ajax request",
             "itemtype": "property",
             "name": "tpl",
@@ -2690,7 +2921,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2330,
+            "line": 2534,
             "description": "bind a store or plain data to the view",
             "itemtype": "property",
             "name": "store",
@@ -2701,7 +2932,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2337,
+            "line": 2541,
             "description": "parsed html using the tpl and data",
             "itemtype": "property",
             "name": "html",
@@ -2712,7 +2943,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2344,
+            "line": 2548,
             "description": "Target to which to render the html content",
             "itemtype": "property",
             "name": "target",
@@ -2723,7 +2954,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2351,
+            "line": 2555,
             "description": "render the view on class creation",
             "itemtype": "property",
             "name": "autoRender",
@@ -2734,7 +2965,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2358,
+            "line": 2562,
             "description": "controller to bind to the view",
             "itemtype": "property",
             "name": "controller",
@@ -2745,7 +2976,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2365,
+            "line": 2569,
             "description": "loading template - loaded into target is showLoading == true",
             "itemtype": "property",
             "name": "loadingTpl",
@@ -2756,7 +2987,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2372,
+            "line": 2576,
             "description": "whether the loader is being shown or not",
             "access": "private",
             "tagname": "",
@@ -2769,7 +3000,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2380,
+            "line": 2584,
             "description": "whether to show that the view is loading",
             "itemtype": "property",
             "name": "showLoading",
@@ -2780,7 +3011,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2387,
+            "line": 2591,
             "description": "State the view is current in. \"initial\", \"rendered\", \"unbound\", \"destroyed\"",
             "itemtype": "property",
             "name": "_state",
@@ -2793,7 +3024,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2395,
+            "line": 2599,
             "description": "bindings are applied to its decendants, not on the target itself",
             "itemtype": "property",
             "name": "applyBindingsToDescendants",
@@ -2804,7 +3035,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2402,
+            "line": 2606,
             "description": "wrap the view inside its own div which gets bound separatly to its context",
             "itemtype": "property",
             "name": "enclosedBind",
@@ -2815,7 +3046,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2409,
+            "line": 2613,
             "description": "define subviews to load after creation of this view",
             "example": [
                 " \n\t\tsubViews: MyApp.view.MyView",
@@ -2831,7 +3062,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2423,
+            "line": 2627,
             "description": "boolean whether class is view",
             "itemtype": "property",
             "name": "isView",
@@ -2843,7 +3074,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2430,
+            "line": 2634,
             "description": "whether or not the template is to load asyncronously",
             "itemtype": "property",
             "name": "async",
@@ -2854,7 +3085,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2437,
+            "line": 2641,
             "description": "whether to append or overwrite the content of the target",
             "itemtype": "property",
             "name": "appendTarget",
@@ -2865,7 +3096,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2444,
+            "line": 2648,
             "description": "custom attribute to add to the element to mark as bound",
             "itemtype": "property",
             "name": "bindAttribute",
@@ -2876,7 +3107,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2451,
+            "line": 2655,
             "itemtype": "property",
             "name": "enclosedBindIdPrefix",
             "type": "{String}",
@@ -2886,7 +3117,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2457,
+            "line": 2661,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2903,7 +3134,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2488,
+            "line": 2692,
             "description": "Called on creation",
             "itemtype": "method",
             "name": "init",
@@ -2912,7 +3143,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2512,
+            "line": 2716,
             "description": "Returns the store linked to the view",
             "itemtype": "method",
             "name": "getStore",
@@ -2921,7 +3152,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2519,
+            "line": 2723,
             "description": "Returns data store data as object",
             "itemtype": "method",
             "name": "getData",
@@ -2934,7 +3165,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2529,
+            "line": 2733,
             "description": "Construct the view with template and data binding",
             "itemtype": "method",
             "name": "initView",
@@ -2947,7 +3178,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2544,
+            "line": 2748,
             "access": "private",
             "tagname": "",
             "itemtype": "method",
@@ -2957,7 +3188,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2551,
+            "line": 2755,
             "itemtype": "method",
             "name": "getTarget",
             "return": {
@@ -2969,7 +3200,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2560,
+            "line": 2764,
             "description": "has data been bound to the target by THIS view",
             "itemtype": "method",
             "name": "isTargetBound",
@@ -2982,7 +3213,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2569,
+            "line": 2773,
             "description": "has data been bound to the target by A|ANY view",
             "itemtype": "method",
             "name": "isTargetBound",
@@ -2995,7 +3226,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2578,
+            "line": 2782,
             "description": "has the data been bound",
             "itemtype": "method",
             "name": "_isBound",
@@ -3017,7 +3248,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2608,
+            "line": 2812,
             "description": "unbind and remove from DOM",
             "itemtype": "method",
             "name": "detroy",
@@ -3030,7 +3261,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2620,
+            "line": 2824,
             "itemtype": "method",
             "name": "getEnclosedBindId",
             "return": {
@@ -3042,7 +3273,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2629,
+            "line": 2833,
             "description": "remove from dom",
             "itemtype": "method",
             "name": "remove",
@@ -3055,7 +3286,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2653,
+            "line": 2857,
             "description": "unbind the data from this view",
             "itemtype": "method",
             "name": "unbind",
@@ -3068,7 +3299,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2671,
+            "line": 2875,
             "itemtype": "method",
             "name": "getEnclosedTarget",
             "return": {
@@ -3080,7 +3311,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2679,
+            "line": 2883,
             "description": "prepare the HTML for rendering",
             "itemtype": "method",
             "name": "prepHtml",
@@ -3093,7 +3324,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2703,
+            "line": 2907,
             "itemtype": "method",
             "name": "_renderHTML",
             "access": "private",
@@ -3114,7 +3345,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2765,
+            "line": 2969,
             "description": "Called by view.Base:render()",
             "itemtype": "method",
             "name": "bind",
@@ -3123,7 +3354,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2795,
+            "line": 2999,
             "description": "Calls renderTo without parameters",
             "itemtype": "method",
             "name": "render",
@@ -3136,7 +3367,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2820,
+            "line": 3024,
             "itemtype": "method",
             "name": "setDisposeCallback",
             "params": [
@@ -3151,7 +3382,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2831,
+            "line": 3035,
             "description": "called by view.Base:setDisposeCallback",
             "access": "private",
             "tagname": "",
@@ -3162,7 +3393,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2848,
+            "line": 3052,
             "description": "show target view.Base:getTarget",
             "itemtype": "method",
             "name": "show",
@@ -3171,7 +3402,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2859,
+            "line": 3063,
             "description": "hide target view.Base:getTarget",
             "itemtype": "method",
             "name": "hide",
@@ -3180,7 +3411,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2870,
+            "line": 3074,
             "itemtype": "method",
             "name": "isVisible",
             "class": "view.Base",
@@ -3188,7 +3419,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2881,
+            "line": 3085,
             "description": "Converts View data into a Store if not already done",
             "access": "private",
             "tagname": "",
@@ -3210,7 +3441,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2896,
+            "line": 3100,
             "description": "update the view with new data",
             "itemtype": "method",
             "name": "update",
@@ -3230,7 +3461,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2907,
+            "line": 3111,
             "itemtype": "method",
             "name": "startLoader",
             "access": "private",
@@ -3240,7 +3471,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2927,
+            "line": 3131,
             "itemtype": "method",
             "name": "stopLoader",
             "access": "private",
@@ -3250,7 +3481,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2948,
+            "line": 3152,
             "description": "Called on creation",
             "itemtype": "method",
             "name": "init",
@@ -3259,7 +3490,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2955,
+            "line": 3159,
             "itemtype": "property",
             "name": "app",
             "type": "{Object}",
@@ -3271,7 +3502,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2964,
+            "line": 3168,
             "description": "see Firebrick.events:on",
             "itemtype": "property",
             "name": "on",
@@ -3281,7 +3512,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2973,
+            "line": 3177,
             "description": "see Firebrick.events:addListener",
             "itemtype": "property",
             "name": "listeners",
@@ -3291,7 +3522,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 2991,
+            "line": 3195,
             "description": "Called on creation",
             "itemtype": "method",
             "name": "init",
@@ -3300,7 +3531,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3015,
+            "line": 3219,
             "description": "Default store configurations\nany types that jQuery allows in $.ajax()",
             "itemtype": "property",
             "name": "datatype",
@@ -3311,7 +3542,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3023,
+            "line": 3227,
             "description": "URL Config:",
             "itemtype": "property",
             "name": "url",
@@ -3325,7 +3556,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3036,
+            "line": 3240,
             "itemtype": "property",
             "name": "get",
             "type": "{String}",
@@ -3335,7 +3566,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3042,
+            "line": 3246,
             "itemtype": "property",
             "name": "submit",
             "type": "{String}",
@@ -3345,7 +3576,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3049,
+            "line": 3253,
             "itemtype": "property",
             "name": "stringifyData",
             "type": "{Boolean}",
@@ -3355,7 +3586,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3055,
+            "line": 3259,
             "description": "set the connection protocol, POST or GET for load",
             "itemtype": "property",
             "name": "loadProtocol",
@@ -3366,7 +3597,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3062,
+            "line": 3266,
             "description": "set the connection protocol, POST or GET for submit",
             "itemtype": "property",
             "name": "submitProtocol",
@@ -3377,7 +3608,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3069,
+            "line": 3273,
             "description": "Store status\n1. initial :: store has just been created\n2. preload :: store is just about to fire the $.ajax event\n3. any :: success status of $.ajax()",
             "access": "private",
             "tagname": "",
@@ -3389,7 +3620,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3079,
+            "line": 3283,
             "description": "Simple property to check whether this object is a store",
             "access": "private",
             "tagname": "",
@@ -3402,7 +3633,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3087,
+            "line": 3291,
             "description": "Whether the data in the store has been initialised, ie. convert to records etc.",
             "access": "private",
             "tagname": "",
@@ -3415,7 +3646,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3095,
+            "line": 3299,
             "description": "load store on creation",
             "itemtype": "property",
             "name": "autoLoad",
@@ -3426,7 +3657,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3102,
+            "line": 3306,
             "description": "data store - use setData()",
             "itemtype": "property",
             "name": "data",
@@ -3437,7 +3668,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3110,
+            "line": 3314,
             "description": "initial raw data that was passed when setting the store with setData() function",
             "access": "private",
             "tagname": "",
@@ -3450,7 +3681,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3118,
+            "line": 3322,
             "description": "default value",
             "itemtype": "property",
             "name": "async",
@@ -3461,7 +3692,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3125,
+            "line": 3329,
             "description": "specify a root - used when calling getData()",
             "itemtype": "property",
             "name": "root",
@@ -3472,7 +3703,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3133,
+            "line": 3337,
             "description": "return the correct url when getting or submitting the store",
             "itemtype": "method",
             "name": "getUrl",
@@ -3492,7 +3723,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3150,
+            "line": 3354,
             "description": "Load the store - see data.store:loadStore",
             "example": [
                 " \n\t\tload({\n\t\t\t\t\tcallback:function(){},\n\t\t\t\t\tscope:this //scope for callback\n\t\t\t\t})"
@@ -3515,7 +3746,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3164,
+            "line": 3368,
             "description": "Returns the store data attribute",
             "itemtype": "method",
             "name": "getData",
@@ -3528,7 +3759,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3178,
+            "line": 3382,
             "description": "remove data",
             "itemtype": "method",
             "name": "destroy",
@@ -3537,7 +3768,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3191,
+            "line": 3395,
             "description": "provide the raw data",
             "itemtype": "method",
             "name": "getRawData",
@@ -3557,7 +3788,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3206,
+            "line": 3410,
             "description": "Converts a json object into stores with records",
             "itemtype": "method",
             "name": "setData",
@@ -3577,7 +3808,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3236,
+            "line": 3440,
             "description": "Submit the store data to the specified url.submit path\nsee data.store:submit",
             "itemtype": "method",
             "name": "submit",
@@ -3590,7 +3821,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3245,
+            "line": 3449,
             "description": "convert store data to a plain object",
             "itemtype": "method",
             "name": "toPlainObject",
@@ -3603,7 +3834,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3265,
+            "line": 3469,
             "description": "Convert store data to json string",
             "itemtype": "method",
             "name": "toJson",
@@ -3616,7 +3847,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3280,
+            "line": 3484,
             "itemtype": "property",
             "name": "Firebrick",
             "type": "{Object}",
@@ -3625,7 +3856,7 @@
         },
         {
             "file": "src\\firebrick.js",
-            "line": 3287,
+            "line": 3491,
             "itemtype": "property",
             "name": "fb",
             "type": "{Object}",

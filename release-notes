@@ -1,3 +1,10 @@
+v0.11.0
+----------------------------
+* implement HTML5 JS history API
+* change router to router.history and router.hashbang
+* Firebrick.fireEvent - returns event object
+* defaults for router configuration has been removed - replaced with "/"
+
 v0.10.4
 ----------------------------
 * class creaton id fix

@@ -1,4 +1,4 @@
-#Firebrick JS version: 0.10.4
+#Firebrick JS version: 0.11.0
 
 JavaScript MVC Framework built with:
 
