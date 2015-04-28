@@ -1978,14 +1978,15 @@
 					var me = this,
 						origin = Firebrick.router.getRoute().origin;
 					
-					$(document).on("click", "a:not([fb-ignore-router]):not([target])", function(event){
+					$(document).on("click", "a:not([fb-ignore-router]):not([target]):not()", function(event){
 						var $this = $(this),
 							href = $this.attr("href"),
-							hash = href.indexOf("#") === 0 ? true : false,
-							external = href.indexOf("http") === 0 && href.indexOf(origin) === -1 ? true : false,	//whether the link is external or internal 
+							hash = href.indexOf("#") === 0,
+							external = (href.indexOf("http") === 0 && href.indexOf(origin) === -1),	//whether the link is external or internal 
+							js = href.indexOf("javascript:") >= 0,
 							eventObj;
 						
-							if(!external){
+							if(!external && !js){
 								event.preventDefault();
 								
 								eventObj = Firebrick.fireEvent("router.pre.pushState", href);
