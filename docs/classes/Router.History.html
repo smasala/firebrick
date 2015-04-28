@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Data.Store - Firebrick JS API</title>
+    <title>Router.History - Firebrick JS API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -130,7 +130,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Data.Store Class</h1>
+                        <h1>Router.History Class</h1>
 <div class="box meta">
     
 
@@ -138,7 +138,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l1628"><code>src\firebrick.js:1628</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l1887"><code>src\firebrick.js:1887</code></a>
         </div>
     
 
@@ -167,6 +167,8 @@
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
         
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
         
         
     </ul>
@@ -182,28 +184,59 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
-                                <a href="#method__basicStoreConfigurations">_basicStoreConfigurations</a>
+                                <a href="#method__createRouterFunction">_createRouterFunction</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method__loadStore">_loadStore</a>
+                                <a href="#method__registerLinkEvent">_registerLinkEvent</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method__submit">_submit</a>
+                                <a href="#method__registerPopEvent">_registerPopEvent</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_createStore">createStore</a>
+                                <a href="#method_init">init</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_set">set</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property__initialised">_initialised</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__routes">_routes</a>
 
                                 
                                 
@@ -216,8 +249,6 @@
             
 
             
-
-            
         </div>
 
         
@@ -225,8 +256,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__basicStoreConfigurations" class="method item private">
-    <h3 class="name"><code>_basicStoreConfigurations</code></h3>
+                    <div id="method__createRouterFunction" class="method item private">
+    <h3 class="name"><code>_createRouterFunction</code></h3>
 
     
         <div class="args">
@@ -244,7 +275,7 @@
 
     
         <span class="returns-inline">
-            <span class="type">Object</span>
+            <span class="type">Function</span>
         </span>
     
 
@@ -273,7 +304,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1675"><code>src\firebrick.js:1675</code></a>
+        <a href="../files/src_firebrick.js.html#l1948"><code>src\firebrick.js:1948</code></a>
         
         </p>
 
@@ -284,8 +315,7 @@
     </div>
 
     <div class="description">
-        <p>Basic view configurations when defining/creating a view</p>
-
+        
     </div>
 
     
@@ -297,136 +327,6 @@
                 <li class="param">
                     
                         <code class="param-name">config</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>(optional)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method__loadStore" class="method item private">
-    <h3 class="name"><code>_loadStore</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>store</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>options</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l1689"><code>src\firebrick.js:1689</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Used by Firebrick.store.Base:load
-GET</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">store</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Firebrick.store.Base object</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">options</code>
                         <span class="type">Object</span>
                     
 
@@ -437,65 +337,6 @@ GET</p>
                     </div>
 
                     
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">async</code>
-                                    <span class="type">Boolean</span>
-                                
-
-                                <div class="param-description">
-                                    <p>[default=store.async]</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">callback</code>
-                                    <span class="type">Function</span>
-                                
-
-                                <div class="param-description">
-                                    <p>[store, jsonObject, status, response]</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">error</code>
-                                    <span class="type">Function</span>
-                                
-
-                                <div class="param-description">
-                                    <p>[response, error, errorMessage]</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">scope</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
                 </li>
             
             </ul>
@@ -509,10 +350,8 @@ GET</p>
             <div class="returns-description">
                 
                     
-                        <span class="type">Object</span>:
+                        <span class="type">Function</span>:
                     
-                    <p>store</p>
-
                 
             </div>
         </div>
@@ -522,33 +361,13 @@ GET</p>
 </div>
 
                 
-                    <div id="method__submit" class="method item private">
-    <h3 class="name"><code>_submit</code></h3>
+                    <div id="method__registerLinkEvent" class="method item private">
+    <h3 class="name"><code>_registerLinkEvent</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>store</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
     
 
     
@@ -576,7 +395,7 @@ GET</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1752"><code>src\firebrick.js:1752</code></a>
+        <a href="../files/src_firebrick.js.html#l1972"><code>src\firebrick.js:1972</code></a>
         
         </p>
 
@@ -587,75 +406,130 @@ GET</p>
     </div>
 
     <div class="description">
-        <p>Submit the given store with its data to the specified url
-POST</p>
+        <p>used by init</p>
 
     </div>
 
     
-        <div class="params">
-            <h4>Parameters:</h4>
 
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">store</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>//Firebricks.store.Base class</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>(optional) function to call on store submission success</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>store</p>
-
-                
-            </div>
-        </div>
     
 
     
 </div>
 
                 
-                    <div id="method_createStore" class="method item">
-    <h3 class="name"><code>createStore</code></h3>
+                    <div id="method__registerPopEvent" class="method item private">
+    <h3 class="name"><code>_registerPopEvent</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2009"><code>src\firebrick.js:2009</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2026"><code>src\firebrick.js:2026</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_set" class="method item">
+    <h3 class="name"><code>set</code></h3>
 
     
         <div class="args">
@@ -663,13 +537,7 @@ POST</p>
             
                 <li class="arg">
                     
-                        <code>name</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>config</code>
+                        <code>routes</code>
                     
                 </li>
             
@@ -679,7 +547,7 @@ POST</p>
 
     
         <span class="returns-inline">
-            <span class="type">Object</span>
+            <span class="type"></span>
         </span>
     
 
@@ -706,7 +574,7 @@ POST</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l1634"><code>src\firebrick.js:1634</code></a>
+        <a href="../files/src_firebrick.js.html#l1908"><code>src\firebrick.js:1908</code></a>
         
         </p>
 
@@ -717,7 +585,7 @@ POST</p>
     </div>
 
     <div class="description">
-        <p>creates a new Firebrick.store.Base store to be used OR if a name and config are supplied, then Firebrick.create() is called</p>
+        <p>set route definitions</p>
 
     </div>
 
@@ -729,30 +597,16 @@ POST</p>
             
                 <li class="param">
                     
-                        <code class="param-name">name</code>
-                        <span class="type">String</span>
+                        <code class="param-name">routes</code>
+                        <span class="type">Object | Function</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>if string, then Firebrick:create is called</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">config</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>data to config the class with - called in conjuction when name is set</p>
+                        <ul>
+<li>if function then the function is called regardless of route</li>
+</ul>
 
                     </div>
 
@@ -770,9 +624,7 @@ POST</p>
             <div class="returns-description">
                 
                     
-                        <span class="type">Object</span>:
-                    
-                    <p>Firebrick.store.Base</p>
+                    <p>routes function</p>
 
                 
             </div>
@@ -784,12 +636,15 @@ POST</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>    //creates a new class Firebrick.store.Base to be used
-    createStore({
-                        data:{name:&quot;bob&quot;}
-                    }); </code></pre>
-<pre class="code prettyprint"><code>    createStore(&quot;MyApp.store.MyStore&quot;, {}); //Firebrick.create() is called</code></pre>
-<pre class="code prettyprint"><code>    createStore() //returns a Store class to be used</code></pre>
+                <pre class="code prettyprint"><code>    Firebrick.router.set({
+        &quot;users/abc&quot;: {
+            require:[&quot;file1&quot;, &quot;file2&quot;],
+            callback: function(){}
+        },
+        &quot;contact&quot;: function(){}
+        defaults: function(){}        //defaults pattern - fallback
+    })</code></pre>
+<pre class="code prettyprint"><code>    Firebrick.router.set(function(){}) //call function regardless of route</code></pre>
 
             </div>
         </div>
@@ -800,6 +655,107 @@ POST</p>
             </div>
         
 
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__initialised" class="property item">
+    <h3 class="name"><code>_initialised</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1894"><code>src\firebrick.js:1894</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>used to see whether document events for the history API have already been set</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> false</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__routes" class="property item private">
+    <h3 class="name"><code>_routes</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1901"><code>src\firebrick.js:1901</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> []</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
         
 
         

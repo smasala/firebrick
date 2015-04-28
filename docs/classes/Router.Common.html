@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Templates - Firebrick JS API</title>
+    <title>Router.Common - Firebrick JS API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -130,7 +130,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Templates Class</h1>
+                        <h1>Router.Common Class</h1>
 <div class="box meta">
     
 
@@ -138,7 +138,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l649"><code>src\firebrick.js:649</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l1803"><code>src\firebrick.js:1803</code></a>
         </div>
     
 
@@ -164,8 +164,8 @@
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
         
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         
@@ -176,15 +176,20 @@
             <h2 class="off-left">Item Index</h2>
 
             
+                <div class="index-section methods">
+                    <h3>Methods</h3>
 
-            
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties">
+                    <ul class="index-list methods">
                         
-                            <li class="index-item property">
-                                <a href="#property_loadingTpl">loadingTpl</a>
+                            <li class="index-item method private">
+                                <a href="#method__iterateRouterConfigs">_iterateRouterConfigs</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_scrollTo">scrollTo</a>
 
                                 
                                 
@@ -197,18 +202,55 @@
             
 
             
+
+            
         </div>
 
         
-
-        
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="property_loadingTpl" class="property item">
-    <h3 class="name"><code>loadingTpl</code></h3>
-    <span class="type">Unknown</span>
+                    <div id="method__iterateRouterConfigs" class="method item private">
+    <h3 class="name"><code>_iterateRouterConfigs</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>patternConfig</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>args</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>ready</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
 
     
 
@@ -229,9 +271,10 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l654"><code>src\firebrick.js:654</code></a>
+        <a href="../files/src_firebrick.js.html#l1809"><code>src\firebrick.js:1809</code></a>
         
         </p>
+
 
         
 
@@ -239,11 +282,166 @@
     </div>
 
     <div class="description">
-        <p>General loading tpl - override to change the loading mask
-Bootstrap is needed for this to work</p>
+        <p>check if configuration pattern match (url) and applies it.</p>
 
     </div>
 
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">patternConfig</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">args</code>
+                        <span class="type">Arguments</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">ready</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <ul>
+<li>called when all dependencies etc are fetched and loaded</li>
+</ul>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_scrollTo" class="method item">
+    <h3 class="name"><code>scrollTo</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>target</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l1863"><code>src\firebrick.js:1863</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">target</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>jquery selector</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -253,6 +451,8 @@ Bootstrap is needed for this to work</p>
 
                 
             </div>
+        
+
         
 
         

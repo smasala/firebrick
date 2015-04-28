@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Views - Firebrick JS API</title>
+    <title>Router.Hashbang - Firebrick JS API</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -130,7 +130,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Views Class</h1>
+                        <h1>Router.Hashbang Class</h1>
 <div class="box meta">
     
 
@@ -138,7 +138,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l661"><code>src\firebrick.js:661</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l2041"><code>src\firebrick.js:2041</code></a>
         </div>
     
 
@@ -184,63 +184,49 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
-                                <a href="#method__basicViewConfigurations">_basicViewConfigurations</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method__loadSubView">_loadSubView</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method_bootView">bootView</a>
+                                <a href="#method__createRouterFunction">_createRouterFunction</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_createView">createView</a>
+                                <a href="#method_getRoute">getRoute</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_defineView">defineView</a>
+                                <a href="#method_getUrlParam">getUrlParam</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_getBody">getBody</a>
+                                <a href="#method_init">init</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_getTarget">getTarget</a>
+                                <a href="#method_is">is</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method_initSubViews">initSubViews</a>
+                                <a href="#method_onHashChange">onHashChange</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method private">
-                                <a href="#method_renderTo">renderTo</a>
+                            <li class="index-item method">
+                                <a href="#method_set">set</a>
 
                                 
                                 
@@ -257,7 +243,7 @@
                     <ul class="index-list properties">
                         
                             <li class="index-item property private">
-                                <a href="#property__body">_body</a>
+                                <a href="#property__cache">_cache</a>
 
                                 
                                 
@@ -277,8 +263,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__basicViewConfigurations" class="method item private">
-    <h3 class="name"><code>_basicViewConfigurations</code></h3>
+                    <div id="method__createRouterFunction" class="method item private">
+    <h3 class="name"><code>_createRouterFunction</code></h3>
 
     
         <div class="args">
@@ -296,7 +282,7 @@
 
     
         <span class="returns-inline">
-            <span class="type">Object</span>
+            <span class="type">Function</span>
         </span>
     
 
@@ -325,7 +311,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l781"><code>src\firebrick.js:781</code></a>
+        <a href="../files/src_firebrick.js.html#l2093"><code>src\firebrick.js:2093</code></a>
         
         </p>
 
@@ -336,8 +322,7 @@
     </div>
 
     <div class="description">
-        <p>Basic view configurations when defining/creating a view with shorthand function calls</p>
-
+        
     </div>
 
     
@@ -355,113 +340,6 @@
                     
 
                     <div class="param-description">
-                        <p>(optional)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method__loadSubView" class="method item private">
-    <h3 class="name"><code>_loadSubView</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>subView</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l757"><code>src\firebrick.js:757</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>used by initSubViews</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">subView</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
                          
                     </div>
 
@@ -479,10 +357,8 @@
             <div class="returns-description">
                 
                     
-                        <span class="type">Object</span>:
+                        <span class="type">Function</span>:
                     
-                    <p>subView passed</p>
-
                 
             </div>
         </div>
@@ -492,135 +368,11 @@
 </div>
 
                 
-                    <div id="method_bootView" class="method item private">
-    <h3 class="name"><code>bootView</code></h3>
+                    <div id="method_getRoute" class="method item">
+    <h3 class="name"><code>getRoute</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>options</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l666"><code>src\firebrick.js:666</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>used by Firebrick.Boot:prepApplication to render the &quot;view/Index.html&quot; when autoRender is true</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">options</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                
-                                    <code class="param-name">viewData</code>
-                                    <span class="type">Object</span>
-                                
-
-                                <div class="param-description">
-                                    <p>to pass to the view Store parameter</p>
-
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_createView" class="method item">
-    <h3 class="name"><code>createView</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>name</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>config</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
     
@@ -652,7 +404,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l688"><code>src\firebrick.js:688</code></a>
+        <a href="../files/src_firebrick.js.html#l2185"><code>src\firebrick.js:2185</code></a>
         
         </p>
 
@@ -663,7 +415,93 @@
     </div>
 
     <div class="description">
-        <p>Create and render a view (shorthand function)</p>
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>{
+                        href: &quot;<a href="http://localhost/#/mypath/dayone?user=1">http://localhost/#/mypath/dayone?user=1</a>&quot;,
+                        origin: &quot;<a href="http://localhost">http://localhost</a>&quot;
+                        path: &quot;/#/mypath/dayone?user=1&quot;,    // (href - origin)
+                        cleanPath: &quot;/mypath/dayone&quot;,    //non hash routes
+                        hash: &quot;#/mypath/dayone?user=1&quot;,        //window.location.hash
+                        cleanHash: &quot;#/mypath/dayone&quot;
+                        parameters:{}        //url parameter as object
+                    }</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getUrlParam" class="method item">
+    <h3 class="name"><code>getUrlParam</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>url</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2224"><code>src\firebrick.js:2224</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>adapted from <a href="http://stackoverflow.com/a/1099670/425226">http://stackoverflow.com/a/1099670/425226</a></p>
 
     </div>
 
@@ -675,15 +513,285 @@
             
                 <li class="param">
                     
-                        <code class="param-name">name</code>
+                        <code class="param-name">url</code>
                         <span class="type">String</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>example: &quot;MyApp.view.MyView&quot;</p>
+                        <p>/#/mypath/dayone?user=1&amp;name=fred</p>
 
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_init" class="method item">
+    <h3 class="name"><code>init</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2151"><code>src\firebrick.js:2151</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>call this after setting router.set({}) if you wish to do an immediate evaulation of url</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_is" class="method item">
+    <h3 class="name"><code>is</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>pattern</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2164"><code>src\firebrick.js:2164</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Check whether the url matches a pattern - removes any parameters in the url to check for a match</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">pattern</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>    Firebrick.router.is(&quot;#/completed&quot;) // returns true or false</code></pre>
+<pre class="code prettyprint"><code>    Firebrick.router.is(&quot;/completed&quot;) // returns true or false</code></pre>
+
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_onHashChange" class="method item private">
+    <h3 class="name"><code>onHashChange</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>callback</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>config</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2128"><code>src\firebrick.js:2128</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Call a function when the hash changes on the site
+use Firebrick.route:set</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">callback</code>
+                        <span class="type">Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
                     </div>
 
                     
@@ -698,7 +806,7 @@
                     
 
                     <div class="param-description">
-                        <p>(optional) object to config the View class with</p>
+                        <p>config that was used for this callback - optional</p>
 
                     </div>
 
@@ -718,7 +826,7 @@
                     
                         <span class="type">Object</span>:
                     
-                    <p>Firebrick.view.Base class</p>
+                    <p>jQuery object</p>
 
                 
             </div>
@@ -730,9 +838,9 @@
             <h4>Example:</h4>
 
             <div class="example-content">
-                <pre class="code prettyprint"><code>createView({...})</code></pre>
-<pre class="code prettyprint"><code>createView(&quot;MyApp.view.MyView&quot;)</code></pre>
-<pre class="code prettyprint"><code>createView(&quot;MyApp.view.MyView&quot;, {...})</code></pre>
+                <pre class="code prettyprint"><code>                    Firebrick.router.onHashChange(function(){
+                        //something happens
+                    })</code></pre>
 
             </div>
         </div>
@@ -740,18 +848,12 @@
 </div>
 
                 
-                    <div id="method_defineView" class="method item">
-    <h3 class="name"><code>defineView</code></h3>
+                    <div id="method_set" class="method item">
+    <h3 class="name"><code>set</code></h3>
 
     
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>name</code>
-                    
-                </li>
             
                 <li class="arg">
                     
@@ -765,7 +867,7 @@
 
     
         <span class="returns-inline">
-            <span class="type">Object</span>
+            <span class="type"></span>
         </span>
     
 
@@ -792,7 +894,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l721"><code>src\firebrick.js:721</code></a>
+        <a href="../files/src_firebrick.js.html#l2057"><code>src\firebrick.js:2057</code></a>
         
         </p>
 
@@ -803,8 +905,7 @@
     </div>
 
     <div class="description">
-        <p>Note: different to Firebrick.define() for classes -
-Firebrick.defineView, defines and fetches if not already loaded the given view by name</p>
+        <p>set route definitions</p>
 
     </div>
 
@@ -813,33 +914,19 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             <h4>Parameters:</h4>
 
             <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">name</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>name of the view to me shown &quot;MyApp.view.MyView&quot;</p>
-
-                    </div>
-
-                    
-                </li>
             
                 <li class="param">
                     
                         <code class="param-name">config</code>
-                        <span class="type">Object</span>
+                        <span class="type">Object | Function</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>(optional) object to config the View class with</p>
+                        <ul>
+<li>if function then the function is called regardless of route</li>
+</ul>
 
                     </div>
 
@@ -857,9 +944,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             <div class="returns-description">
                 
                     
-                        <span class="type">Object</span>:
-                    
-                    <p>Firebrick.view.Base class</p>
+                    <p>onhashChange()</p>
 
                 
             </div>
@@ -867,478 +952,22 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
     
 
     
-</div>
+        <div class="example">
+            <h4>Example:</h4>
 
-                
-                    <div id="method_getBody" class="method item">
-    <h3 class="name"><code>getBody</code></h3>
+            <div class="example-content">
+                <pre class="code prettyprint"><code>    Firebrick.router.set({
+        &quot;users/abc&quot;: {
+            require:[&quot;file1&quot;, &quot;file2&quot;],
+            callback: function(){}
+        },
+        &quot;contact&quot;: function(){}
+        defaults: function(){}        //defaults pattern - fallback
+    })</code></pre>
+<pre class="code prettyprint"><code>    Firebrick.router.set(function(){}) //call function regardless of route</code></pre>
 
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>refresh</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l802"><code>src\firebrick.js:802</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Shortcut to get jQuery(&quot;body&quot;)</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">refresh</code>
-                        <span class="type">Boolean</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>[default=false] (optional) if true gets the body object fresh from dom and not from cache</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>jquery object</p>
-
-                
             </div>
         </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_getTarget" class="method item">
-    <h3 class="name"><code>getTarget</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>selector</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object, Null</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l815"><code>src\firebrick.js:815</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>find the target using a selector - same as jQuery(selector)</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">selector</code>
-                        <span class="type">String, jQuery Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object, Null</span>:
-                    
-                    <p>jquery object || null</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_initSubViews" class="method item private">
-    <h3 class="name"><code>initSubViews</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>view</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l734"><code>src\firebrick.js:734</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>initialise subviews of a view</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">view</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>view passed</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_renderTo" class="method item private">
-    <h3 class="name"><code>renderTo</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>target</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>html</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>append</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">JQuery Object</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l825"><code>src\firebrick.js:825</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Render HTML or Template to the given target</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">target</code>
-                        <span class="type">JQuery Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">html</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>template or html</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">append</code>
-                        <span class="type">Boolean</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>[default=false] if true will append to instead of overwriting content of target</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">JQuery Object</span>:
-                    
-                    <p>target</p>
-
-                
-            </div>
-        </div>
-    
-
     
 </div>
 
@@ -1351,9 +980,9 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
                 <h2 class="off-left">Properties</h2>
 
                 
-                    <div id="property__body" class="property item private">
-    <h3 class="name"><code>_body</code></h3>
-    <span class="type">Object jquery object</span>
+                    <div id="property__cache" class="property item private">
+    <h3 class="name"><code>_cache</code></h3>
+    <span class="type">Array of Functions map</span>
 
     
 
@@ -1376,7 +1005,7 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
             
         
         
-        <a href="../files/src_firebrick.js.html#l795"><code>src\firebrick.js:795</code></a>
+        <a href="../files/src_firebrick.js.html#l2048"><code>src\firebrick.js:2048</code></a>
         
         </p>
 
@@ -1386,10 +1015,12 @@ Firebrick.defineView, defines and fetches if not already loaded the given view b
     </div>
 
     <div class="description">
-        <p>jQuery body object (cache) - is set initally by {{crossLink Firebrick.views:getBody}}{{/crossLink}}</p>
+        <p>router cache, primarly used by init() function</p>
 
     </div>
 
+    
+        <p><strong>Default:</strong> []</p>
     
 
     

@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.10.4</em>
+            <em>API Docs for: 0.11.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -43,8 +43,6 @@
             
                 <li><a href="../classes/Boot.html">Boot</a></li>
             
-                <li><a href="../classes/class.Base.html">class.Base</a></li>
-            
                 <li><a href="../classes/Classes.html">Classes</a></li>
             
                 <li><a href="../classes/controller.Base.html">controller.Base</a></li>
@@ -62,6 +60,18 @@
                 <li><a href="../classes/Languages.html">Languages</a></li>
             
                 <li><a href="../classes/Router.html">Router</a></li>
+            
+                <li><a href="../classes/Router.class.Base.html">Router.class.Base</a></li>
+            
+                <li><a href="../classes/Router.Common.html">Router.Common</a></li>
+            
+                <li><a href="../classes/Router.Hashbang.html">Router.Hashbang</a></li>
+            
+                <li><a href="../classes/Router.History.html">Router.History</a></li>
+            
+                <li><a href="../classes/Router.Router.html">Router.Router</a></li>
+            
+                <li><a href="../classes/Router.Router.Router.html">Router.Router.Router</a></li>
             
                 <li><a href="../classes/store.Base.html">store.Base</a></li>
             
@@ -126,13 +136,13 @@
 
     
         <div class="extends">
-            Extends <a href="../classes/class.Base.html" class="crosslink">class.Base</a>
+            Extends class.Base
         </div>
     
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l2941"><code>src\firebrick.js:2941</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l3145"><code>src\firebrick.js:3145</code></a>
         </div>
     
 
@@ -166,8 +176,6 @@
         
         
         
-            <li class="api-class-tab events"><a href="#events">Events</a></li>
-        
     </ul>
 
     <div>
@@ -180,50 +188,8 @@
 
                     <ul class="index-list methods extends">
                         
-                            <li class="index-item method private inherited">
-                                <a href="#method__cloneListener">_cloneListener</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_fireEvent">fireEvent</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_getId">getId</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
+                            <li class="index-item method">
                                 <a href="#method_init">init</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_off">off</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_on">on</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_passEvent">passEvent</a>
 
                                 
                                 
@@ -239,13 +205,6 @@
 
                     <ul class="index-list properties extends">
                         
-                            <li class="index-item property private inherited">
-                                <a href="#property__idPrefix">_idPrefix</a>
-
-                                
-                                
-                            </li>
-                        
                             <li class="index-item property">
                                 <a href="#property_app">app</a>
 
@@ -253,57 +212,8 @@
                                 
                             </li>
                         
-                            <li class="index-item property inherited">
-                                <a href="#property_autoDestroy">autoDestroy</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_classReadyEvent">classReadyEvent</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property private inherited">
-                                <a href="#property_id">id</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_initialConfig">initialConfig</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
+                            <li class="index-item property">
                                 <a href="#property_listeners">listeners</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property private inherited">
-                                <a href="#property_localEventRegistry">localEventRegistry</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property private inherited">
-                                <a href="#property_mixedIn">mixedIn</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property inherited">
-                                <a href="#property_mixins">mixins</a>
 
                                 
                                 
@@ -316,338 +226,18 @@
                                 
                             </li>
                         
-                            <li class="index-item property inherited">
-                                <a href="#property_sName">sName</a>
-
-                                
-                                
-                            </li>
-                        
                     </ul>
                 </div>
             
 
             
 
-            
-                <div class="index-section events">
-                    <h3>Events</h3>
-
-                    <ul class="index-list events extends">
-                        
-                            <li class="index-item event inherited">
-                                <a href="#event_destroy">destroy</a>
-
-                                
-                                
-                            </li>
-                        
-                    </ul>
-                </div>
             
         </div>
 
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method__cloneListener" class="method item private inherited">
-    <h3 class="name"><code>_cloneListener</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>function</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Function</span>
-        </span>
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#method__cloneListener">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2065"><code>src\firebrick.js:2065</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>create a copy of the listener for each class</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">function</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Function</span>:
-                    
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_fireEvent" class="method item inherited">
-    <h3 class="name"><code>fireEvent</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>eventName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>args</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#method_fireEvent">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2278"><code>src\firebrick.js:2278</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Fire an event on this object</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">eventName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>name of the event to fire</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">args</code>
-                        <span class="type">Any...</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>(optional)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>self</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_getId" class="method item inherited">
-    <h3 class="name"><code>getId</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">String</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#method_getId">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2160"><code>src\firebrick.js:2160</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">String</span>:
-                    
-                    <p>uniqueId</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-</div>
 
                 
                     <div id="method_init" class="method item">
@@ -673,16 +263,16 @@
 
     <div class="meta">
         
-            <p>Inherited from
-            <a href="../classes/class.Base.html#method_init">
-                class.Base
-            </a>
             
-            but overwritten in
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="../files/src_firebrick.js.html#l2948"><code>src\firebrick.js:2948</code></a>
+        <a href="../files/src_firebrick.js.html#l3152"><code>src\firebrick.js:3152</code></a>
         
         </p>
 
@@ -705,453 +295,12 @@
 </div>
 
                 
-                    <div id="method_off" class="method item inherited">
-    <h3 class="name"><code>off</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>eventName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#method_off">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2254"><code>src\firebrick.js:2254</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>remove a listener that was registered with .on()</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">eventName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>the function that was used when registering the event with .on()</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                
-            </div>
-        </div>
-    
-
-    
-</div>
-
-                
-                    <div id="method_on" class="method item inherited">
-    <h3 class="name"><code>on</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>eventName</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>callback</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>scope</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Object</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#method_on">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2197"><code>src\firebrick.js:2197</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>register a listener to this object, when the object fires a specific event</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">eventName</code>
-                        <span class="type">String</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">callback</code>
-                        <span class="type">Function</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                         
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">scope</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>(optional)</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Object</span>:
-                    
-                    <p>self</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>on(&quot;someEvent&quot;, callback)</code></pre>
-<pre class="code prettyprint"><code>on({
-&quot;someevent&quot;: callback,
-&quot;someotherevent&quot;: callback1
-})</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-                
-                    <div id="method_passEvent" class="method item inherited">
-    <h3 class="name"><code>passEvent</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>argument</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-        <span class="returns-inline">
-            <span class="type">Any</span>
-        </span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#method_passEvent">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2300"><code>src\firebrick.js:2300</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>pass an event to another object - fire the same event on the second object with all the arguments of the first</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">argument</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>:: arguments array</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Any</span>:
-                    
-                    <p>value from fireEvent</p>
-
-                
-            </div>
-        </div>
-    
-
-    
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>         classOne.on(&quot;someEvent&quot;, function(){
-            //fire the same event on the second object with all the arguments of the first
-             classTwo.passEvent(arguments);    //same as classTwo.fireEvent(&quot;someEvent&quot;, arg1, arg2, arg3, ...)
-        });</code></pre>
-
-            </div>
-        </div>
-    
-</div>
-
-                
             </div>
         
 
         
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
-
-                
-                    <div id="property__idPrefix" class="property item private inherited">
-    <h3 class="name"><code>_idPrefix</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property__idPrefix">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2139"><code>src\firebrick.js:2139</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-
-    
-
-    
-</div>
 
                 
                     <div id="property_app" class="property item">
@@ -1177,7 +326,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2955"><code>src\firebrick.js:2955</code></a>
+        <a href="../files/src_firebrick.js.html#l3159"><code>src\firebrick.js:3159</code></a>
         
         </p>
 
@@ -1208,185 +357,6 @@
 </div>
 
                 
-                    <div id="property_autoDestroy" class="property item inherited">
-    <h3 class="name"><code>autoDestroy</code></h3>
-    <span class="type">Boolean</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_autoDestroy">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2117"><code>src\firebrick.js:2117</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>controls which data will be destoryed</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> true</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_classReadyEvent" class="property item inherited">
-    <h3 class="name"><code>classReadyEvent</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_classReadyEvent">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2111"><code>src\firebrick.js:2111</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-        <p><strong>Default:</strong> &quot;ready&quot;</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_id" class="property item private inherited">
-    <h3 class="name"><code>id</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_id">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2145"><code>src\firebrick.js:2145</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>use Firebrick.class.Base:getId</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_initialConfig" class="property item inherited">
-    <h3 class="name"><code>initialConfig</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_initialConfig">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2056"><code>src\firebrick.js:2056</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p><p>when calling Firebrick.create(&quot;xxx&quot;, {});
-the second parameter {} (config) is stored in this property as a reference</p></p>
-<ul>
-<li>in case one needs to know with what paramters the object was intialised with</li>
-</ul>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> null</p>
-    
-
-    
-
-    
-</div>
-
-                
                     <div id="property_listeners" class="property item">
     <h3 class="name"><code>listeners</code></h3>
     <span class="type">Function</span>
@@ -1401,16 +371,16 @@ the second parameter {} (config) is stored in this property as a reference</p></
 
     <div class="meta">
         
-            <p>Inherited from
-            <a href="../classes/class.Base.html#property_listeners">
-                class.Base
-            </a>
             
-            but overwritten in
+                
+                <p>
+                
+                Defined in
+                
             
         
         
-        <a href="../files/src_firebrick.js.html#l2973"><code>src\firebrick.js:2973</code></a>
+        <a href="../files/src_firebrick.js.html#l3177"><code>src\firebrick.js:3177</code></a>
         
         </p>
 
@@ -1424,140 +394,6 @@ the second parameter {} (config) is stored in this property as a reference</p></
 
     </div>
 
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_localEventRegistry" class="property item private inherited">
-    <h3 class="name"><code>localEventRegistry</code></h3>
-    <span class="type">Object map</span>
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_localEventRegistry">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2152"><code>src\firebrick.js:2152</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>event registry</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_mixedIn" class="property item private inherited">
-    <h3 class="name"><code>mixedIn</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_mixedIn">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2130"><code>src\firebrick.js:2130</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>reference for mixins that have been mixed in.
-works only if &quot;mixins&quot; is a String or array or strings</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> : null</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_mixins" class="property item inherited">
-    <h3 class="name"><code>mixins</code></h3>
-    <span class="type">String | Object | String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_mixins">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2124"><code>src\firebrick.js:2124</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        
-    </div>
-
-    
-        <p><strong>Default:</strong> null</p>
     
 
     
@@ -1589,7 +425,7 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
             
         
         
-        <a href="../files/src_firebrick.js.html#l2964"><code>src\firebrick.js:2964</code></a>
+        <a href="../files/src_firebrick.js.html#l3168"><code>src\firebrick.js:3168</code></a>
         
         </p>
 
@@ -1611,103 +447,11 @@ works only if &quot;mixins&quot; is a String or array or strings</p>
 </div>
 
                 
-                    <div id="property_sName" class="property item inherited">
-    <h3 class="name"><code>sName</code></h3>
-    <span class="type">String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#property_sName">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2077"><code>src\firebrick.js:2077</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>use this give the class a shortname to reference
-Firebrick.get(sname) is also possible if this property is defined</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> null</p>
-    
-
-    
-
-    
-</div>
-
-                
             </div>
         
 
         
 
-        
-            <div id="events" class="api-class-tabpanel">
-                <h2 class="off-left">Events</h2>
-
-                
-                    <div id="event_destroy" class="events item inherited">
-    <h3 class="name"><code>destroy</code></h3>
-    <span class="type"></span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="../classes/class.Base.html#event_destroy">class.Base</a>:
-            
-        
-        
-        <a href="../files/src_firebrick.js.html#l2175"><code>src\firebrick.js:2175</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>remove class from registry</p>
-
-    </div>
-
-    
-
-
-    
-</div>
-
-                
-            </div>
         
     </div>
 </div>
