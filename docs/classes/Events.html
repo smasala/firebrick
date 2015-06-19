@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.11.0</em>
+            <em>API Docs for: 0.12.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -63,15 +63,11 @@
             
                 <li><a href="../classes/Router.class.Base.html">Router.class.Base</a></li>
             
-                <li><a href="../classes/Router.Common.html">Router.Common</a></li>
-            
                 <li><a href="../classes/Router.Hashbang.html">Router.Hashbang</a></li>
             
                 <li><a href="../classes/Router.History.html">Router.History</a></li>
             
                 <li><a href="../classes/Router.Router.html">Router.Router</a></li>
-            
-                <li><a href="../classes/Router.Router.Router.html">Router.Router.Router</a></li>
             
                 <li><a href="../classes/store.Base.html">store.Base</a></li>
             
@@ -138,7 +134,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l1319"><code>src\firebrick.js:1319</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l1396"><code>src\firebrick.js:1396</code></a>
         </div>
     
 
@@ -337,7 +333,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1372"><code>src\firebrick.js:1372</code></a>
+        <a href="../files/src_firebrick.js.html#l1457"><code>src\firebrick.js:1457</code></a>
         
         </p>
 
@@ -444,7 +440,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1485"><code>src\firebrick.js:1485</code></a>
+        <a href="../files/src_firebrick.js.html#l1570"><code>src\firebrick.js:1570</code></a>
         
         </p>
 
@@ -547,7 +543,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1565"><code>src\firebrick.js:1565</code></a>
+        <a href="../files/src_firebrick.js.html#l1653"><code>src\firebrick.js:1653</code></a>
         
         </p>
 
@@ -595,10 +591,13 @@
 
             <div class="example-content">
                 <pre class="code prettyprint"><code>    _on({
-                        &quot;a.link&quot;:{
+                        &quot;a.link&quot;:{                    
                             click:function(){},
                             mouseover:function(){}
                         },
+                        &quot;a, button&quot;: {
+                            click: function(){}
+                        }
                         scope:this
                     }</code></pre>
 
@@ -642,7 +641,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1600"><code>src\firebrick.js:1600</code></a>
+        <a href="../files/src_firebrick.js.html#l1691"><code>src\firebrick.js:1691</code></a>
         
         </p>
 
@@ -723,7 +722,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1331"><code>src\firebrick.js:1331</code></a>
+        <a href="../files/src_firebrick.js.html#l1408"><code>src\firebrick.js:1408</code></a>
         
         </p>
 
@@ -817,7 +816,8 @@
             <div class="example-content">
                 <pre class="code prettyprint"><code>    addListener(&quot;myEvent&quot;, myFunction(){}, this);</code></pre>
 <pre class="code prettyprint"><code>    addListener({
-                    &quot;myEvent&quot;: function(){},
+                    &quot;myEvent&quot;: function(){},        
+                    &quot;event1, event2&quot;: function(){},
                     &quot;mySecondEvent&quot;: function(){},
                     scope: this
                 })</code></pre>
@@ -882,7 +882,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1551"><code>src\firebrick.js:1551</code></a>
+        <a href="../files/src_firebrick.js.html#l1639"><code>src\firebrick.js:1639</code></a>
         
         </p>
 
@@ -1016,7 +1016,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1500"><code>src\firebrick.js:1500</code></a>
+        <a href="../files/src_firebrick.js.html#l1585"><code>src\firebrick.js:1585</code></a>
         
         </p>
 
@@ -1124,7 +1124,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1446"><code>src\firebrick.js:1446</code></a>
+        <a href="../files/src_firebrick.js.html#l1531"><code>src\firebrick.js:1531</code></a>
         
         </p>
 
@@ -1255,7 +1255,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1524"><code>src\firebrick.js:1524</code></a>
+        <a href="../files/src_firebrick.js.html#l1609"><code>src\firebrick.js:1609</code></a>
         
         </p>
 
@@ -1357,6 +1357,9 @@
                         click:function(){},
                         mouseover:function(){}
                     },
+                    &quot;a, button&quot;:{
+                        click: function(){}
+                    }
                     scope:this
                 })</code></pre>
 
@@ -1414,7 +1417,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1398"><code>src\firebrick.js:1398</code></a>
+        <a href="../files/src_firebrick.js.html#l1483"><code>src\firebrick.js:1483</code></a>
         
         </p>
 
@@ -1519,7 +1522,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1511"><code>src\firebrick.js:1511</code></a>
+        <a href="../files/src_firebrick.js.html#l1596"><code>src\firebrick.js:1596</code></a>
         
         </p>
 
@@ -1583,7 +1586,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l1324"><code>src\firebrick.js:1324</code></a>
+        <a href="../files/src_firebrick.js.html#l1401"><code>src\firebrick.js:1401</code></a>
         
         </p>
 
