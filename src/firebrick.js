@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.11.0",
+		version: "0.12.0",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -829,13 +829,18 @@
 			* @param target {jQuery Object}
 			* @param html {String} template or html
 			* @param append {Boolean} [default=false] if true will append to instead of overwriting content of target
+			* @param options {$.show ( options )} arguments - optional
 			* @return {jQuery Object} target
 			*/
-			renderTo:function(target, html, append){
+			renderTo:function(target, html, append, options){
+				var $content = $(html);
+				$content.hide();
 				if(append === true){
-					return target.append(html);
+					target.append( $content );
+				}else{
+					target.html( $content );
 				}
-				return target.html(html);
+				return $content.show( options );
 			}
 			
 		},
@@ -913,7 +918,7 @@
 			 * @property splashCleared
 			 * @type {Object} map
 			 */
-			splashCleared: false, 
+			splashCleared: false,
 			/**
 			 * html is appended to the $("html") tag before the document is ready 
 			 * used by Firebrick:ready
@@ -941,6 +946,50 @@
 			clearSplash: function(){
 				this.splashCleared = true;
 				$("#fb-splash").remove();
+			},
+			/**
+			 * shortcut for knockout.dataFor
+			 * @method dataFor
+			 * @return knockout.dataFor
+			 */
+			dataFor: function(){
+				return ko.dataFor.apply(ko, arguments);
+			},
+			/**
+			 * multidimensional array comparison
+			 * inspired by: http://stackoverflow.com/a/14853974/425226
+			 * @method compareArrays
+			 * @param array1
+			 * @param array2
+			 * @return {Boolean} true is they are identical
+			 */
+			compareArrays: function(array1, array2){
+				var me = this,
+					it1, it2;
+				
+				//check lengths
+				if(array1.length !== array2.length){
+					return false;
+				}
+				
+				for(var i = 0, l = array1.length; i<l; i++){
+					it1 = array1[i];
+					it2 = array2[i];
+					
+					if(typeof it1 !== typeof it2){
+						return false;
+					}else{
+						if(it1 instanceof Array && it2 instanceof Array){
+							if(!me.compareArrays(it1, it2)){
+								return false;
+							}
+						}else if( it1 !== it2 ){
+							return false;
+						}
+					}
+				}
+				
+				return true;
 			},
 			/**
 			* overwrite properties in {obj1} with properties from {obj2} (mixin)
@@ -1133,7 +1182,35 @@
 				}
 				return args;
 			},
-			
+			/**
+			 * @method mergeArrays
+			 * @param {Array | Argument Arrays} any number - ignores null
+			 * @return {Array}
+			 */
+			mergeArrays: function(){
+				var me = this,
+					it,
+					newArr = [],
+					args = me.argsToArray( arguments );
+				
+				for(var i = 0, l = args.length; i<l; i++){
+					it = args[i];
+					if( it !== null){
+						newArr = newArr.concat( me.stripArguments( it ) );	
+					}
+				}
+				
+				return newArr;
+			},
+			/**
+			 * convert arguments array to nomral array
+			 * @method argsToArray
+			 * @param args {Arguments Array}
+			 * @return {Array}
+			 */
+			argsToArray: function( args ){
+				return Array.prototype.slice.call( args );
+			},
 			/**
 			* Get a script/file from path
 			* @example 
@@ -1334,7 +1411,8 @@
 			* 		addListener("myEvent", myFunction(){}, this);
 			* @example
 			* 		addListener({
-						"myEvent": function(){},
+						"myEvent": function(){},		
+						"event1, event2": function(){},
 						"mySecondEvent": function(){},
 						scope: this
 					})
@@ -1345,7 +1423,8 @@
 			* @return {Function} the function with the assigned callbackId;
 			*/
 			addListener: function(eventName, callback, scope){
-				var me = this;
+				var me = this,
+					ev;
 				
 				if($.isPlainObject(eventName)){
 					return me._addListener(eventName);
@@ -1361,12 +1440,18 @@
 				
 				callback.conf.scope = scope;
 				
-				if(!me._eventRegistry[eventName]){
-					//no listeners under this event name yet
-					me._eventRegistry[eventName] = [];
+				eventName = eventName.split(",");
+				
+				for(var i = 0, l = eventName.length; i<l; i++){
+					ev = eventName[i].trim();
+					if(!me._eventRegistry[ev]){
+						//no listeners under this event name yet
+						me._eventRegistry[ev] = [];
+					}
+					
+					me._eventRegistry[ev].push(callback);
 				}
 				
-				me._eventRegistry[eventName].push(callback);
 				return callback;
 			},
 			/**
@@ -1531,6 +1616,9 @@
 							click:function(){},
 							mouseover:function(){}
 						},
+						"a, button":{
+							click: function(){}
+						}
 						scope:this
 					})
 			* @method on
@@ -1566,10 +1654,13 @@
 			* use Firebrick.events:on
 			* @example 
 			* 		_on({
-							"a.link":{
+							"a.link":{					
 								click:function(){},
 								mouseover:function(){}
 							},
+							"a, button": {
+								click: function(){}
+							}
 							scope:this
 						}
 			* @method _on
@@ -1604,19 +1695,23 @@
 			*/
 			_registerOnEvent: function(eventName, selector, callback, scope){
 				var func = function(){
-					//add scope as last argument, just in case the scope of the function is changed
-					var args = Array.prototype.slice.call(arguments);
-					args.push(this);
-					this.destroy = function(){
-						Firebrick.events.off(eventName, selector, callback);
+						//add scope as last argument, just in case the scope of the function is changed
+						var args = Array.prototype.slice.call(arguments);
+						args.push(this);
+						this.destroy = function(){
+							Firebrick.events.off(eventName, selector, callback);
+						};
+						callback.apply(scope || this, args);
 					};
-					callback.apply(scope || this, args);
-				};
 				
 				//needed for off() - set outside function, in case the event is called before it is fired
 				callback.offFunc = func;
 				
-				$(document).on(eventName, selector, func);
+				eventName = eventName.split(",");	//convert to array
+				
+				for(var i = 0, l = eventName.length; i<l; i++){
+					$(document).on(eventName[i].trim(), selector, func);	
+				}
 			}
 			
 		},
@@ -1723,7 +1818,7 @@
 					}					
 					
 					store.status = "preload";
-					ajaxData = store.toPlainObject();
+					ajaxData = options.params || store.params;
 					$.ajax({
 						dataType: store.datatype,
 						type: store.loadProtocol,
@@ -1734,7 +1829,7 @@
 							store.setData(jsonObject);
 							store.status = status;
 							if($.isFunction(options.callback)){
-								options.callback.call(options.scope || store, store, jsonObject, status, response);
+								options.callback.call(options.scope || store, jsonObject, status, response);
 							}
 						},
 						error:function(response, error, errorMessage){
@@ -1793,7 +1888,6 @@
 				
 			}
 		},
-		
 		/**
 		 * @for Firebrick
 		 * @class Router
@@ -1801,28 +1895,145 @@
 		router:{
 			
 			/**
-			 * @for Router
-			 * @namespace Router
-			 * @class Common
+			 * @property _routes
+			 * @private
+			 * @type {Array}
+			 * @default []
 			 */
-			common: {
-				/**
-				 * check if configuration pattern match (url) and applies it.
-				 * @method _iterateRouterConfigs
-				 * @private 
-				 * @param {Object} patternConfig
-				 * @param {Arguments} args
-				 * @param {Function} ready - called when all dependencies etc are fetched and loaded
-				 * @return {Boolean}
-				 */
-				_applyRoute: function(patternConfig, args, ready){
-					var me = this,
-						deps, callback,
-						requireArgs = [];
+			_routes:{},
+			/**
+			 * convert route urls to regex
+			 * @method _convertToRegex
+			 * @param routes {Object Map}
+			 * @private
+			 * @return {Object}
+			 */
+			_convertToRegex: function( routes ){
+				var regRoutes = {},
+					map,
+					regex;
+				
+				//example url:      /users/:surname/:age
+				
+				for(var key in routes){
+					if(routes.hasOwnProperty(key)){
+						map = routes[key];
+						/*
+						 * convert all : params in url with regex
+						 * /users/:surname/:age => /users/[a-z0-9._-]+/[a-z0-9._-]+
+						*/ 
+						regex = key.replace(/:[a-zA-Z0-9._-]*/ig, "[a-zA-Z0-9._-]+");
+						/*
+						 * /users/[a-z0-9._-]+/[a-z0-9._-]+  =>   ^\/users\/[a-z0-9._-]+\/[a-z0-9._-]+$
+						 */
+						regex = "^" + regex.replace(/\//g, "\\/") + "$";
+						
+						if( $.isFunction(map) ){
+							map = {
+								callback: map
+							}
+						}
+						
+						map.path = key;	//original path as defined by set()
+						
+						regRoutes[regex] = map;
+					}
+				}
+				
+				return regRoutes;
+			},
+			/**
+			 * @method _set
+			 * @private
+			 * @param routes {Object Map}
+			 */
+			_set: function( routes ){
+				var me = this;
+				
+				if( $.isFunction(routes) ){
+					//convert to object
+					routes = {
+						"*": routes
+					};
+				}
+				
+				if( $.isPlainObject(routes) ){
+					
+					Firebrick.router._routes = Firebrick.utils.overwrite( 
+													Firebrick.router._routes, 
+													me._convertToRegex( routes )
+											);
+				}else{
+					console.error("incorrect routes", routes);
+					return;
+				}
+				
+				
+				return routes;
+			},
+			/**
+			 * @method match
+			 * @param href {String}
+			 * @return match or null
+			 */
+			match: function( href ){
+				var me = this,
+					routes = me._routes,
+					match = null;
+				
+				for(var key in routes){
+					if(routes.hasOwnProperty(key)){
+						match = href.match(key);
+						if(match){
+							match = routes[key];
+							break;
+						}
+					}
+				}
+				
+				return match;
+			},
+			/**
+			 * @method _getParamsForMatch
+			 * @private
+			 * @param url {String}
+			 * @param match {Object} return of me.match()
+			 * @return {Array} 
+			 */
+			_getParamsForMatch: function( url, match ){
+				var matchUrl = match.path.split("/"),
+					it,
+					params = [];
+				url = url.split("/");
+				for(var i = 0, l = matchUrl.length; i<l; i++){
+					it = matchUrl[i];
+					if( it.indexOf(":") === 0){
+						params.push( url[i] );
+					}
+				}
+				
+				return params;
+			},
+			/**
+			 * @method callRoute
+			 * @param url {String}
+			 * @param args {Arguments Array}
+			 */
+			callRoute: function( url, args ){
+				var me = this,
+					deps,
+					callback,
+					requireArgs = [],
+					params,
+					match = me.match( url ) || me.match("404");
+				
+				if(match){
+					
+					params = me._getParamsForMatch( url, match );
 					
 					//are dependencies required to run this pattern
-					if($.isPlainObject(patternConfig) && patternConfig.require){
-						deps = patternConfig.require;
+					if($.isPlainObject(match) && match.require){
+						deps = match.require;
 						
 						if(!$.isArray(deps)){
 							deps = [deps];	//convert to array if needed
@@ -1831,66 +2042,56 @@
 						require(deps, function(){
 							
 							//check if pattern has a callback and fire
-							if(patternConfig.callback){
-								requireArgs.push(Firebrick.utils.stripArguments(args));
-								requireArgs.push(Firebrick.utils.stripArguments(arguments));
-								patternConfig.callback.apply(me, requireArgs);
+							if(match.callback){
+								match.callback.apply(me, Firebrick.utils.mergeArrays(params, arguments, args) );
 							}
 							
-							if(ready){
-								ready();	
-							}
 						});
 					}else{
-						//no dependencies - just fire the callback if it has once
+						//no dependencies - just fire the callback
 						
 						//if object configuration
-						if($.isPlainObject(patternConfig)){
-							callback = patternConfig.callback;
+						if($.isPlainObject(match)){
+							callback = match.callback;
 						}else{
 							//not object just a function defined
-							callback = patternConfig;
+							callback = match;
 						}
 						
-						callback.apply(me, args);
-						if(ready){
-							ready();	
+						callback.apply(me, Firebrick.utils.mergeArrays(params, args));
+					}
+					
+				}
+				
+			},
+			/**
+			 * @method scrollTo
+			 * @param target {String} jquery selector
+			 */
+			scrollTo: function(target){
+				var me = this,
+					offset = Firebrick.scrollTopOffset,
+					scrollContainer = $(Firebrick.scrollContainerSelector);
+				
+				if($.isFunction(offset)){
+					offset = offset(target);
+				}
+				
+				if(target){
+					scrollContainer.animate({ scrollTop: $(target).offset().top - offset + scrollContainer.scrollTop() }, {
+						duration: 1000,
+						complete: function(){
+							//finished
 						}
-					}
-				},
-				
-				
-				/**
-				 * @method scrollTo
-				 * @param target {String} jquery selector
-				 */
-				scrollTo: function(target){
-					var me = this,
-						offset = Firebrick.scrollTopOffset,
-						scrollContainer = $(Firebrick.scrollContainerSelector);
-					
-					if($.isFunction(offset)){
-						offset = offset(target);
-					}
-					
-					if(target){
-						scrollContainer.animate({ scrollTop: $(target).offset().top - offset + scrollContainer.scrollTop() }, {
-							duration: 1000,
-							complete: function(){
-								//finished
-							}
-						});
-					}
+					});
 				}
 			},
-			
 			/**
 			 * @for Router
 			 * @namespace Router
 			 * @class History
 			 */
 			history: {
-				
 				/**
 				 * used to see whether document events for the history API have already been set
 				 * @property _initialised
@@ -1898,13 +2099,6 @@
 				 * @default false
 				 */
 				_initialised: false,
-				/**
-				 * @property _routes
-				 * @private
-				 * @type {Array}
-				 * @default []
-				 */
-				_routes:[],
 				/**
 				 * set route definitions
 				 * @example
@@ -1926,49 +2120,14 @@
 					var me = this;
 				
 					if(!me._initialised){
-						me._registerLinkEvent();
-						me._registerPopEvent();
 						//mark as set
 						me._initialised = true;
+						me._registerLinkEvent();
+						me._registerPopEvent();
 					}
 					
-					if(!$.isFunction(routes) && $.isPlainObject(routes)){
-						//create a route function
-						routes = me._createRouterFunction(routes);
-					}else if(!$.isFunction(routes) && !$.isPlainObject(routes)){
-						console.error("incorrect routes", routes);
-						return;
-					}
-					
-					me._routes.push(routes);
-					
-					return routes;
+					return Firebrick.router._set(routes);
 				},
-				
-				/**
-				 * @method _createRouterFunction
-				 * @private
-				 * @param {Object} config
-				 * @return {Function}
-				 */
-				_createRouterFunction: function(config){
-					return function(){
-						var url = Firebrick.router.getRoute(),
-							route = url.cleanPath;
-						if(route && config[route]){
-							Firebrick.router.common._applyRoute(config[route], arguments, function(){
-								if(url.hash){
-									Firebrick.router.common.scrollTo( url.hash );
-								}
-							});
-						}else{
-							if(config["404"]){
-								Firebrick.router.common._applyRoute(config["404"], arguments);							
-							}
-						}
-					};
-				},
-				
 				/**
 				 * used by init
 				 * @method _registerLinkEvent
@@ -1978,13 +2137,14 @@
 					var me = this,
 						origin = Firebrick.router.getRoute().origin;
 					
-					$(document).on("click", "a:not([fb-ignore-router]):not([target]):not()", function(event){
+					$(document).on("click", "a[href]:not([fb-ignore-router]):not([target]):not()", function(event){
 						var $this = $(this),
 							href = $this.attr("href"),
 							hash = href.indexOf("#") === 0,
 							external = (href.indexOf("http") === 0 && href.indexOf(origin) === -1),	//whether the link is external or internal 
 							js = href.indexOf("javascript:") >= 0,
-							eventObj;
+							eventObj,
+							_routes = Firebrick.router._routes;
 						
 							if(!external && !js){
 								event.preventDefault();
@@ -1994,11 +2154,9 @@
 								if(eventObj.preventDefault !== true){
 									history.pushState(href, "", href);
 									if(hash){
-										Firebrick.router.common.scrollTo( href );
+										Firebrick.router.scrollTo( href );
 									}else{
-										for(var i = 0, l = me._routes.length; i<l; i++){
-											me._routes[i]();
-										}
+										Firebrick.router.callRoute( href, arguments );
 									}
 									Firebrick.fireEvent("router.post.pushState", href);
 								}	
@@ -2006,7 +2164,6 @@
 						
 					});
 				},
-
 				/**
 				 * @method _registerPopEvent
 				 * @private
@@ -2014,47 +2171,29 @@
 				_registerPopEvent: function(){
 					var me = this;
 					window.addEventListener('popstate', function(popState){
-						var eObj = Firebrick.fireEvent("router.pre.popState", popState);
+						var eObj = Firebrick.fireEvent("router.pre.popState", popState),
+							_routes = Firebrick.router._routes;
 						if(eObj.preventDefault !== true){
-							for(var i = 0, l = me._routes.length; i<l; i++){
-								me._routes[i]();
-							}
+							Firebrick.router.callRoute( popState, arguments );
 							Firebrick.fireEvent("router.post.popState", popState);
 						}
 					});
-				},
-				
-				/**
-				 * @method init
-				 */
-				init: function(){
-					var me = this,
-						routes = me._routes;
-					
-					for(var i = 0, l = routes.length; i<l; i++){
-						routes[i]();
-					}
-					
 				}
 				
 			},
-			
 			/**
 			 * @for Router
 			 * @namespace Router
 			 * @class Hashbang
 			 */
 			hashbang: {
-				
 				/**
-				 * router cache, primarly used by init() function
-				 * @private
-				 * @property _cache
-				 * @type {Array of Functions} map
-				 * @default []
+				 * used to see whether document events for the history API have already been set
+				 * @property _initialised
+				 * @type {Boolean}
+				 * @default false
 				 */
-				_cache:[],
-				
+				_initialised: false,
 				/**
 				 * set route definitions
 				 * @example
@@ -2069,61 +2208,15 @@
 				 * @example
 				 * 		Firebrick.router.set(function(){}) //call function regardless of route
 				 * @method set
-				 * @param config {Object|Function} - if function then the function is called regardless of route
-				 * @return onhashChange()
+				 * @param routes {Object|Function} - if function then the function is called regardless of route
 				 */
-				set: function(config){
-					var me = this,
-						route;  
-					
-					if($.isFunction(config)){
-						//one argument given, simple callback regardless of hash change
-						route = config;
-					}else{
-						if($.isPlainObject(config)){
-							route = me._createRouterFunction(config);
-						}
+				set: function(routes){
+					var me = this;
+					Firebrick.router._set(routes);
+					if(!me._initialised){
+						me._initialised = true;
+						me.onHashChange();
 					}
-					
-					me._cache.push(route);
-					
-					//set onhash change routing
-					return me.onHashChange(route, config);
-				},
-				
-				/**
-				 * @method _createRouterFunction
-				 * @private
-				 * @param {Object} config
-				 * @return {Function}
-				 */
-				_createRouterFunction: function(config){
-					
-					return function(){
-						var route = Firebrick.router.getRoute(),
-							hash = route.cleanHash;
-						
-						if(hash){
-							
-							if(hash === "/#"){
-								hash = "/";
-							}
-							
-							if(config[hash]){
-								Firebrick.router.common._applyRoute( config[hash], arguments );
-							}else{
-								//page not found
-								if(config["404"]){
-									Firebrick.router.common._applyRoute(config["404"], arguments);
-								}
-							}	
-						}else{
-							if(config["/"]){
-								Firebrick.router.common._applyRoute(config["/"], arguments);
-							}
-						}
-						
-					};
 				},
 				
 				/**
@@ -2141,25 +2234,22 @@
 				*/
 				onHashChange: function(callback, config){
 					return $(window).on("hashchange", function(){
-						var eObj = Firebrick.fireEvent("router.pre.hashchang", config, arguments);
+						var eObj = Firebrick.fireEvent("router.pre.hashbang", config, arguments);
 						if(eObj.preventDefault !== true){
-							callback.apply(this, arguments);
-							Firebrick.fireEvent("router.post.hashchang", config, arguments);
+							Firebrick.router.callRoute( Firebrick.router.getRoute().path, arguments );
+							Firebrick.fireEvent("router.post.hashbang", config, arguments);
 						}
 					});
-				},
-				
-				/**
-				 * call this after setting router.set({}) if you wish to do an immediate evaulation of url
-				 * @method init
-				 */
-				init: function(){
-					var me = this;
-					for(var i = 0, l = me._cache.length; i<l; i++){
-						me._cache[i]();
-					}
 				}
 				
+			},
+			
+			/**
+			 * call this after setting router.set({}) if you wish to do an immediate evaulation of url
+			 * @method init
+			 */
+			init: function(){
+				Firebrick.router.callRoute( Firebrick.router.getRoute().path );
 			},
 			
 			/**
@@ -2303,7 +2393,7 @@
 				me.listeners = a;
 				me.on(me.listeners);
 			}
-			me.fireEvent("preReady");
+			
 			me.fireEvent(me.classReadyEvent);
 			return me;
 		},
@@ -2394,13 +2484,43 @@
 		 */
 		listeners:null,
 		/**
-		* register a listener to this object, when the object fires a specific event
+		 * use .on()
+		 * @method _addEvent
+		 * @private
+		 * @param eventName {String} singular or comma separated
+		 * @param funct {Function}
+		 * @param scope
+		 */
+		_addEvent: function(eventName, func, scope){
+			var me = this,
+				eName;
+			
+			eventName = eventName.split(",");	//convert to array
+			
+			for(var i = 0, l = eventName.length; i<l; i++){
+				eName = eventName[i].trim();
+				//init the registry
+				if(!me.localEventRegistry[eName]){
+					me.localEventRegistry[eName] = [];
+				}
+				//give the function an id
+				func.id = Firebrick.utils.uniqId();
+				if(scope){
+					//add the scope if needed
+					func.scope = scope;
+				}
+				me.localEventRegistry[eName].push(func);
+			}
+		},
+		/**
+		* register a listener to this object class, when the object fires a specific event
 		* @example 
 		* 	on("someEvent", callback)
 		* @example 
 		* 	on({
-		*     "someevent": callback,
-		*     "someotherevent": callback1
+		*     "someevent": callback,		//comma separate event names for the same callback
+		*     "someotherevent": callback1,
+		*     scope: this
 		* 	})
 		* @method on
 		* @param eventName {String}
@@ -2415,37 +2535,20 @@
 				me.localEventRegistry = {};
 			}
 			
-			var addEvent = function(eventName, func, sc){
-				//init the registry
-				if(!me.localEventRegistry[eventName]){
-					me.localEventRegistry[eventName] = [];
-				}
-				//give the function an id
-				func.id = Firebrick.utils.uniqId();
-				if(sc){
-					//add the scope if needed
-					func.scope = sc;
-				}
-				me.localEventRegistry[eventName].push(func);
-			};
-			
 			if($.isPlainObject(eventName)){
 				//first argument is an object
-				var s = eventName.scope || me,
-					k;
-				
+				scope = scope || eventName.scope || me;
 				delete eventName.scope;
 				
-				for(k in eventName){
+				for(var k in eventName){
 					if(eventName.hasOwnProperty(k)){
-						addEvent(k, eventName[k], s);
+						me._addEvent(k, eventName[k], scope);
 					}
 				}
 				
 			}else{
 				//just add the event
-				scope = scope || me;
-				addEvent(eventName, callback, scope);
+				me._addEvent(eventName, callback, (scope || me) );
 			}
 			
 			return me;
@@ -2484,38 +2587,31 @@
 		fireEvent: function(){
 			var me = this,
 				events = me.localEventRegistry,
-				args = arguments, 
-				eventName = arguments[0],	//get first argument - i.e. the event name
+				args = Array.prototype.slice.call(arguments), 
+				eventName = args[0],	//get first argument - i.e. the event name
 				func, eObj, 
+				scope,
 				eventObject = Firebrick.events._initEventObject(eventName);
 			
 			if(events && events[eventName]){
+				//remove event name from arguments
+				args.splice(0, 1);
 				eObj = events[eventName];
 				for(var i = 0, l = eObj.length; i < l; i++){
 					func = eObj[i];
-					func.event = eventObject;
-					func.apply(func.scope || func, args);
+					//TODO: ugly, change this - check firebrick ui
+					if(!func.__isDestroyed){
+						scope = func.scope || func;
+						scope.event = eventObject;
+						func.apply(scope, args);
+					}
 				}
 				
 			}
 			
 			return eventObject;
-		},
-		
-		/**
-		 * pass an event to another object - fire the same event on the second object with all the arguments of the first
-		 * @method passEvent
-		 * @param argument :: arguments array
-		 * @example
-		 * 		 	classOne.on("someEvent", function(){
-		 * 				//fire the same event on the second object with all the arguments of the first
-		 *		 		classTwo.passEvent(arguments);	//same as classTwo.fireEvent("someEvent", arg1, arg2, arg3, ...)
-		 * 			});
-		 * @return {Any} value from fireEvent
-		 */
-		passEvent: function(){
-			return this.fireEvent.apply(this, Firebrick.utils.stripArguments(arguments));
 		}
+		
 	});
 	
 	/**
@@ -2640,6 +2736,12 @@
 		 */
 		async:true,
 		/**
+		 * @property animations
+		 * @type {$.show() Arguments}
+		 * @default null
+		 */
+		animations: null,
+		/**
 		 * whether to append or overwrite the content of the target
 		 * @property appendTarget
 		 * @type {Boolean}
@@ -2687,7 +2789,7 @@
 				callback.call();
 			}
 			
-			return this;
+			return me;
 		},
 		
 		/**
@@ -2699,7 +2801,6 @@
 				classReadyEvent = me.classReadyEvent;
 			//overwrite the original event
 			me.classReadyEvent = "base";
-			
 			me.on(me.classReadyEvent, function(){
 				me._init(function(){
 					//check the data of the view is in the correct format
@@ -2739,7 +2840,7 @@
 		initView: function(){
 			var me = this;
 			me._html = me.tpl;
-			
+
 			if(me.autoRender && me.getTarget()){
 				me.render();
 			}
@@ -2784,16 +2885,15 @@
 		 * has the data been bound
 		 * @method _isBound
 		 * @private
-		 * @param idMatch {Boolean} [default=false] optional - if true it will also check that the target it bound with the current view and not just generally bound to 
+		 * @param checkId {Boolean} [default=false] optional - if true it will also check that the target it bound with the current view and not just generally bound to 
 		 * @return {Boolean}
 		 */
-		_isBound: function(idMatch){
+		_isBound: function(checkId){
 			var me = this,
 			target = me.enclosedBind ? me.getEnclosedTarget() : me.getTarget();
-
 			if(target && target.length && target.attr("fb-view-bind")){
-				if(idMatch === true){
-					if(target.attr("id") === me.getId()){
+				if(checkId){
+					if(target.attr("fb-view-bind") === me.getId()){
 						//target is bound and with this view
 						return true;
 					}else{
@@ -2914,6 +3014,8 @@
 		_renderHTML: function(){
 			var me = this,
 				target = me.getTarget(),
+				appendTarget = me.appendTarget,
+				animations = me.animations,
 				html,
 				enclosedTarget;
 			
@@ -2924,23 +3026,29 @@
 			if(me.enclosedBind){
 				enclosedTarget = me.getEnclosedTarget();
 				//check if a enclosedTarget already exists
-				if(!enclosedTarget){
-					//if not render and append the html to the target
-					Firebrick.views.renderTo(target, html, me.appendTarget);
-				}else{
-					//enclosedTarget has already been rendered before - just update its content (don't append)
-					Firebrick.views.renderTo(enclosedTarget, html, false);
+				if(enclosedTarget){
+					target = enclosedTarget;
+					appendTarget = false;
 				}
-			}else{
-				//standard render - no enclosedBinding!
-				Firebrick.views.renderTo(target, html, me.appendTarget);
 			}
+			
+			me._render(target, html, appendTarget, animations);
 			
 			me.fireEvent("htmlRendered");
 			
 			return me;
 		},
-		
+		/**
+		 * @method _render
+		 * @private
+		 * @param those of Firebrick.views.renderTo
+		 */
+		_render: function(){
+			return Firebrick.views.renderTo.apply(Firebrick.views, arguments);
+		},
+		/**
+		 * @method bindContent
+		 */
 		bindContent: function(){
 			var me = this,
 				data = me.getData(),
@@ -2966,7 +3074,6 @@
 			//set dispose callback (destory|unbind)
 			me.setDisposeCallback(el);	
 		},
-		
 		/**
 		 * Called by view.Base:render()
 		 * @method bind
@@ -2996,7 +3103,6 @@
 				
 			
 		},
-		
 		/**
 		* Calls renderTo without parameters
 		* @method render
@@ -3313,6 +3419,13 @@
 		 */
 		data: null,
 		/**
+		 * pass parameters when loading the store
+		 * @property params
+		 * @type {Object}
+		 * @default null
+		 */
+		params: null,
+		/**
 		 * initial raw data that was passed when setting the store with setData() function
 		 * @private
 		 * @property _initialData
@@ -3453,14 +3566,15 @@
 		* @return {Object}
 		*/
 		toPlainObject: function(){
-			var me = this;
+			var me = this,
+				data = me.getData();
 			
 			//check if knockout data, if so, convert back to simple js object
-			if($.isFunction(me.data)){
-				return ko.toJs(me.data);
-			}else if($.isPlainObject(me.data)){
-				if(me.data.__ko_mapping__){					// jshint ignore:line
-					return ko.mapping.toJS(me.data);
+			if($.isFunction(data)){
+				return ko.toJS(data);
+			}else if($.isPlainObject(data)){
+				if(data.__ko_mapping__){					// jshint ignore:line
+					return ko.mapping.toJS(data);
 				}
 			}
 			

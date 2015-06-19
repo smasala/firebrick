@@ -1,3 +1,18 @@
+v0.12.0
+----------------------------
+* classes .on function no longer recieves the eventname as it's first argument
+* function passEvent removed
+* add params property store to pass data parameters when loading a store
+* remove store as first argument from load() callback
+* fix store toPlainObject(), so that it calls getData() first before transforming knockout observables
+* added util function argsToArray( arguments ) to convert function arguments array to simple array 
+* simplify _renderHTML and allow for animations property in views - this property is passed to the $.show() functions when called
+* allow comma separated selectors for events: this.on("myevent, secondevent", function(){});
+* refactor history and hashbang api to allow "regex" type urls
+** init function for history or hashbang api moved 1 level up to Firebrick.router.init();
+** get url parameters for example /user/:id - parameters are passed as arguments to the callback function
+* fix isBound() always returning false
+
 v0.11.0
 ----------------------------
 * implement HTML5 JS history API

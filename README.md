@@ -1,4 +1,4 @@
-#Firebrick JS version: 0.11.0
+#Firebrick JS version: 0.12.0
 
 JavaScript MVC Framework built with:
 
@@ -10,3 +10,6 @@ JavaScript MVC Framework built with:
 ```
 bower install firebrick
 ```
+
+## More Info
+[Firebrickjs.com](http://www.firebrickjs.com)

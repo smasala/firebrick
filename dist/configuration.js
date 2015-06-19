@@ -12,7 +12,8 @@ define(function(_require, _exports, _module){
 			"knockout": bowerPath + "/knockoutjs/dist/knockout",
 			"knockout-mapping": bowerPath + "/knockout-mapping/knockout.mapping",
 			"firebrick": bowerPath + "/firebrick/dist/firebrick",
-			"text": bowerPath + "/text/text"
+			"text": bowerPath + "/text/text",
+			"Firebrick.engines": bowerPath + "/firebrick/dist/engines"
 		},
 		shim:{
 			"knockout-mapping": ["knockout"]

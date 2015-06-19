@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.11.0</em>
+            <em>API Docs for: 0.12.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -63,15 +63,11 @@
             
                 <li><a href="../classes/Router.class.Base.html">Router.class.Base</a></li>
             
-                <li><a href="../classes/Router.Common.html">Router.Common</a></li>
-            
                 <li><a href="../classes/Router.Hashbang.html">Router.Hashbang</a></li>
             
                 <li><a href="../classes/Router.History.html">Router.History</a></li>
             
                 <li><a href="../classes/Router.Router.html">Router.Router</a></li>
-            
-                <li><a href="../classes/Router.Router.Router.html">Router.Router.Router</a></li>
             
                 <li><a href="../classes/store.Base.html">store.Base</a></li>
             
@@ -142,7 +138,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_firebrick.js.html#l2521"><code>src\firebrick.js:2521</code></a>
+            Defined in: <a href="../files/src_firebrick.js.html#l2617"><code>src\firebrick.js:2617</code></a>
         </div>
     
 
@@ -203,6 +199,13 @@
                             </li>
                         
                             <li class="index-item method private">
+                                <a href="#method__render">_render</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method__renderHTML">_renderHTML</a>
 
                                 
@@ -211,6 +214,13 @@
                         
                             <li class="index-item method">
                                 <a href="#method_bind">bind</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_bindContent">bindContent</a>
 
                                 
                                 
@@ -402,6 +412,13 @@
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_animations">animations</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_appendTarget">appendTarget</a>
 
                                 
@@ -578,7 +595,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2662"><code>src\firebrick.js:2662</code></a>
+        <a href="../files/src_firebrick.js.html#l2764"><code>src\firebrick.js:2764</code></a>
         
         </p>
 
@@ -632,7 +649,7 @@
             
                 <li class="arg">
                     
-                        <code>idMatch</code>
+                        <code>checkId</code>
                     
                 </li>
             
@@ -671,7 +688,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2783"><code>src\firebrick.js:2783</code></a>
+        <a href="../files/src_firebrick.js.html#l2884"><code>src\firebrick.js:2884</code></a>
         
         </p>
 
@@ -694,7 +711,7 @@
             
                 <li class="param">
                     
-                        <code class="param-name">idMatch</code>
+                        <code class="param-name">checkId</code>
                         <span class="type">Boolean</span>
                     
 
@@ -724,6 +741,96 @@
                 
             </div>
         </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__render" class="method item private">
+    <h3 class="name"><code>_render</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>those</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l3041"><code>src\firebrick.js:3041</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">those</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>of Firebrick.views.renderTo</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
     
 
     
@@ -778,7 +885,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2908"><code>src\firebrick.js:2908</code></a>
+        <a href="../files/src_firebrick.js.html#l3008"><code>src\firebrick.js:3008</code></a>
         
         </p>
 
@@ -869,7 +976,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2970"><code>src\firebrick.js:2970</code></a>
+        <a href="../files/src_firebrick.js.html#l3077"><code>src\firebrick.js:3077</code></a>
         
         </p>
 
@@ -882,6 +989,60 @@
     <div class="description">
         <p>Called by view.Base:render()</p>
 
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_bindContent" class="method item">
+    <h3 class="name"><code>bindContent</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l3049"><code>src\firebrick.js:3049</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
     </div>
 
     
@@ -928,7 +1089,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2813"><code>src\firebrick.js:2813</code></a>
+        <a href="../files/src_firebrick.js.html#l2913"><code>src\firebrick.js:2913</code></a>
         
         </p>
 
@@ -1001,7 +1162,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2724"><code>src\firebrick.js:2724</code></a>
+        <a href="../files/src_firebrick.js.html#l2825"><code>src\firebrick.js:2825</code></a>
         
         </p>
 
@@ -1072,7 +1233,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2825"><code>src\firebrick.js:2825</code></a>
+        <a href="../files/src_firebrick.js.html#l2925"><code>src\firebrick.js:2925</code></a>
         
         </p>
 
@@ -1142,7 +1303,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2876"><code>src\firebrick.js:2876</code></a>
+        <a href="../files/src_firebrick.js.html#l2976"><code>src\firebrick.js:2976</code></a>
         
         </p>
 
@@ -1208,7 +1369,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2717"><code>src\firebrick.js:2717</code></a>
+        <a href="../files/src_firebrick.js.html#l2818"><code>src\firebrick.js:2818</code></a>
         
         </p>
 
@@ -1267,7 +1428,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2756"><code>src\firebrick.js:2756</code></a>
+        <a href="../files/src_firebrick.js.html#l2857"><code>src\firebrick.js:2857</code></a>
         
         </p>
 
@@ -1335,7 +1496,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3064"><code>src\firebrick.js:3064</code></a>
+        <a href="../files/src_firebrick.js.html#l3170"><code>src\firebrick.js:3170</code></a>
         
         </p>
 
@@ -1390,7 +1551,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2693"><code>src\firebrick.js:2693</code></a>
+        <a href="../files/src_firebrick.js.html#l2795"><code>src\firebrick.js:2795</code></a>
         
         </p>
 
@@ -1461,7 +1622,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3086"><code>src\firebrick.js:3086</code></a>
+        <a href="../files/src_firebrick.js.html#l3192"><code>src\firebrick.js:3192</code></a>
         
         </p>
 
@@ -1556,7 +1717,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2749"><code>src\firebrick.js:2749</code></a>
+        <a href="../files/src_firebrick.js.html#l2850"><code>src\firebrick.js:2850</code></a>
         
         </p>
 
@@ -1614,7 +1775,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2734"><code>src\firebrick.js:2734</code></a>
+        <a href="../files/src_firebrick.js.html#l2835"><code>src\firebrick.js:2835</code></a>
         
         </p>
 
@@ -1687,7 +1848,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2765"><code>src\firebrick.js:2765</code></a>
+        <a href="../files/src_firebrick.js.html#l2866"><code>src\firebrick.js:2866</code></a>
         
         </p>
 
@@ -1758,7 +1919,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2774"><code>src\firebrick.js:2774</code></a>
+        <a href="../files/src_firebrick.js.html#l2875"><code>src\firebrick.js:2875</code></a>
         
         </p>
 
@@ -1825,7 +1986,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3075"><code>src\firebrick.js:3075</code></a>
+        <a href="../files/src_firebrick.js.html#l3181"><code>src\firebrick.js:3181</code></a>
         
         </p>
 
@@ -1883,7 +2044,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2884"><code>src\firebrick.js:2884</code></a>
+        <a href="../files/src_firebrick.js.html#l2984"><code>src\firebrick.js:2984</code></a>
         
         </p>
 
@@ -1956,7 +2117,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2834"><code>src\firebrick.js:2834</code></a>
+        <a href="../files/src_firebrick.js.html#l2934"><code>src\firebrick.js:2934</code></a>
         
         </p>
 
@@ -2029,7 +2190,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3000"><code>src\firebrick.js:3000</code></a>
+        <a href="../files/src_firebrick.js.html#l3106"><code>src\firebrick.js:3106</code></a>
         
         </p>
 
@@ -2108,7 +2269,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3025"><code>src\firebrick.js:3025</code></a>
+        <a href="../files/src_firebrick.js.html#l3131"><code>src\firebrick.js:3131</code></a>
         
         </p>
 
@@ -2185,7 +2346,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3053"><code>src\firebrick.js:3053</code></a>
+        <a href="../files/src_firebrick.js.html#l3159"><code>src\firebrick.js:3159</code></a>
         
         </p>
 
@@ -2242,7 +2403,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3112"><code>src\firebrick.js:3112</code></a>
+        <a href="../files/src_firebrick.js.html#l3218"><code>src\firebrick.js:3218</code></a>
         
         </p>
 
@@ -2298,7 +2459,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3132"><code>src\firebrick.js:3132</code></a>
+        <a href="../files/src_firebrick.js.html#l3238"><code>src\firebrick.js:3238</code></a>
         
         </p>
 
@@ -2356,7 +2517,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2858"><code>src\firebrick.js:2858</code></a>
+        <a href="../files/src_firebrick.js.html#l2958"><code>src\firebrick.js:2958</code></a>
         
         </p>
 
@@ -2427,7 +2588,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3036"><code>src\firebrick.js:3036</code></a>
+        <a href="../files/src_firebrick.js.html#l3142"><code>src\firebrick.js:3142</code></a>
         
         </p>
 
@@ -2496,7 +2657,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l3101"><code>src\firebrick.js:3101</code></a>
+        <a href="../files/src_firebrick.js.html#l3207"><code>src\firebrick.js:3207</code></a>
         
         </p>
 
@@ -2590,7 +2751,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2592"><code>src\firebrick.js:2592</code></a>
+        <a href="../files/src_firebrick.js.html#l2688"><code>src\firebrick.js:2688</code></a>
         
         </p>
 
@@ -2606,6 +2767,52 @@
 
     
         <p><strong>Default:</strong> &quot;initial&quot;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_animations" class="property item">
+    <h3 class="name"><code>animations</code></h3>
+    <span class="type">$.show() Arguments</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_firebrick.js.html#l2738"><code>src\firebrick.js:2738</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
     
 
     
@@ -2637,7 +2844,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2642"><code>src\firebrick.js:2642</code></a>
+        <a href="../files/src_firebrick.js.html#l2744"><code>src\firebrick.js:2744</code></a>
         
         </p>
 
@@ -2684,7 +2891,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2600"><code>src\firebrick.js:2600</code></a>
+        <a href="../files/src_firebrick.js.html#l2696"><code>src\firebrick.js:2696</code></a>
         
         </p>
 
@@ -2731,7 +2938,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2635"><code>src\firebrick.js:2635</code></a>
+        <a href="../files/src_firebrick.js.html#l2731"><code>src\firebrick.js:2731</code></a>
         
         </p>
 
@@ -2778,7 +2985,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2556"><code>src\firebrick.js:2556</code></a>
+        <a href="../files/src_firebrick.js.html#l2652"><code>src\firebrick.js:2652</code></a>
         
         </p>
 
@@ -2825,7 +3032,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2649"><code>src\firebrick.js:2649</code></a>
+        <a href="../files/src_firebrick.js.html#l2751"><code>src\firebrick.js:2751</code></a>
         
         </p>
 
@@ -2872,7 +3079,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2563"><code>src\firebrick.js:2563</code></a>
+        <a href="../files/src_firebrick.js.html#l2659"><code>src\firebrick.js:2659</code></a>
         
         </p>
 
@@ -2919,7 +3126,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2607"><code>src\firebrick.js:2607</code></a>
+        <a href="../files/src_firebrick.js.html#l2703"><code>src\firebrick.js:2703</code></a>
         
         </p>
 
@@ -2966,7 +3173,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2656"><code>src\firebrick.js:2656</code></a>
+        <a href="../files/src_firebrick.js.html#l2758"><code>src\firebrick.js:2758</code></a>
         
         </p>
 
@@ -3012,7 +3219,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2542"><code>src\firebrick.js:2542</code></a>
+        <a href="../files/src_firebrick.js.html#l2638"><code>src\firebrick.js:2638</code></a>
         
         </p>
 
@@ -3061,7 +3268,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2628"><code>src\firebrick.js:2628</code></a>
+        <a href="../files/src_firebrick.js.html#l2724"><code>src\firebrick.js:2724</code></a>
         
         </p>
 
@@ -3108,7 +3315,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2577"><code>src\firebrick.js:2577</code></a>
+        <a href="../files/src_firebrick.js.html#l2673"><code>src\firebrick.js:2673</code></a>
         
         </p>
 
@@ -3155,7 +3362,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2570"><code>src\firebrick.js:2570</code></a>
+        <a href="../files/src_firebrick.js.html#l2666"><code>src\firebrick.js:2666</code></a>
         
         </p>
 
@@ -3202,7 +3409,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2585"><code>src\firebrick.js:2585</code></a>
+        <a href="../files/src_firebrick.js.html#l2681"><code>src\firebrick.js:2681</code></a>
         
         </p>
 
@@ -3249,7 +3456,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2535"><code>src\firebrick.js:2535</code></a>
+        <a href="../files/src_firebrick.js.html#l2631"><code>src\firebrick.js:2631</code></a>
         
         </p>
 
@@ -3296,7 +3503,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2614"><code>src\firebrick.js:2614</code></a>
+        <a href="../files/src_firebrick.js.html#l2710"><code>src\firebrick.js:2710</code></a>
         
         </p>
 
@@ -3353,7 +3560,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2549"><code>src\firebrick.js:2549</code></a>
+        <a href="../files/src_firebrick.js.html#l2645"><code>src\firebrick.js:2645</code></a>
         
         </p>
 
@@ -3400,7 +3607,7 @@
             
         
         
-        <a href="../files/src_firebrick.js.html#l2528"><code>src\firebrick.js:2528</code></a>
+        <a href="../files/src_firebrick.js.html#l2624"><code>src\firebrick.js:2624</code></a>
         
         </p>
 
