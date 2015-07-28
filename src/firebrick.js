@@ -97,7 +97,7 @@
 			} else {
 				me.utils.clearSplash();
 				$(document).ready(function () {
-					options.go();
+					options.ready();
 				});
 			}
 		},
