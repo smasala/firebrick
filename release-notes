@@ -1,3 +1,18 @@
+v0.13.0
+----------------------------
+* declared _defaults as a parameter in the router callback function to call the function manually
+* include scroll to hash with history api
+** with hashbang use param ?scrollTo=#123
+* fix options.go is undefined
+* Firebrick.ready renamed to Firebrick.application
+** go function option renamed to ready
+* make property callback optional for router patterns with property "require" defined
+* fix a view / unbind bug when re-creating a class that has a non set id defined
+** "fb-view-bind" html element attribute is no longer the class id but a primitive boolean value 
+** reference to the actual class object is passed to the element property "fb-view-bind" which has the html attribute "fb-view-bind=true" also
+* add Firebrick.history.location to change the url programmatically when using the history api
+* fix history api "undefined popstate" on browser back button
+
 v0.12.0
 ----------------------------
 * classes .on function no longer recieves the eventname as it's first argument

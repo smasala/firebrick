@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.12.0",
+		version: "0.13.0",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -53,9 +53,9 @@
 		
 		/** 
 		 * ready function to kick start the application
-		* @method ready
+		* @method application
 		* @param {Object} options
-		* @param {Object} options.go {Function} - called on document ready
+		* @param {Object} options.ready {Function} - called on document ready
 		* @param {Object} options.app
 		* @param {Object} options.app.name name of the app
 		* @param {Object} options.app.path path of the app
@@ -67,7 +67,7 @@
 		* @param {Object} options.dev {Boolean} [dev=false] true to print requirejs exceptions to console
 		* @param {Object} options.lang language file name or store,
 		*/
-		ready: function (options) {
+		application: function (options) {
 			var me = this;
 			
             me.app = options.app;
@@ -88,7 +88,9 @@
 					me.utils.clearSplash();
 					var args = arguments;
 					$(document).ready(function () {
-						options.go.apply(options.go, args);
+						if(options.ready){
+							options.ready.apply(Firebrick, args);
+						}
 					});
 				});
 			
@@ -534,7 +536,7 @@
 			 */
 			_doMix: function(obj, mix){
 				//mix._mixedIn = true;	//mark as mixed in - extra safety measure
-				return Firebrick.utils.overwrite(obj, mix);
+				return Firebrick.utils.copyover(obj, mix);
 			},
 			
 			/**
@@ -956,6 +958,42 @@
 				return ko.dataFor.apply(ko, arguments);
 			},
 			/**
+			 * returns a deep property from an object
+			 * fails silently and returns null
+			 * 
+			 * 
+			 * @example 
+			 * //get property "where.street"
+			 * obj = {
+			 * 		where: {
+			 *			street: "Some Street" 	
+			 *		}
+			 * }
+			 * @method getDeepProperty
+			 * @param {String} property
+			 * @param {Object} obj
+			 * @return {Any|null} property value
+			 */
+			getDeepProperty: function(prop, obj){
+				var me = this,
+					it,
+					bits = prop.split("."),
+					value = obj;
+				
+				
+				for(var i = 0, l = bits.length; i<l; i++){
+					it = bits[i];
+					if( value.hasOwnProperty( it ) ) {
+						value = value[ bits[i] ];	
+					}else{
+						value = null;
+						break;
+					}
+				}
+				
+				return value;
+			},
+			/**
 			 * multidimensional array comparison
 			 * inspired by: http://stackoverflow.com/a/14853974/425226
 			 * @method compareArrays
@@ -1289,8 +1327,16 @@
 			    link.rel = "stylesheet";
 			    link.href = url;
 			    document.getElementsByTagName("head")[0].appendChild(link);
-			}
+			},
 			
+			/**
+			 * @method firstToUpper
+			 * @param str {String}
+			 * @return {String} first character in string uppercase
+			 */
+			firstToUpper: function( str ){
+				 return str.charAt(0).toUpperCase() + str.slice(1);
+			}
 		},
 		/**
 		 * @for Firebrick
@@ -2011,8 +2057,64 @@
 						params.push( url[i] );
 					}
 				}
-				
 				return params;
+			},
+			
+			_defaults: function(){
+				var me = this,
+					route = me.getRoute(),
+					hash = route.hashbang ? route.parameters.scrollTo : route.hash;
+
+				if(hash){
+					me.scrollTo( hash );
+				}
+			},
+			/**
+			 * checks the callback function to see whether the parameter _defaults was declared for the function
+			 * @method _hasParameterDefined
+			 * @private
+			 * @param callback {Function}
+			 * @return {Boolean} 
+			 */
+			_hasParameterDefined: function( callback ){
+				return callback.toString().match(/function *\( *[\D\d,]*(_defaults)/) ? true : false;
+			},
+			/**
+			 * this function checks whether the callback has the method _defaults declared are a paramter.
+			 * if not: the _defaults method is called after the callback is fired
+			 * if yes: the _defaults method is passed to the callback as an argument, which must then be manually called
+			 * used by callRoute()
+			 * @method _routeCallback
+			 * @private
+			 */
+			_routeCallback: function(callback, args){
+				var me = this,
+					res = true,
+					dDefined,
+					argsArr = [];
+				
+				if(callback){
+					dDefined = me._hasParameterDefined( callback );
+					
+					if(!args.length){
+						args = [];
+					}
+					
+					if(dDefined){
+						args[0] = Firebrick.utils.mergeArrays(args[0], [me._defaults.bind(me)]);	
+					}
+						
+					for(var i = 0, l = args.length; i<l; i++){
+						argsArr = Firebrick.utils.mergeArrays(argsArr, args[i]);
+					}
+					
+					res = callback.apply(me, argsArr);
+					
+					if(!dDefined && res !== false){
+						me._defaults();
+					}
+				}
+				
 			},
 			/**
 			 * @method callRoute
@@ -2023,9 +2125,17 @@
 				var me = this,
 					deps,
 					callback,
-					requireArgs = [],
 					params,
-					match = me.match( url ) || me.match("404");
+					hashPos = url.indexOf("#"),
+					hash = hashPos >= 0 ? url.substr( hashPos ) : null,
+					match;
+				
+				//following only valid when history api active
+				if( me.history._initialised && hash ){
+					url = url.substr(0, hashPos);
+				}
+					
+				match = me.match( url ) || me.match("404");
 				
 				if(match){
 					
@@ -2040,12 +2150,8 @@
 						}
 						
 						require(deps, function(){
-							
 							//check if pattern has a callback and fire
-							if(match.callback){
-								match.callback.apply(me, Firebrick.utils.mergeArrays(params, arguments, args) );
-							}
-							
+							me._routeCallback( match.callback, [params, arguments, args] );
 						});
 					}else{
 						//no dependencies - just fire the callback
@@ -2058,7 +2164,7 @@
 							callback = match;
 						}
 						
-						callback.apply(me, Firebrick.utils.mergeArrays(params, args));
+						me._routeCallback( callback, [params, args] );
 					}
 					
 				}
@@ -2078,12 +2184,15 @@
 				}
 				
 				if(target){
-					scrollContainer.animate({ scrollTop: $(target).offset().top - offset + scrollContainer.scrollTop() }, {
-						duration: 1000,
-						complete: function(){
-							//finished
-						}
-					});
+					target = $(target);
+					if(target.length){
+						scrollContainer.animate({ scrollTop: target.offset().top - offset + scrollContainer.scrollTop() }, {
+							duration: 1000,
+							complete: function(){
+								//finished
+							}
+						});
+					}
 				}
 			},
 			/**
@@ -2140,29 +2249,38 @@
 					$(document).on("click", "a[href]:not([fb-ignore-router]):not([target]):not()", function(event){
 						var $this = $(this),
 							href = $this.attr("href"),
-							hash = href.indexOf("#") === 0,
 							external = (href.indexOf("http") === 0 && href.indexOf(origin) === -1),	//whether the link is external or internal 
-							js = href.indexOf("javascript:") >= 0,
-							eventObj,
-							_routes = Firebrick.router._routes;
+							js = href.indexOf("javascript:") >= 0;
 						
 							if(!external && !js){
 								event.preventDefault();
-								
-								eventObj = Firebrick.fireEvent("router.pre.pushState", href);
-								
-								if(eventObj.preventDefault !== true){
-									history.pushState(href, "", href);
-									if(hash){
-										Firebrick.router.scrollTo( href );
-									}else{
-										Firebrick.router.callRoute( href, arguments );
-									}
-									Firebrick.fireEvent("router.post.pushState", href);
-								}	
+								me.location( href, arguments );	
 							}
 						
 					});
+				},
+				/**
+				 * similar to window.location
+				 * @method location
+				 * @param url
+				 * @param args {Any Array} - optional - use to pass arguments to callRoute
+				 */
+				location: function( url, args ){
+					var hash = url.indexOf("#") === 0,
+						eventObj = Firebrick.fireEvent("router.pre.pushState", url);
+					
+					if(eventObj.preventDefault !== true){
+						window.history.pushState(url, "", url);
+						if(hash){
+							if(url !== "#"){
+								//more than just the has symbol
+								Firebrick.router.scrollTo( url );											
+							}
+						}else{
+							Firebrick.router.callRoute( url, args );
+						}
+						Firebrick.fireEvent("router.post.pushState", url);
+					}
 				},
 				/**
 				 * @method _registerPopEvent
@@ -2171,11 +2289,16 @@
 				_registerPopEvent: function(){
 					var me = this;
 					window.addEventListener('popstate', function(popState){
-						var eObj = Firebrick.fireEvent("router.pre.popState", popState),
+						var pState = popState.state,
+							eObj = Firebrick.fireEvent("router.pre.popState", popState),
 							_routes = Firebrick.router._routes;
 						if(eObj.preventDefault !== true){
-							Firebrick.router.callRoute( popState, arguments );
-							Firebrick.fireEvent("router.post.popState", popState);
+							if(typeof pState === "string"){
+								Firebrick.router.callRoute( pState, arguments );
+								Firebrick.fireEvent("router.post.popState", pState);
+							}else{
+								console.warn("undefined popstate", pState);
+							}
 						}
 					});
 				}
@@ -2308,7 +2431,8 @@
 					cleanPath: cleanPath,
 					hash: hash,
 					cleanHash: pPos !== -1 ? hash.substr(0, pPos) : hash,
-					parameters: me.getUrlParam(path)
+					parameters: me.getUrlParam(path),
+					hashbang: me.hashbang._initialised
 				}
 			},
 			
@@ -2968,7 +3092,8 @@
 			if(me.isTargetBound()){
 				el = target[0];
 				ko.cleanNode(el);
-				target.removeAttr(me.bindAttribute);
+				target.removeAttr( me.bindAttribute );
+				target.removeProp( me.bindAttribute );
 			}
 			return me;
 		},
@@ -3062,7 +3187,8 @@
 			}
 
 			//add FB related bind attribute to mark it as bound
-			target.attr(me.bindAttribute, me.getId());
+			target.attr(me.bindAttribute, true);
+			target.prop(me.bindAttribute, me);
 			
 			//apply data bindings
 			if(me.applyBindingsToDescendants){
@@ -3135,7 +3261,7 @@
 		setDisposeCallback: function(el){
 			var me = this;
 			ko.utils.domNodeDisposal.addDisposeCallback(el, function(el){
-				var view = Firebrick.getById( $(el).attr( me.bindAttribute ) );
+				var view = $(el).prop( me.bindAttribute );//Firebrick.getById( $(el).attr( me.bindAttribute ) );
 				view.unbound();
 			});
 		},
