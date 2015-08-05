@@ -2,7 +2,7 @@
     "project": {
         "name": "Firebrick JS API",
         "description": "Firebrick JS API: A lightweight JavaScript MVC Framework powered with jQuery, Bootstrap, Knockout JS and Require JS",
-        "version": "0.13.0",
+        "version": "0.13.1",
         "url": "https://github.com/smasala",
         "logo": "fb_small.png"
     },
@@ -4061,15 +4061,6 @@
             "line": 3725,
             "itemtype": "property",
             "name": "Firebrick",
-            "type": "{Object}",
-            "class": "window",
-            "module": "Global"
-        },
-        {
-            "file": "src\\firebrick.js",
-            "line": 3732,
-            "itemtype": "property",
-            "name": "fb",
             "type": "{Object}",
             "class": "window",
             "module": "Global"

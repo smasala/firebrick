@@ -1,3 +1,7 @@
+v0.13.1
+----------------------------
+* remove global window.fb - now only window.Firebrick
+
 v0.13.0
 ----------------------------
 * declared _defaults as a parameter in the router callback function to call the function manually
