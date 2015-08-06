@@ -1,3 +1,7 @@
+v0.13.2
+----------------------------
+* remove params from url matcher (router)
+
 v0.13.1
 ----------------------------
 * remove global window.fb - now only window.Firebrick

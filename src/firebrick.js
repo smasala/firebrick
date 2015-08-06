@@ -1,7 +1,7 @@
 /*!
 * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
 * @author Steven Masala [me@smasala.com]
-* @version 0.13.1 
+* @version 0.13.2 
 */
 
 (function (root, factory) {
@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.13.1",
+		version: "0.13.2",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -2127,12 +2127,17 @@
 					callback,
 					params,
 					hashPos = url.indexOf("#"),
+					urlParams = url.indexOf("?"),
 					hash = hashPos >= 0 ? url.substr( hashPos ) : null,
 					match;
 				
 				//following only valid when history api active
 				if( me.history._initialised && hash ){
 					url = url.substr(0, hashPos);
+				}
+				
+				if(urlParams !== -1){
+					url = url.substr(0, urlParams);
 				}
 					
 				match = me.match( url ) || me.match("404");
