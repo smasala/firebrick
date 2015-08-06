@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.13.1</em>
+            <em>API Docs for: 0.13.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -133,7 +133,7 @@
 /*!
 * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
 * @author Steven Masala [me@smasala.com]
-* @version 0.13.1 
+* @version 0.13.2 
 */
 
 (function (root, factory) {
@@ -170,7 +170,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: &quot;0.13.1&quot;,
+		version: &quot;0.13.2&quot;,
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -2259,12 +2259,17 @@
 					callback,
 					params,
 					hashPos = url.indexOf(&quot;#&quot;),
+					urlParams = url.indexOf(&quot;?&quot;),
 					hash = hashPos &gt;= 0 ? url.substr( hashPos ) : null,
 					match;
 				
 				//following only valid when history api active
 				if( me.history._initialised &amp;&amp; hash ){
 					url = url.substr(0, hashPos);
+				}
+				
+				if(urlParams !== -1){
+					url = url.substr(0, urlParams);
 				}
 					
 				match = me.match( url ) || me.match(&quot;404&quot;);
