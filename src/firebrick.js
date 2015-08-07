@@ -1,7 +1,7 @@
 /*!
 * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
 * @author Steven Masala [me@smasala.com]
-* @version 0.13.2 
+* @version 0.13.4 
 */
 
 (function (root, factory) {
@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.13.2",
+		version: "0.13.4",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -97,7 +97,9 @@
 			} else {
 				me.utils.clearSplash();
 				$(document).ready(function () {
-					options.ready();
+					if(options.ready){
+						options.ready();	
+					}
 				});
 			}
 		},
@@ -1964,11 +1966,17 @@
 				for(var key in routes){
 					if(routes.hasOwnProperty(key)){
 						map = routes[key];
+						regex = key;
+						/*
+						 * replace all * with the correct regex 
+						 * thanks to: http://stackoverflow.com/a/15275806/425226
+						 */
+						regex = regex.replace("*", ".*?");
 						/*
 						 * convert all : params in url with regex
 						 * /users/:surname/:age => /users/[a-z0-9._-]+/[a-z0-9._-]+
 						*/ 
-						regex = key.replace(/:[a-zA-Z0-9._-]*/ig, "[a-zA-Z0-9._-]+");
+						regex = regex.replace(/:[a-zA-Z0-9._-]*/ig, "[a-zA-Z0-9._-]+");
 						/*
 						 * /users/[a-z0-9._-]+/[a-z0-9._-]+  =>   ^\/users\/[a-z0-9._-]+\/[a-z0-9._-]+$
 						 */
@@ -2025,7 +2033,20 @@
 			match: function( href ){
 				var me = this,
 					routes = me._routes,
+					url = href,
+					hashPos = href.indexOf("#"),
+					urlParams = href.indexOf("?"),
+					hash = hashPos >= 0 ? href.substr( hashPos ) : null,
 					match = null;
+				
+				//following only valid when history api active
+				if( me.history._initialised && hash ){
+					href = href.substr(0, hashPos);
+				}
+				
+				if(urlParams !== -1){
+					href = href.substr(0, urlParams);
+				}
 				
 				for(var key in routes){
 					if(routes.hasOwnProperty(key)){
@@ -2037,27 +2058,42 @@
 					}
 				}
 				
+				if(match){
+					match.originalUrl = url;
+				}
+				
 				return match;
 			},
 			/**
 			 * @method _getParamsForMatch
 			 * @private
-			 * @param url {String}
 			 * @param match {Object} return of me.match()
-			 * @return {Array} 
+			 * @return {{map:{}, arr:[]}|Null} 
 			 */
-			_getParamsForMatch: function( url, match ){
-				var matchUrl = match.path.split("/"),
-					it,
-					params = [];
-				url = url.split("/");
-				for(var i = 0, l = matchUrl.length; i<l; i++){
-					it = matchUrl[i];
-					if( it.indexOf(":") === 0){
-						params.push( url[i] );
+			_getParamsForMatch: function( match ){
+				var url,
+					matchUrl,
+					it, val,
+					params = {
+						map:{},
+						arr: []
+					};
+				
+				if(match){
+					url = match.originalUrl;
+					matchUrl = match.path.split("/");
+					url = url.replace( window.location.origin, "" );
+					url = url.split("/");
+					for(var i = 0, l = matchUrl.length; i<l; i++){
+						it = matchUrl[i];
+						if( it.indexOf(":") === 0){
+							val = url[i];
+							params.map[it.substr(1)] = val;
+							params.arr.push( val );
+						}
 					}
+					return params;
 				}
-				return params;
 			},
 			
 			_defaults: function(){
@@ -2126,25 +2162,13 @@
 					deps,
 					callback,
 					params,
-					hashPos = url.indexOf("#"),
-					urlParams = url.indexOf("?"),
-					hash = hashPos >= 0 ? url.substr( hashPos ) : null,
 					match;
-				
-				//following only valid when history api active
-				if( me.history._initialised && hash ){
-					url = url.substr(0, hashPos);
-				}
-				
-				if(urlParams !== -1){
-					url = url.substr(0, urlParams);
-				}
-					
+
 				match = me.match( url ) || me.match("404");
 				
 				if(match){
 					
-					params = me._getParamsForMatch( url, match );
+					params = me._getParamsForMatch( match );
 					
 					//are dependencies required to run this pattern
 					if($.isPlainObject(match) && match.require){
@@ -2156,7 +2180,7 @@
 						
 						require(deps, function(){
 							//check if pattern has a callback and fire
-							me._routeCallback( match.callback, [params, arguments, args] );
+							me._routeCallback( match.callback, [params.arr, arguments, args] );
 						});
 					}else{
 						//no dependencies - just fire the callback
@@ -2169,7 +2193,7 @@
 							callback = match;
 						}
 						
-						me._routeCallback( callback, [params, args] );
+						me._routeCallback( callback, [args] );
 					}
 					
 				}
@@ -2420,7 +2444,8 @@
 					hash = location.hash,
 					pPos = hash.indexOf("?"),
 					pPos1 = path.indexOf("?"), 	//paramter position
-					cleanPath = path;
+					cleanPath = path,
+					urlParams = me._getParamsForMatch( me.match( location.href ) );
 				
 				if(hash){
 					cleanPath = path.replace(hash, "");
@@ -2437,6 +2462,7 @@
 					hash: hash,
 					cleanHash: pPos !== -1 ? hash.substr(0, pPos) : hash,
 					parameters: me.getUrlParam(path),
+					urlParameters: urlParams ? urlParams.map : {},
 					hashbang: me.hashbang._initialised
 				}
 			},

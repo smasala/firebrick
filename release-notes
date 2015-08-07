@@ -1,3 +1,13 @@
+v0.13.4
+----------------------------
+* fix "options.ready" is not defined
+* router improvements
+  ** Firebrick.router.getRoute() - now has property "urlParameters" in return map for regex parameter matches in the current url
+
+v0.13.2
+----------------------------
+* fix options.ready is not a function
+
 v0.13.2
 ----------------------------
 * remove params from url matcher (router)
