@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.13.2</em>
+            <em>API Docs for: 0.13.4</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -133,7 +133,7 @@
 /*!
 * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
 * @author Steven Masala [me@smasala.com]
-* @version 0.13.2 
+* @version 0.13.4 
 */
 
 (function (root, factory) {
@@ -170,7 +170,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: &quot;0.13.2&quot;,
+		version: &quot;0.13.4&quot;,
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -229,7 +229,9 @@
 			} else {
 				me.utils.clearSplash();
 				$(document).ready(function () {
-					options.ready();
+					if(options.ready){
+						options.ready();	
+					}
 				});
 			}
 		},
@@ -2096,11 +2098,17 @@
 				for(var key in routes){
 					if(routes.hasOwnProperty(key)){
 						map = routes[key];
+						regex = key;
+						/*
+						 * replace all * with the correct regex 
+						 * thanks to: http://stackoverflow.com/a/15275806/425226
+						 */
+						regex = regex.replace(&quot;*&quot;, &quot;.*?&quot;);
 						/*
 						 * convert all : params in url with regex
 						 * /users/:surname/:age =&gt; /users/[a-z0-9._-]+/[a-z0-9._-]+
 						*/ 
-						regex = key.replace(/:[a-zA-Z0-9._-]*/ig, &quot;[a-zA-Z0-9._-]+&quot;);
+						regex = regex.replace(/:[a-z0-9._-]*/ig, &quot;[a-z0-9._-]+&quot;);
 						/*
 						 * /users/[a-z0-9._-]+/[a-z0-9._-]+  =&gt;   ^\/users\/[a-z0-9._-]+\/[a-z0-9._-]+$
 						 */
@@ -2157,11 +2165,24 @@
 			match: function( href ){
 				var me = this,
 					routes = me._routes,
+					url = href,
+					hashPos = href.indexOf(&quot;#&quot;),
+					urlParams = href.indexOf(&quot;?&quot;),
+					hash = hashPos &gt;= 0 ? href.substr( hashPos ) : null,
 					match = null;
+				
+				//following only valid when history api active
+				if( me.history._initialised &amp;&amp; hash ){
+					href = href.substr(0, hashPos);
+				}
+				
+				if(urlParams !== -1){
+					href = href.substr(0, urlParams);
+				}
 				
 				for(var key in routes){
 					if(routes.hasOwnProperty(key)){
-						match = href.match(key);
+						match = href.match(new RegExp( key, &quot;i&quot; ));
 						if(match){
 							match = routes[key];
 							break;
@@ -2169,27 +2190,45 @@
 					}
 				}
 				
+				if(match){
+					match.originalUrl = url;
+				}
+				
 				return match;
 			},
 			/**
 			 * @method _getParamsForMatch
 			 * @private
-			 * @param url {String}
 			 * @param match {Object} return of me.match()
-			 * @return {Array} 
+			 * @return {{map:{}, arr:[]}|Null} 
 			 */
-			_getParamsForMatch: function( url, match ){
-				var matchUrl = match.path.split(&quot;/&quot;),
-					it,
-					params = [];
-				url = url.split(&quot;/&quot;);
-				for(var i = 0, l = matchUrl.length; i&lt;l; i++){
-					it = matchUrl[i];
-					if( it.indexOf(&quot;:&quot;) === 0){
-						params.push( url[i] );
+			_getParamsForMatch: function( match ){
+				var url,
+					matchUrl,
+					it, val,
+					params = {
+						map:{},
+						arr: []
+					};
+				
+				if(match){
+					url = match.originalUrl;
+					matchUrl = match.path.split(&quot;/&quot;);
+					url = url.replace( window.location.origin, &quot;&quot; );
+					url = url.split(&quot;/&quot;);
+					matchUrl.reverse();
+					url.reverse();
+					for(var i = 0, l = matchUrl.length; i&lt;l; i++){
+						it = matchUrl[i];
+						if(it.indexOf(&quot;:&quot;) === 0){
+							val = url[i];
+							params.map[it.substr(1)] = val;
+							params.arr.push( val );
+						}
 					}
+					params.arr.reverse();
+					return params;
 				}
-				return params;
 			},
 			
 			_defaults: function(){
@@ -2258,25 +2297,13 @@
 					deps,
 					callback,
 					params,
-					hashPos = url.indexOf(&quot;#&quot;),
-					urlParams = url.indexOf(&quot;?&quot;),
-					hash = hashPos &gt;= 0 ? url.substr( hashPos ) : null,
 					match;
-				
-				//following only valid when history api active
-				if( me.history._initialised &amp;&amp; hash ){
-					url = url.substr(0, hashPos);
-				}
-				
-				if(urlParams !== -1){
-					url = url.substr(0, urlParams);
-				}
-					
+
 				match = me.match( url ) || me.match(&quot;404&quot;);
-				
+
 				if(match){
 					
-					params = me._getParamsForMatch( url, match );
+					params = me._getParamsForMatch( match );
 					
 					//are dependencies required to run this pattern
 					if($.isPlainObject(match) &amp;&amp; match.require){
@@ -2288,7 +2315,7 @@
 						
 						require(deps, function(){
 							//check if pattern has a callback and fire
-							me._routeCallback( match.callback, [params, arguments, args] );
+							me._routeCallback( match.callback, [params.arr, arguments, args] );
 						});
 					}else{
 						//no dependencies - just fire the callback
@@ -2301,7 +2328,7 @@
 							callback = match;
 						}
 						
-						me._routeCallback( callback, [params, args] );
+						me._routeCallback( callback, [args] );
 					}
 					
 				}
@@ -2552,7 +2579,8 @@
 					hash = location.hash,
 					pPos = hash.indexOf(&quot;?&quot;),
 					pPos1 = path.indexOf(&quot;?&quot;), 	//paramter position
-					cleanPath = path;
+					cleanPath = path,
+					urlParams = me._getParamsForMatch( me.match( location.href ) );
 				
 				if(hash){
 					cleanPath = path.replace(hash, &quot;&quot;);
@@ -2569,6 +2597,7 @@
 					hash: hash,
 					cleanHash: pPos !== -1 ? hash.substr(0, pPos) : hash,
 					parameters: me.getUrlParam(path),
+					urlParameters: urlParams ? urlParams.map : {},
 					hashbang: me.hashbang._initialised
 				}
 			},
