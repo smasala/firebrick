@@ -1,7 +1,7 @@
 /*!
 * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
 * @author Steven Masala [me@smasala.com]
-* @version 0.13.4 
+* @version 0.13.6 
 */
 
 (function (root, factory) {
@@ -38,7 +38,7 @@
 		 * @property version
 		 * @type {String}
 		 */
-		version: "0.13.4",
+		version: "0.13.6",
 
 		/**2
 		* used to store configurations set Firebrick.ready()
@@ -2171,7 +2171,7 @@
 
 				if(match){
 					
-					params = me._getParamsForMatch( match );
+					params = me._getParamsForMatch( match ).arr || [];
 					
 					//are dependencies required to run this pattern
 					if($.isPlainObject(match) && match.require){
@@ -2183,7 +2183,7 @@
 						
 						require(deps, function(){
 							//check if pattern has a callback and fire
-							me._routeCallback( match.callback, [params.arr, arguments, args] );
+							me._routeCallback( match.callback, [params, arguments, args] );
 						});
 					}else{
 						//no dependencies - just fire the callback
@@ -2196,7 +2196,7 @@
 							callback = match;
 						}
 						
-						me._routeCallback( callback, [args] );
+						me._routeCallback( callback, [params, args] );
 					}
 					
 				}
