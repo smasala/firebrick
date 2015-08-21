@@ -1,3 +1,7 @@
+v0.13.xxxxx
+----------------------------
+* fix auto dependency loader
+
 v0.13.6
 ----------------------------
 * fix router when no require array is defined

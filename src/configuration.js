@@ -3,11 +3,11 @@
  * @author Steven Masala [me@smasala.com]
 **/
 
-define(function(_require, _exports, _module){
+define(function( _require, _exports, _module ) {
 	"use strict";
 	var bowerPath = _module.config().bowerPath || "bower_components";
 	return require.config({
-		paths:{
+		paths: {
 			"jquery": bowerPath + "/jquery/dist/jquery",
 			"knockout": bowerPath + "/knockoutjs/dist/knockout.debug",
 			"knockout-mapping": bowerPath + "/knockout-mapping/knockout.mapping",
@@ -15,8 +15,8 @@ define(function(_require, _exports, _module){
 			"text": bowerPath + "/text/text",
 			"Firebrick.engines": bowerPath + "/firebrick/src/engines"
 		},
-		shim:{
-			"knockout-mapping": ["knockout"]
+		shim: {
+			"knockout-mapping": [ "knockout" ]
 		}
-	});	
+	});
 });

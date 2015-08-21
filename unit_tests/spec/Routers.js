@@ -19,11 +19,11 @@ define(["jquery", "firebrick"], function($, Firebrick){
 		});
 		
 		it("Router", function(done){
-
-			Firebrick.router.set({
-				"#jasmineTest1":{
+			
+			Firebrick.router.hashbang.set({
+				"*#/jasmineTest1":{
 					require: ["text!Test/view/Index.html"],
-					callback: function(hashEvent, html){
+					callback: function(html, hashEvent){
 						expect($.isPlainObject(hashEvent)).toBe(true);
 						expect(typeof html).toBe("string");
 						done();
@@ -31,14 +31,14 @@ define(["jquery", "firebrick"], function($, Firebrick){
 				}
 			});
 			
-			window.location = href + "#jasmineTest1";
+			window.location = href + "#/jasmineTest1";
 		
 		});
 		
 		it("Params", function(done){
 
-			Firebrick.router.set({
-				"#jasmineTest2":function(){
+			Firebrick.router.hashbang.set({
+				"*#/jasmineTest2": function () {
 					var route = Firebrick.router.getRoute();
 					expect(route.parameters.name).toBe("Steve");
 					expect(route.parameters.id).toBe("123");
@@ -46,14 +46,26 @@ define(["jquery", "firebrick"], function($, Firebrick){
 				}
 			});
 			
-			window.location = href + "#jasmineTest2?name=Steve&id=123";
+			window.location = href + "#/jasmineTest2?name=Steve&id=123";
 		
+		});
+		
+		it("regex", function(done){
+			Firebrick.router.hashbang.set({
+				"*#/jasmineTest3/:name/:age": function (name, age) {
+					expect(name).toBe("steve");
+					expect(parseInt(age)).toBe(10);
+					done();
+				}
+			});
+			
+			window.location = href + "#/jasmineTest3/steve/10";
 		});
 		
 		it("Router default", function(done){
 
-			Firebrick.router.set({
-				defaults: function(){
+			Firebrick.router.hashbang.set({
+				"*#/": function(){
 					var route = Firebrick.router.getRoute();
 					if(testing){
 						expect(route.parameters.worked).toBe("true");
@@ -62,7 +74,7 @@ define(["jquery", "firebrick"], function($, Firebrick){
 				}
 			});
 			
-			window.location = href + "#noRouteSet?worked=true";
+			window.location = href + "#/?worked=true";
 		
 		});
 		

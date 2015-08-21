@@ -1,0 +1,10 @@
+{
+  	"name":"firebrick.unit.tests",
+  	"private": true,
+  	"dependencies": {
+    	"phantomjs": "latest"
+  	},
+	"scripts":{
+		"test": "phantomjs SpecRunner.js SpecRunner.html"
+	}
+}

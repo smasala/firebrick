@@ -1,3 +1,6 @@
+/*
+ * jshint global: jasmine
+ */
 var system = require('system');
 
 /**
