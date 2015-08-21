@@ -1,5 +1,5 @@
 {
-  "version":"0.13.6",
+  "version":"0.13.7",
   "dependencies": {
     "grunt": "~0.4.5",
     "grunt-version": "latest",
