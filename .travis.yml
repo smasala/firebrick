@@ -8,9 +8,10 @@ node_js:
     - '0.12'
 before_script:
     # install dependencies
+    - npm install
     - npm install -g jscs
     - npm install -g jshint
 script:
     # We want to gate on passing tests and a successful build
-    - jscs -c ./.jscsrc ./src
-    - jshint ./
+    - grunt shell:jscs
+    - grunt shell:jshint
