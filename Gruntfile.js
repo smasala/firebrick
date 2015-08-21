@@ -2,8 +2,7 @@
 module.exports = function(grunt){
 	'use strict';
 	
-	var pkg = require("./package.json"),
-		tasks = [];
+	var tasks = [];
 
 	grunt.loadNpmTasks('grunt-version');
 	grunt.loadNpmTasks('grunt-shell');
