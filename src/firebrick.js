@@ -1,7 +1,7 @@
 /*!
  * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
  * @author Steven Masala [me@smasala.com]
- * @version 0.13.7
+ * @version 0.13.8
  */
 
 ( function( root, factory ) {
@@ -36,7 +36,7 @@
          * @property version
          * @type {String}
          */
-        version: "0.13.7",
+        version: "0.13.8",
 
         /**2
         * used to store configurations set Firebrick.ready()
@@ -3742,5 +3742,5 @@
      */
     window.Firebrick = Firebrick;
 
-    return Firebrick;
+    return window.Firebrick;
 } ) );
