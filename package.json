@@ -1,11 +1,27 @@
 {
-  "version":"0.13.8",
-  "dependencies": {
-    "grunt": "~0.4.5",
-    "grunt-version": "latest",
-    "grunt-shell": "latest",
-    "grunt-contrib-watch": "latest",
-    "jscs": "latest",
-    "jshint": "latest"
-  }
+	"name": "Firebrick JS",
+  	"version":"0.13.8",
+  	"description": "A powerful JavaScript Framework powered by jQuery, Knockout JS and Require JSS",
+  	"keywords": [
+	  	"firebrick", 
+	  	"browser",
+	    "framework",
+	    "client",
+	    "front-end",
+	    "mvc",
+	    "mvvm"
+	],
+  	"devDependencies": {
+  		""grunt": "~0.4.5",
+	    "grunt-version": "latest",
+	    "grunt-shell": "latest",
+	    "grunt-contrib-watch": "latest",
+	    "jscs": "latest",
+	    "jshint": "latest"
+  	},
+  	"repository": {
+  		"type": "git",
+  		"url": "git://github.com/smasala/firebrick.git"
+	},
+  	"license": "MIT"
 }
