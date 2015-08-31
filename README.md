@@ -6,9 +6,21 @@ JavaScript MVC Framework built with:
 * Knockout JS 3
 * Require JS 2
 
-## Install with Bower
+## Installation
+
+### Bower
 ```
 bower install firebrick
+```
+
+### NPM
+```
+npm install firebrick
+```
+
+### Yeoman
+```
+npm install -g generator-firebrick && yo firebrick
 ```
 
 ## More Info
