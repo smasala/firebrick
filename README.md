@@ -1,4 +1,4 @@
-#Firebrick JS version: 0.13.8 [![Build Status](https://travis-ci.org/smasala/firebrick.svg?branch=master)](https://travis-ci.org/smasala/firebrick)
+#Firebrick JS version: 0.13.10 [![Build Status](https://travis-ci.org/smasala/firebrick.svg?branch=master)](https://travis-ci.org/smasala/firebrick)
 
 JavaScript MVC Framework built with:
 

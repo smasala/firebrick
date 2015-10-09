@@ -1,3 +1,8 @@
+v0.13.10
+----------------------------
+* router fix where value after "?" was passed into arguments
+* fix bug when creating anonymous classes with Firebrick.create. e.g Firebrick.create({a:1});
+
 v0.13.8
 ----------------------------
 * add to global window.Firebrick

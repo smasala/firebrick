@@ -1,7 +1,7 @@
 /*!
  * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
  * @author Steven Masala [me@smasala.com]
- * @version 0.13.8
+ * @version 0.13.10
  */
 
 ( function( root, factory ) {
@@ -36,7 +36,7 @@
          * @property version
          * @type {String}
          */
-        version: "0.13.8",
+        version: "0.13.10",
 
         /**2
         * used to store configurations set Firebrick.ready()
@@ -459,14 +459,28 @@
 
             /**
             * get or returns a firebrick class by name and calls init()
+            * @example
+            *   Firebrick.create("SomeAlreadyDefinedClass");
+            *   Firebrick.create("MyNewClass", { a:1 } );
+            *   Firebrick.create({a:1});
+            *   Firebrick.create({extend:"someclass"});
             * @method create
             * @param name {String}
             * @param config {Object}
             * @return {Object|Null} if null then asynchronous dependency calls were made
             */
             create: function( name, config ) {
-                var me = this, clazz = me.get( name );
-
+                var me = this,
+                    clazz;
+                
+                if ( typeof name !== "string" ) {
+                    //create called with one param (object)
+                    config = name;
+                    name = "";
+                } else {
+                    clazz = me.get( name );
+                }
+                
                 if ( clazz ) {
 	                //check if there are any config options
 	                clazz = me.extend( config, clazz );
@@ -2109,13 +2123,20 @@
              * @return {{map:{}, arr:[]}|Null}
              */
             _getParamsForMatch: function( match ) {
-                var url, matchUrl, it, val, params = {
-                    map: {},
-                    arr: []
-                };
+                var url,
+                    matchUrl,
+                    it,
+                    val,
+                    end,
+                    params = {
+	                    map: {},
+	                    arr: []
+	                };
 
                 if ( match ) {
-	                url = match.originalUrl;
+                    end = match.originalUrl.indexOf( "?" );
+                    end = end > 0 ? end : match.originalUrl.length;
+	                url = match.originalUrl.substr( 0, end );
 	                matchUrl = match.path.split( "/" );
 	                url = url.replace( window.location.origin, "" );
 	                url = url.split( "/" );
@@ -2458,9 +2479,14 @@
              * 					}
              */
             getRoute: function() {
-                var me = this, location = window.location, path = location.href.replace( location.origin, "" ), hash = location.hash, pPos = hash
-                        .indexOf( "?" ), pPos1 = path.indexOf( "?" ), //paramter position
-                cleanPath = path, urlParams = me._getParamsForMatch( me.match( location.href ) );
+                var me = this,
+                    location = window.location,
+                    path = location.href.replace( location.origin, "" ),
+                    hash = location.hash,
+                    pPos = hash.indexOf( "?" ),
+                    pPos1 = path.indexOf( "?" ), //paramter position
+                    cleanPath = path,
+                    urlParams = me._getParamsForMatch( me.match( location.href ) );
 
                 if ( hash ) {
 	                cleanPath = path.replace( hash, "" );
