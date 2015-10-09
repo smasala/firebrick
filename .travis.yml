@@ -9,6 +9,7 @@ node_js:
 before_script:
     # install dependencies
     - npm install
+    - npm install -g grunt-cli
 script:
     # We want to gate on passing tests and a successful build
     - grunt travis
