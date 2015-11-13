@@ -1,3 +1,8 @@
+v0.13.12
+----------------------------
+* add success, error & complete events to stores
+* fix dataType camelCase typo on load
+
 v0.13.10
 ----------------------------
 * router fix where value after "?" was passed into arguments

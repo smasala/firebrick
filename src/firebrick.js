@@ -1,7 +1,7 @@
 /*!
  * Firebrick JS - JavaScript MVC Framework powered by jQuery and Knockout JS
  * @author Steven Masala [me@smasala.com]
- * @version 0.13.10
+ * @version 0.13.12
  */
 
 ( function( root, factory ) {
@@ -36,7 +36,7 @@
          * @property version
          * @type {String}
          */
-        version: "0.13.10",
+        version: "0.13.12",
 
         /**2
         * used to store configurations set Firebrick.ready()
@@ -1924,7 +1924,7 @@
 	                store.status = "preload";
 	                ajaxData = options.params || store.params;
 	                $.ajax( {
-	                    dataType: store.datatype,
+	                    dataType: store.dataType,
 	                    type: store.loadProtocol,
 	                    async: async,
 	                    url: store.getUrl(),
@@ -1937,6 +1937,7 @@
 		                    if ( $.isFunction( options.callback ) ) {
 			                    options.callback.call( options.scope || store, jsonObject, status, response );
 		                    }
+		                    store.fireEvent( "error", jsonObject, status, response );
 	                    },
 	                    error: function( response, error, errorMessage ) {
 		                    if ( $.isFunction( options.error ) ) {
@@ -1945,6 +1946,10 @@
 			                    console.warn( "unable to load store '", store._classname, "' with path:", store.url );
 			                    console.error( response, error, errorMessage );
 		                    }
+		                    store.fireEvent( "error", response, error, errorMessage );
+	                    },
+	                    complete: function( response, success ) {
+	                        store.fireEvent( "complete", response, success );
 	                    }
 	                } );
 
@@ -3492,7 +3497,7 @@
         /**
         * Default store configurations
         * any types that jQuery allows in $.ajax()
-        * @property datatype
+        * @property dataType
         * @type {String}
         * @default "json"
         */

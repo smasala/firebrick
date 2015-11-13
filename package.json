@@ -1,6 +1,6 @@
 {
 	"name": "firebrick",
-  	"version":"0.13.10",
+  	"version":"0.13.12",
   	"description": "A powerful JavaScript Framework powered by jQuery, Knockout JS and Require JS",
   	"keywords": [
 	  	"firebrick", 
