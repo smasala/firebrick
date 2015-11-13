@@ -1937,7 +1937,7 @@
 		                    if ( $.isFunction( options.callback ) ) {
 			                    options.callback.call( options.scope || store, jsonObject, status, response );
 		                    }
-		                    store.fireEvent( "error", jsonObject, status, response );
+		                    store.fireEvent( "success", jsonObject, status, response );
 	                    },
 	                    error: function( response, error, errorMessage ) {
 		                    if ( $.isFunction( options.error ) ) {
