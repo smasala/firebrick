@@ -14,7 +14,7 @@
 		"framework",
 		"javascript"
 	],
-	"version": "0.13.10",
+	"version": "0.13.12",
 	"dependencies": {
 		"jquery": "2.x",
 		"knockoutjs": "3.x",
